@@ -4,16 +4,18 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.view.MenuItem;
 import android.widget.TextView;
-import com.fire.baselibrary.network.RetrofitClient;
+import com.fire.translation.network.RetrofitClient;
 import com.fire.translation.entity.Test;
 import com.fire.baselibrary.base.BaseActivity;
 import com.fire.baselibrary.network.NetworkListener;
 import com.fire.baselibrary.network.OkhttpClientImpl;
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.observers.SafeObserver;
+
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * @author fire
@@ -61,8 +63,8 @@ public class MainActivity extends BaseActivity {
                 .setOnListener(new NetworkListener<Test>(Test.class) {
                     @Override
                     public void onSucess(Test string) {
-                        String s = new Gson().toJson(string);
-                        Logger.e(s);
+//                        String s = new Gson().toJson(string);
+//                        Logger.e(s);
                     }
 
                     @Override
@@ -71,9 +73,22 @@ public class MainActivity extends BaseActivity {
                     }
                 });
 
-        //RetrofitClient.getInstance()
-        //        .getServiceApi()
-        //        .beforeNews("2017-12-26")
-        //        .subscribe(new Fun);
+        RetrofitClient.getInstance()
+                .getServiceApi()
+                .beforeNews("2017-12-26")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Test>() {
+                    @Override
+                    public void accept(Test test) throws Exception {
+                        Logger.e(test.toString());
+
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Logger.e(throwable.toString());
+                    }
+                });
     }
 }

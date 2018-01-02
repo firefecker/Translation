@@ -1,9 +1,13 @@
-package com.fire.baselibrary.network;
+package com.fire.translation.network;
 
+import com.fire.baselibrary.network.OkhttpClientImpl;
+import com.fire.translation.entity.Test;
 import com.orhanobut.logger.Logger;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Observable;
 import okhttp3.JavaNetCookieJar;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -12,6 +16,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  *
@@ -26,7 +31,7 @@ public class RetrofitClient {
     private CookieManager mCookieManager;
     private OkHttpClient mOkHttpClient;
     private Retrofit mRetrofit;
-    private final ServiceApi mServiceApi;
+    private Api mServiceApi;
 
     public static RetrofitClient getInstance() {
         if (mRetrofitClient == null) {
@@ -58,24 +63,30 @@ public class RetrofitClient {
                 .build();
 
         mRetrofit = new Retrofit.Builder()
-                .baseUrl( "http://open.iciba.com/dsapi/?")
+                .baseUrl( "http://open.iciba.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(mOkHttpClient)
                 .build();
 
-        mServiceApi = mRetrofit.create(ServiceApi.class);
+        mServiceApi = mRetrofit.create(Api.class);
     }
 
-    public ServiceApi getServiceApi() {
+    public RetrofitClient setmServiceApi(Api serviceApi) {
+        mServiceApi = mRetrofit.create(Api.class);
+        return this;
+    }
+
+    public Api getServiceApi() {
         return mServiceApi;
     }
 
 
 
-    public interface ServiceApi {
+    public interface Api {
 
-        //@GET("date={time}")
-        //Observable<Test> beforeNews(@Path("time") String time);
+        @GET("dsapi")
+        Observable<Test> beforeNews(@Query("data") String data);
     }
+
 }
