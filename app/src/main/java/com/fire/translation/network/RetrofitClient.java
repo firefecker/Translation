@@ -1,13 +1,13 @@
 package com.fire.translation.network;
 
-import com.fire.baselibrary.network.OkhttpClientImpl;
-import com.fire.translation.entity.Test;
+import com.fire.translation.entity.DailyEntity;
 import com.orhanobut.logger.Logger;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
+import okhttp3.ConnectionPool;
 import okhttp3.JavaNetCookieJar;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -15,7 +15,6 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -35,7 +34,7 @@ public class RetrofitClient {
 
     public static RetrofitClient getInstance() {
         if (mRetrofitClient == null) {
-            synchronized (OkhttpClientImpl.class) {
+            synchronized (RetrofitClient.class) {
                 if (mRetrofitClient == null) {
                     mRetrofitClient = new RetrofitClient();
                 }
@@ -46,20 +45,29 @@ public class RetrofitClient {
 
     private RetrofitClient() {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor(
-                new HttpLoggingInterceptor.Logger() {
-                    @Override
-                    public void log(String message) {
-                        Logger.i(message);
-                    }
-                });
+                message -> Logger.e(message));
         logging.setLevel(HttpLoggingInterceptor.Level.HEADERS);
 
         mCookieManager = new CookieManager();
         mCookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
         mOkHttpClient = new OkHttpClient.Builder()
+                //拦截器
                 .addInterceptor(logging)
+                //网络拦截器
+                .addNetworkInterceptor(logging)
+                //连接失败后重新链接
+                .retryOnConnectionFailure(true)
+                //连接池
+                .connectionPool(new ConnectionPool())
+                //读取时间
+                .readTimeout(60,TimeUnit.SECONDS)
+                //写入时间
+                .writeTimeout(60,TimeUnit.SECONDS)
+                //链接时间
                 .connectTimeout(20, TimeUnit.SECONDS)
+                //cookie管理器
                 .cookieJar(new JavaNetCookieJar(mCookieManager))
+                //build
                 .build();
 
         mRetrofit = new Retrofit.Builder()
@@ -85,8 +93,8 @@ public class RetrofitClient {
 
     public interface Api {
 
-        @GET("dsapi")
-        Observable<Test> beforeNews(@Query("data") String data);
+        @GET("dsapi/")
+        Observable<DailyEntity> beforeNews(@Query("date") String date);
     }
 
 }

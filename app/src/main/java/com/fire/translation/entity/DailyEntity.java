@@ -9,7 +9,7 @@ import java.util.List;
  * Description:
  */
 
-public class Test {
+public class DailyEntity {
 
     private String sid;
     private String tts;
@@ -174,7 +174,7 @@ public class Test {
 
     @Override
     public String toString() {
-        return "Test{" +
+        return "DailyEntity{" +
                "sid='" + sid + '\'' +
                ", tts='" + tts + '\'' +
                ", content='" + content + '\'' +

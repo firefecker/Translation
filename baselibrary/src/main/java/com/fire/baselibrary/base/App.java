@@ -5,7 +5,6 @@ import com.fire.baselibrary.utils.ImageLoader;
 import com.fire.baselibrary.utils.ToastUtils;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
-import com.orhanobut.logger.LogStrategy;
 import com.orhanobut.logger.Logger;
 import com.orhanobut.logger.PrettyFormatStrategy;
 

@@ -1,16 +1,13 @@
 apply plugin: 'com.android.library'
-
+apply plugin: 'com.jakewharton.butterknife'
+def butterknife = "8.5.1"
 android {
     compileSdkVersion 26
-
-
-
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -23,7 +20,7 @@ android {
 }
 
 dependencies {
-    api fileTree(dir: 'libs', include: ['*.jar'])
+    api fileTree(include: ['*.jar'], dir: 'libs')
     api 'com.android.support:appcompat-v7:26.1.0'
     api 'com.android.support:design:26.1.0'
     api 'com.android.support.constraint:constraint-layout:1.0.2'
@@ -62,4 +59,7 @@ dependencies {
     api 'com.orhanobut:logger:2.1.1'
     //Gson
     api 'com.google.code.gson:gson:2.8.2'
+    //butterknife
+    implementation "com.jakewharton:butterknife:${butterknife}" //woo new Gradle API!
+    annotationProcessor "com.jakewharton:butterknife-compiler:${butterknife}"
 }

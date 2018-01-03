@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'com.jakewharton.butterknife'
+def butterknife = "8.5.1"
 android {
     compileSdkVersion 26
     defaultConfig {
@@ -25,11 +26,18 @@ android {
     packagingOptions {
         exclude 'META-INF/rxjava.properties'
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':baselibrary')
+
+    implementation "com.jakewharton:butterknife:${butterknife}" //woo new Gradle API!
+    annotationProcessor "com.jakewharton:butterknife-compiler:${butterknife}"
 }
 
 android.applicationVariants.all { variant ->
