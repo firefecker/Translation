@@ -1,7 +1,5 @@
 package com.fire.translation.ui.fragment;
 
-import android.support.annotation.NonNull;
-import android.view.MenuItem;
 import com.fire.baselibrary.base.BaseFragment;
 import com.fire.translation.R;
 import com.fire.translation.entity.DailyEntity;
