@@ -26,7 +26,7 @@ public class OkhttpClientImpl {
     private static OkhttpClientImpl sMOkhttpClientImpl;
     private CookieManager mCookieManager;
     private OkHttpClient mOkHttpClient;
-    private NetworkListener mNetworkListener;
+    private AbstractListener mNetworkListener;
     private Request.Builder mRequestBuilder;
 
     public static OkhttpClientImpl getInstance() {
@@ -82,13 +82,13 @@ public class OkhttpClientImpl {
                 }
                 //response.body().string()只能调用一次
                 String string = response.body().string();
-                mNetworkListener.onSucess(new Gson().fromJson(string, mNetworkListener.getTypeClass()));
+                mNetworkListener.onSuccess(new Gson().fromJson(string, mNetworkListener.getTypeClass()));
             }
         });
         return this;
     }
 
-    public void setOnListener(NetworkListener listener) {
+    public void setOnListener(AbstractListener listener) {
         mNetworkListener = listener;
     }
 }

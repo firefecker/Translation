@@ -6,15 +6,26 @@ package com.fire.baselibrary.network;
  * Description:
  */
 
-public abstract class NetworkListener<T> {
+public abstract class AbstractListener<T> {
 
     private Class<T> tClass;
 
-    public NetworkListener(Class<T> tClass) {
+    public AbstractListener(Class<T> tClass) {
         this.tClass = tClass;
     }
 
-    public abstract void onSucess(T t);
+    /**
+     * success
+     * @param t
+     * @return
+     */
+    public abstract void onSuccess(T t);
+
+    /**
+     * Failure
+     * @param e
+     * @return
+     */
     public abstract void onFailure(Exception e);
 
     public Class<T> getTypeClass() {

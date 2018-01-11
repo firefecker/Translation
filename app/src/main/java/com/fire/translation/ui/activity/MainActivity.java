@@ -15,7 +15,7 @@ import com.fire.translation.ui.fragment.MineFragment;
 /**
  * @author fire
  */
-public class MainActivity extends BaseActivity{
+public class MainActivity extends BaseActivity {
 
     @BindView(R.id.navigation)
     BottomNavigationView mNavigationView;
@@ -42,20 +42,21 @@ public class MainActivity extends BaseActivity{
                 item -> {
                     switch (item.getItemId()) {
                         case R.id.navigation_home:
-                            updateShowSatus(true,mDashboardFragment,mMineFragment);
+                            updateShowSatus(true, mDashboardFragment, mMineFragment);
                             return true;
                         case R.id.navigation_dashboard:
-                            updateShowSatus(false,mDashboardFragment,mMineFragment);
+                            updateShowSatus(false, mDashboardFragment, mMineFragment);
                             return true;
                         case R.id.navigation_notifications:
-                            updateShowSatus(false,mMineFragment,mDashboardFragment);
+                            updateShowSatus(false, mMineFragment, mDashboardFragment);
                             return true;
+                        default:
+                            return false;
                     }
-                    return false;
                 });
     }
 
-    private void updateShowSatus(boolean isHome,Fragment fragment1,Fragment fragment2) {
+    private void updateShowSatus(boolean isHome, Fragment fragment1, Fragment fragment2) {
         if (isHome) {
             mActionButton.setVisibility(View.VISIBLE);
             getSupportFragmentManager().beginTransaction()

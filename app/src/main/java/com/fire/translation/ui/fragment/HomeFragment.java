@@ -1,10 +1,14 @@
 package com.fire.translation.ui.fragment;
 
+import android.widget.Button;
+import android.widget.TextView;
+import butterknife.BindView;
 import com.fire.baselibrary.base.BaseFragment;
 import com.fire.translation.R;
 import com.fire.translation.entity.DailyEntity;
 import com.fire.translation.mvp.presenter.HomePresenter;
 import com.fire.translation.mvp.view.HomeView;
+import com.fire.translation.view.NotifyTextView;
 
 /**
  *
@@ -14,6 +18,21 @@ import com.fire.translation.mvp.view.HomeView;
  */
 
 public class HomeFragment extends BaseFragment implements HomeView {
+
+    @BindView(R.id.nv_jcnum)
+    NotifyTextView mNvJcnum;
+    @BindView(R.id.nv_jsnum)
+    NotifyTextView mNvJsnum;
+    @BindView(R.id.nv_review)
+    NotifyTextView mNvReview;
+    @BindView(R.id.nvtype)
+    NotifyTextView mNvType;
+    @BindView(R.id.nvzwnum)
+    NotifyTextView mNvZwnum;
+    @BindView(R.id.btn_start)
+    Button mBtnStart;
+    @BindView(R.id.tv_type)
+    TextView mTvType;
 
     private HomePresenter mHomePresenter;
 

@@ -8,4 +8,26 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
+    <style name="NotifyProStyle">
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="rightText">词</item>
+        <item name="leftText">90</item>
+        <item name="rightSize">@dimen/sp_6</item>
+        <item name="leftSize">@dimen/sp_14</item>
+        <item name="rightColor">@color/colordefault</item>
+        <item name="leftColor">@color/color4</item>
+    </style>
+
+    <style name="textStyleOne">
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/sp_18</item>
+        <item name="android:textColor">@color/color2</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <dimen name="sp_14">14sp</dimen>
+    <dimen name="sp_6">6sp</dimen>
 </resources>
