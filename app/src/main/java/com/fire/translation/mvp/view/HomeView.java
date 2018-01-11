@@ -13,5 +13,8 @@ import com.fire.translation.entity.DailyEntity;
 
 public interface HomeView extends IBaseView {
 
+    /**
+     *
+     */
     void setData(DailyEntity test);
 }
