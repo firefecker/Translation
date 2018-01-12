@@ -9,8 +9,14 @@ package com.fire.baselibrary.base.inter;
 
 public interface IBaseView {
 
-    void showLoadingView();
-    void dismissLoadingView();
-    void notifyError(Throwable e);
+    default void showLoadingView() {
+
+    }
+    default void dismissLoadingView() {
+
+    }
+    default void notifyError(Throwable e) {
+
+    }
 
 }

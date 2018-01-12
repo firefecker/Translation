@@ -1,6 +1,7 @@
 package com.fire.translation.mvp.presenter;
 
 import com.fire.baselibrary.base.inter.IBasePresenter;
+import com.fire.translation.db.entities.Record;
 import com.fire.translation.mvp.model.HomeModel;
 import com.fire.translation.mvp.view.HomeView;
 
@@ -26,11 +27,19 @@ public class HomePresenter implements IBasePresenter {
         }
         mHomeModel.getDsapi(date)
         .subscribe(test -> {
-            mHomeView.setData(test);
+            //mHomeView.setData(test);
             mHomeView.dismissLoadingView();
         },
         throwable -> {
             mHomeView.notifyError(throwable);
         });
+    }
+
+    public void loadRecord() {
+        mHomeView.setRecord(mHomeModel.loadRecord());
+    }
+
+    public Record getRecord() {
+        return mHomeModel.getRecord();
     }
 }

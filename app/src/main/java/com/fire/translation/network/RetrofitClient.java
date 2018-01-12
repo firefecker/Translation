@@ -45,7 +45,9 @@ public class RetrofitClient {
 
     private RetrofitClient() {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor(
-                message -> Logger.e(message));
+                message -> {
+                    /*Logger.e(message)*/
+                });
         logging.setLevel(HttpLoggingInterceptor.Level.HEADERS);
 
         mCookieManager = new CookieManager();

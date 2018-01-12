@@ -102,6 +102,8 @@ public class NotifyTextView extends View {
 
     public void setLeftText(String leftText) {
         mLeftText = leftText;
+        init();
+        postInvalidate();
     }
 
     public void setRightText(String rightText) {

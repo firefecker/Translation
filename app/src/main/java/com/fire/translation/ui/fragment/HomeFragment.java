@@ -5,13 +5,17 @@ import android.widget.TextView;
 import butterknife.BindView;
 import com.fire.baselibrary.base.BaseFragment;
 import com.fire.translation.R;
-import com.fire.translation.entity.DailyEntity;
 import com.fire.translation.mvp.presenter.HomePresenter;
 import com.fire.translation.mvp.view.HomeView;
 import com.fire.translation.view.NotifyTextView;
+import com.orhanobut.logger.Logger;
+import com.pushtorefresh.storio3.sqlite.Changes;
+import com.trello.rxlifecycle2.android.FragmentEvent;
+import io.reactivex.Flowable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
- *
  * @author fire
  * @date 2018/1/3
  * Description:
@@ -44,12 +48,30 @@ public class HomeFragment extends BaseFragment implements HomeView {
     @Override
     public void initView() {
         mHomePresenter = new HomePresenter(this);
-        mHomePresenter.getDsapi("2017-12-26", true);
+        //mHomePresenter.getDsapi("2017-12-26", true);
+        mHomePresenter.loadRecord();
     }
 
-    @Override
-    public void setData(DailyEntity test) {
+    //@Override
+    //public void setData(DailyEntity test) {
+    //    Logger.e(test.toString());
+    //}
 
+    @Override
+    public void setRecord(Flowable<Changes> listFlowable) {
+        listFlowable.compose(this.bindUntilEvent(FragmentEvent.DESTROY_VIEW))
+                .map(changes -> mHomePresenter.getRecord())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(record -> {
+                    mNvJcnum.setLeftText(record.getReview() + "");
+                    mNvJsnum.setLeftText(record.getRecordTime() + "");
+                    mNvReview.setLeftText(record.getRecordDays() + "");
+                    mNvType.setLeftText(record.getRecordCount() + "");
+                    mNvZwnum.setLeftText(record.getRecordWords() + "");
+                },throwable -> {
+                    Logger.e(throwable.toString());
+                });
     }
 
     @Override
