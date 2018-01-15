@@ -30,6 +30,20 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    lintOptions {
+        abortOnError false
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
 }
 
 dependencies {
@@ -44,6 +58,7 @@ dependencies {
     implementation 'com.pushtorefresh.storio3:sqlite-annotations:3.0.0'
 
     annotationProcessor 'com.pushtorefresh.storio3:sqlite-annotations-processor:3.0.0'
+    compile 'org.jetbrains:annotations:15.0'
 }
 
 android.applicationVariants.all { variant ->

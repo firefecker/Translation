@@ -12,6 +12,7 @@ public class Constant {
     public static final String BASESQLNAME = "Beidanci.db";
     public static final String BASEZIPNAME = "Beidanci.zip";
 
+    ///data/data/com.fire.translation/databases/ciku_01.db
     public static final String SQLONENAME = "ciku_01.db";
     public static final String ZIPONENAME = "ciku_01.zip";
 }

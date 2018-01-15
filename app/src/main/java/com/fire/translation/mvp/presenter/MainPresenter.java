@@ -1,9 +1,7 @@
 package com.fire.translation.mvp.presenter;
 
 import com.fire.baselibrary.base.inter.IBasePresenter;
-import com.fire.translation.mvp.model.HomeModel;
 import com.fire.translation.mvp.model.MainModel;
-import com.fire.translation.mvp.view.HomeView;
 import com.fire.translation.mvp.view.MainView;
 
 /**

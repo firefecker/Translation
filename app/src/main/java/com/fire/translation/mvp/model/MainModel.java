@@ -1,17 +1,18 @@
 package com.fire.translation.mvp.model;
 
 import com.fire.baselibrary.base.inter.IBaseModel;
+import com.fire.translation.constant.Constant;
 import com.fire.translation.db.Dbservice;
 import com.fire.translation.db.entities.Record;
 import com.fire.translation.db.entities.TableName;
+import com.fire.translation.db.entities.Word;
 import com.fire.translation.utils.DateUtils;
 import com.pushtorefresh.storio3.Optional;
 import com.pushtorefresh.storio3.sqlite.operations.put.PutResult;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by fire on 2018/1/12.
@@ -30,12 +31,20 @@ public class MainModel implements IBaseModel {
     public Observable<PutResult> setExistTableStatus() {
         return Observable.create(
                 e -> {
-                    Record record = Record.newRecord((int) System.currentTimeMillis(),
-                            DateUtils.getFormatDate1(new Date(), DateUtils.dateFormat1),
-                            0, 30, 0, 0, 0);
-                    PutResult result = Dbservice.getInstance()
+                    Record record = Dbservice.getInstance()
                             .defaultDbConfig()
-                            .insertRecord(record);
+                            .getRecord();
+                    if (record == null) {
+                        List<Word> allWords = Dbservice.getInstance()
+                                .setDbConfig(Constant.SQLONENAME)
+                                .getAllWords();
+                        record = Record.newRecord((int) System.currentTimeMillis(),
+                                DateUtils.getFormatDate1(new Date(), DateUtils.dateFormat1),
+                                0, 30, 0, allWords.size(), 0);
+                        Dbservice.getInstance()
+                                .defaultDbConfig()
+                                .insertRecord(record);
+                    }
                     TableName firstTable = Dbservice.getInstance()
                             .defaultDbConfig()
                             .getFirstTable();

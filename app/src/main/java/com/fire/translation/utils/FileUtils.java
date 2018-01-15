@@ -1,8 +1,11 @@
 package com.fire.translation.utils;
 
+import android.os.Environment;
 import android.text.TextUtils;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by fire on 2018/1/12.
@@ -57,6 +60,25 @@ public class FileUtils {
             created = false;
         }
         return created;
+    }
+
+    /**
+     * 生成文件路径和文件名
+     *
+     * @return
+     */
+    public static String getFileName() {
+        String saveDir = Environment.getExternalStorageDirectory() + "/translation";
+        File dir = new File(saveDir);
+        if (!dir.exists()) {
+            dir.mkdir(); // 创建文件夹
+        }
+        // 用日期作为文件名，确保唯一性
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        String fileName = saveDir + "/" + formatter.format(date) + ".png";
+
+        return fileName;
     }
 
 }

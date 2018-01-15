@@ -10,6 +10,7 @@ import com.fire.translation.db.entities.DbModel;
 import com.fire.translation.utils.AssetsUtils;
 import com.pushtorefresh.storio3.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio3.sqlite.impl.DefaultStorIOSQLite;
+import com.youdao.sdk.app.YouDaoApplication;
 import java.io.File;
 import java.io.IOException;
 
@@ -29,6 +30,7 @@ public class TransApplication extends App {
     @Override
     public void onCreate() {
         super.onCreate();
+        YouDaoApplication.init(this, "0a52ba2c9ab9f3e4");
         mTransApp = this;
         unZipFile();
         initDBHelper();

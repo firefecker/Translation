@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Translation</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_home">主页</string>
+    <string name="title_dashboard">面板</string>
+    <string name="title_notifications">我的</string>
+    <string name="translation">翻译</string>
+    <string name="record">记录</string>
+    <string name="word_book">单词</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.fire.baselibrary.base;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
@@ -18,10 +19,13 @@ import com.trello.rxlifecycle2.components.support.RxFragment;
 
 public abstract class BaseFragment extends RxFragment {
 
+    public Activity mActivity;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
+        mActivity = getActivity();
         super.onCreateView(inflater, container, savedInstanceState);
         View inflate = inflater.inflate(resourceId(), container, false);
         ButterKnife.bind(this,inflate);

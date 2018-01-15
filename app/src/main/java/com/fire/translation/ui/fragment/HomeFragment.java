@@ -48,14 +48,8 @@ public class HomeFragment extends BaseFragment implements HomeView {
     @Override
     public void initView() {
         mHomePresenter = new HomePresenter(this);
-        //mHomePresenter.getDsapi("2017-12-26", true);
         mHomePresenter.loadRecord();
     }
-
-    //@Override
-    //public void setData(DailyEntity test) {
-    //    Logger.e(test.toString());
-    //}
 
     @Override
     public void setRecord(Flowable<Changes> listFlowable) {
@@ -64,28 +58,14 @@ public class HomeFragment extends BaseFragment implements HomeView {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(record -> {
-                    mNvJcnum.setLeftText(record.getReview() + "");
+                    mNvJcnum.setLeftText(record.getRecordDays() + "");
                     mNvJsnum.setLeftText(record.getRecordTime() + "");
-                    mNvReview.setLeftText(record.getRecordDays() + "");
+                    mNvReview.setLeftText(record.getReview() + "");
                     mNvType.setLeftText(record.getRecordCount() + "");
                     mNvZwnum.setLeftText(record.getRecordWords() + "");
-                },throwable -> {
+                }, throwable -> {
                     Logger.e(throwable.toString());
                 });
     }
 
-    @Override
-    public void showLoadingView() {
-
-    }
-
-    @Override
-    public void dismissLoadingView() {
-
-    }
-
-    @Override
-    public void notifyError(Throwable e) {
-
-    }
 }

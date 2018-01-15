@@ -4,6 +4,7 @@ import com.fire.translation.TransApplication;
 import com.fire.translation.constant.Constant;
 import com.fire.translation.db.entities.Record;
 import com.fire.translation.db.entities.TableName;
+import com.fire.translation.db.entities.Word;
 import com.fire.translation.utils.DateUtils;
 import com.pushtorefresh.storio3.Optional;
 import com.pushtorefresh.storio3.sqlite.StorIOSQLite;
@@ -45,8 +46,8 @@ public class Dbservice {
         return mStorIOSQLite;
     }
 
-    public Dbservice setDbConfig(String dbDir, String dbName) {
-        DBConfig build = DBConfig.builder().dbDir(dbDir).dbName(dbName).version(1).build();
+    public Dbservice setDbConfig(String dbName) {
+        DBConfig build = DBConfig.builder().dbDir(TransApplication.mTransApp.getDatabasePath(".").getAbsolutePath()).dbName(dbName).version(1).build();
         CipherOpenHelper cipherOpenHelper = new CipherOpenHelper(TransApplication.mTransApp,
                 build.getDbDir(), build.getDbName(), build.getVersion());
         mStorIOSQLite = TransApplication.mTransApp.initSqlite(cipherOpenHelper);
@@ -126,6 +127,17 @@ public class Dbservice {
                         .table(Record.__TABLE__)
                         .where(String.format("%s = ?", Record.C_RECORD_DATE))
                         .whereArgs(DateUtils.getFormatDate1(new Date(),DateUtils.dateFormat1))
+                        .build())
+                .prepare()
+                .executeAsBlocking();
+    }
+
+    public List<Word> getAllWords() {
+        return mStorIOSQLite
+                .get()
+                .listOfObjects(Word.class)
+                .withQuery(Query.builder()
+                        .table(Word.__TABLE__)
                         .build())
                 .prepare()
                 .executeAsBlocking();

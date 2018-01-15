@@ -77,6 +77,7 @@ public class NotifyTextView extends View {
         mPaint1.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, mLeftSize, mR.getDisplayMetrics()));
         mPaint2.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, mRightSize, mR.getDisplayMetrics()));
         mPaint1.setColor(mLeftColor);
+        mPaint1.setTextAlign(Paint.Align.LEFT);
         mPaint1.getTextBounds(mLeftText, 0, mLeftText.length(), mBounds1);
         mPaint2.setColor(mRightColor);
         mPaint2.getTextBounds(mRightText, 0, mRightText.length(), mBounds2);

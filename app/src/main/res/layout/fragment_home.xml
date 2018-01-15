@@ -23,8 +23,8 @@
             app:layout_constraintTop_toBottomOf="@id/tv_notify"
             app:leftColor="@color/color4"
             app:rightColor="@color/colordefault"
-            app:leftSize="@dimen/sp_40"
-            app:rightSize="@dimen/sp_6"
+            app:leftSize="@dimen/sp_36"
+            app:rightSize="@dimen/sp_4"
             app:leftText="90"
             app:rightText="词"
             android:layout_width="wrap_content"
@@ -45,6 +45,7 @@
             >
         <LinearLayout
                 android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginRight="@dimen/dp_10"
                 android:orientation="vertical"
                 android:layout_weight="1"
                 android:layout_width="0dp"
@@ -58,6 +59,7 @@
                     android:id="@+id/nv_jsnum"
                     app:layout_constraintTop_toBottomOf="@id/tv_notify"
                     style="@style/NotifyProStyle"
+                    app:rightText="次"
                     />
         </LinearLayout>
         <TextView
@@ -67,6 +69,7 @@
                 />
         <LinearLayout
                 android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginLeft="@dimen/dp_10"
                 android:orientation="vertical"
                 android:layout_weight="1"
                 android:layout_width="0dp"
@@ -80,6 +83,7 @@
                     android:id="@+id/nv_jcnum"
                     app:layout_constraintTop_toBottomOf="@id/tv_notify"
                     style="@style/NotifyProStyle"
+                    app:rightText="天"
                     />
         </LinearLayout>
     </LinearLayout>
