@@ -3,8 +3,12 @@ package com.fire.translation.mvp.view;
 import android.view.View;
 import android.view.animation.Animation;
 import com.fire.baselibrary.base.inter.IBaseView;
+import com.fire.translation.widget.EventBase;
+import com.youdao.ocr.online.OCRResult;
+import com.youdao.ocr.online.OcrErrorCode;
 import com.youdao.sdk.ydtranslate.Translate;
 import com.youdao.sdk.ydtranslate.TranslateErrorCode;
+import io.reactivex.Observable;
 import java.util.List;
 
 /**
@@ -18,11 +22,17 @@ public interface TranslationView extends IBaseView{
     void initData(Animation mOperatingAnim1, Animation mOperatingAnim2, Animation mOperatingAnim3,
             List<String> mStrings);
 
-    void translateOnError(TranslateErrorCode translateErrorCode, String s);
+    void translateOnError(Observable<TranslateErrorCode> translateErrorCode);
 
-    void translateOnResult(Translate translate, String s, String s1);
+    void translateOnResult(Observable<Translate> translateObservable);
 
     void stringBack(View view, String data);
 
     void dismissBack(View view);
+
+    void ocrOnResult(Observable<OCRResult> ocrResultObservable);
+
+    void ocrOnError(Observable<OcrErrorCode> ocrResultObservable);
+
+    void rxBus(Observable<EventBase> observable);
 }

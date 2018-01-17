@@ -64,7 +64,6 @@ public class FileUtils {
 
     /**
      * 生成文件路径和文件名
-     *
      * @return
      */
     public static String getFileName() {
@@ -74,11 +73,7 @@ public class FileUtils {
             dir.mkdir(); // 创建文件夹
         }
         // 用日期作为文件名，确保唯一性
-        Date date = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
-        String fileName = saveDir + "/" + formatter.format(date) + ".png";
-
+        String fileName = saveDir + "/" + DateUtils.formatDateToString(new Date(),DateUtils.dateFormat3) + ".png";
         return fileName;
     }
-
 }

@@ -18,4 +18,6 @@ public interface MainView extends IBaseView{
     void loadExistTableName(Flowable<Optional<TableName>> existTableName);
 
     void loadStatus(Observable<PutResult> putResultObservable);
+
+    void loadPath(String s);
 }

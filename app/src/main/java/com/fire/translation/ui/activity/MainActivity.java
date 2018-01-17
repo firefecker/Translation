@@ -1,33 +1,45 @@
 package com.fire.translation.ui.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.RelativeLayout;
 import butterknife.BindView;
 import com.fire.translation.R;
 import com.fire.baselibrary.base.BaseActivity;
+import com.fire.translation.constant.Constant;
 import com.fire.translation.db.entities.TableName;
 import com.fire.translation.mvp.presenter.MainPresenter;
 import com.fire.translation.mvp.view.MainView;
+import com.fire.translation.rx.DefaultButtonTransformer;
 import com.fire.translation.rx.RxBus;
 import com.fire.translation.ui.fragment.DashboardFragment;
 import com.fire.translation.ui.fragment.HomeFragment;
 import com.fire.translation.ui.fragment.MineFragment;
+import com.fire.translation.ui.fragment.TranslationFragment;
 import com.fire.translation.utils.FunctionUtils;
+import com.fire.translation.widget.EventBase;
 import com.orhanobut.logger.Logger;
 import com.pushtorefresh.storio3.Optional;
 import com.pushtorefresh.storio3.sqlite.operations.put.PutResult;
+import com.tbruyelle.rxpermissions2.Permission;
 import com.trello.rxlifecycle2.android.ActivityEvent;
+import com.trello.rxlifecycle2.android.FragmentEvent;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -59,12 +71,11 @@ public class MainActivity extends BaseActivity implements MainView {
 
     @Override
     public void initView() {
-        mMainPresenter = new MainPresenter(this);
+
         mMainPresenter.loadExistTable();
         mHomeFragment = new HomeFragment();
         mDashboardFragment = new DashboardFragment();
         mMineFragment = new MineFragment();
-
 
         mNavigationView.setOnNavigationItemSelectedListener(
                 item -> {
@@ -87,7 +98,23 @@ public class MainActivity extends BaseActivity implements MainView {
                         default:
                             return false;
                     }
+                });
+    }
 
+    @Override
+    protected void onActivityCreate(@Nullable Bundle paramBundle) {
+        super.onActivityCreate(paramBundle);
+        mMainPresenter = new MainPresenter(this);
+        requestPermission(Constant.PERMISSIONS)
+                .compose(DefaultButtonTransformer.create())
+                .compose(this.bindUntilEvent(ActivityEvent.DESTROY))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(permission -> {
+                    if (permission.granted) {
+                        Logger.e("权限申请成功");
+                    } else {
+                        Logger.e("权限申请失败或者已经申请过权限了");
+                    }
                 });
     }
 
@@ -135,14 +162,14 @@ public class MainActivity extends BaseActivity implements MainView {
                     if (tableNameOptional == null || tableNameOptional.get() == null) {
                         mMainPresenter.setTableStatus();
                     }
-                },throwable -> {
+                }, throwable -> {
                     mMainPresenter.setTableStatus();
                 });
     }
 
     @Override
     public void loadStatus(Observable<PutResult> putResultObservable) {
-        putResultObservable .compose(this.bindUntilEvent(ActivityEvent.DESTROY))
+        putResultObservable.compose(this.bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(putResult -> {
@@ -155,20 +182,24 @@ public class MainActivity extends BaseActivity implements MainView {
     }
 
     @Override
+    public void loadPath(String s) {
+        RxBus.getDefault().post(EventBase.builder().arg2(s).receiver(
+                TranslationFragment.class).build());
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            Uri uri = null;
-            if (data != null) {
-                uri = data.getData();
-            }
-            RxBus.getDefault().post(uri);
-            //if (uri == null && !TextUtils.isEmpty(filePath)) {
-            //    uri = Uri.parse(filePath);
-            //}
-            //if (uri == null) {
-            //    return;
-            //}
-        }
         super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case Constant.ACTION_IMAGE:
+                if (resultCode == RESULT_OK) {
+                    RxBus.getDefault().post(EventBase.builder().receiver(
+                            TranslationFragment.class).build());
+                }
+                break;
+            case Constant.ACTION_ALBUM:
+                mMainPresenter.loadPath(this,data);
+                break;
+        }
     }
 }

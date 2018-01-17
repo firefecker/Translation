@@ -1,8 +1,7 @@
 package com.fire.translation.ui.fragment;
 
-import android.content.Intent;
-import android.net.Uri;
-import android.text.TextUtils;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.animation.Animation;
 import android.widget.EditText;
@@ -12,17 +11,24 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.OnClick;
 import com.fire.baselibrary.base.BaseFragment;
+import com.fire.baselibrary.utils.CustomerDialog;
 import com.fire.translation.R;
+import com.fire.translation.constant.Constant;
 import com.fire.translation.mvp.presenter.TranslationPresenter;
 import com.fire.translation.mvp.view.TranslationView;
-import com.fire.translation.rx.DefaultButtonTransformer;
-import com.fire.translation.rx.RxBus;
+import com.fire.translation.utils.FunctionUtils;
+import com.fire.translation.widget.EventBase;
 import com.orhanobut.logger.Logger;
 import com.trello.rxlifecycle2.android.FragmentEvent;
+import com.youdao.ocr.online.Line;
+import com.youdao.ocr.online.OCRResult;
+import com.youdao.ocr.online.OcrErrorCode;
+import com.youdao.ocr.online.Region;
+import com.youdao.ocr.online.Word;
 import com.youdao.sdk.ydtranslate.Translate;
 import com.youdao.sdk.ydtranslate.TranslateErrorCode;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,7 +68,6 @@ public class TranslationFragment extends BaseFragment
     private Animation mOperatingAnim3;
     private List<String> mStrings = new ArrayList<>();
     private TranslationPresenter mTranslationPresenter;
-    private String mFilePath;
 
     @Override
     public int resourceId() {
@@ -70,25 +75,14 @@ public class TranslationFragment extends BaseFragment
     }
 
     @Override
-    public void initView() {
+    protected void onFragmentCreate(@Nullable Bundle paramBundle) {
         mTranslationPresenter = new TranslationPresenter(this);
-        mTranslationPresenter.init(mActivity);
-        RxBus.getDefault()
-                .toObservable(Uri.class)
-                .compose(DefaultButtonTransformer.create())
-                .compose(this.bindUntilEvent(FragmentEvent.DESTROY_VIEW))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(uri -> {
-                    if (uri == null && !TextUtils.isEmpty(mFilePath)) {
-                        uri = Uri.parse(mFilePath);
-                    }
-                    if (uri == null) {
-                        return;
-                    }
-                    Logger.e(uri.getPath());
-                }, throwable -> {
+        mTranslationPresenter.rxBus(EventBase.class);
+    }
 
-                });
+    @Override
+    public void initView() {
+        mTranslationPresenter.init(mActivity);
     }
 
     @OnClick({
@@ -98,12 +92,12 @@ public class TranslationFragment extends BaseFragment
     public void onViewClicked(View v) {
         switch (v.getId()) {
             case R.id.layout_from:
-                mTranslationPresenter.showPopup(mActivity, mLayoutLanguage,
-                        mLayoutFrom, mStrings, mIvFrom, mOperatingAnim1);
+                mTranslationPresenter.showPopup(mActivity, mLayoutLanguage, mLayoutFrom, mStrings,
+                        mIvFrom, mOperatingAnim1);
                 break;
             case R.id.layout_to:
-                mTranslationPresenter.showPopup(mActivity, mLayoutLanguage,
-                        mLayoutTo, mStrings, mIvTo, mOperatingAnim1);
+                mTranslationPresenter.showPopup(mActivity, mLayoutLanguage, mLayoutTo, mStrings,
+                        mIvTo, mOperatingAnim1);
                 break;
             case R.id.iv_revise:
                 mIvRevice.startAnimation(mOperatingAnim3);
@@ -113,9 +107,11 @@ public class TranslationFragment extends BaseFragment
                 mTvTo.setText(stringFrom);
                 break;
             case R.id.iv_camera:
-                mFilePath = mTranslationPresenter.takePhoto(this);
+                mActivity.startActivityForResult(FunctionUtils.getNormalPictureIntent(mActivity),
+                        Constant.ACTION_IMAGE);
                 break;
             case R.id.iv_picture:
+                mActivity.startActivityForResult(FunctionUtils.getAlbumIntent(),  Constant.ACTION_ALBUM);
                 break;
             case R.id.iv_gesture:
                 break;
@@ -153,6 +149,62 @@ public class TranslationFragment extends BaseFragment
     }
 
     @Override
+    public void ocrOnResult(Observable<OCRResult> ocrResultObservable) {
+        //图片识别成功
+        ocrResultObservable
+                .compose(this.bindUntilEvent(FragmentEvent.DESTROY_VIEW))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(result -> {
+                    CustomerDialog.dismissProgress();
+                    List<Region> regions = result.getRegions();
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("识别结果:" + (result.getErrorCode() == 0 ? "成功" : "识别异常"));
+                    sb.append("\n");
+                    for (Region region : regions) {
+                        List<Line> lines = region.getLines();
+                        for (Line line : lines) {
+                            List<Word> words = line.getWords();
+                            for (Word word : words) {
+                                sb.append(word.getText()).append(" ");
+                            }
+                            sb.append("\n");
+                        }
+                        sb.append("\n");
+                    }
+                    Logger.e(sb.toString());
+                }, throwable -> CustomerDialog.dismissProgress());
+    }
+
+    @Override
+    public void ocrOnError(Observable<OcrErrorCode> ocrResultObservable) {
+        //图片识别失败
+        ocrResultObservable
+                .compose(this.bindUntilEvent(FragmentEvent.DESTROY_VIEW))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(translate -> {
+                    CustomerDialog.dismissProgress();
+                    Logger.e("message = "
+                             + translate.getCode()
+                             + ",  name = "
+                             + translate.toString());
+                }, throwable -> CustomerDialog.dismissProgress());
+    }
+
+    @Override
+    public void rxBus(Observable<EventBase> observable) {
+        observable.compose(this.bindUntilEvent(FragmentEvent.DESTROY_VIEW))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(eventBase -> {
+                    if (eventBase != null) {
+                        CustomerDialog.showProgress(mActivity);
+                        mTranslationPresenter.zipFile(eventBase,mActivity);
+                    }
+                }, throwable -> {
+                    Logger.e(throwable.toString());
+                });
+    }
+
+    @Override
     public void initData(Animation mOperatingAnim1, Animation mOperatingAnim2,
             Animation mOperatingAnim3, List<String> mStrings) {
         this.mOperatingAnim1 = mOperatingAnim1;
@@ -162,47 +214,53 @@ public class TranslationFragment extends BaseFragment
     }
 
     @Override
-    public void translateOnError(TranslateErrorCode translateErrorCode, String s) {
-        Logger.e(translateErrorCode.toString() + "  ======  " + s);
+    public void translateOnError(Observable<TranslateErrorCode> translateErrorCode) {
+        //翻译失败
+        translateErrorCode
+                .compose(this.bindUntilEvent(FragmentEvent.DESTROY_VIEW))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(translate -> {
+                    CustomerDialog.dismissProgress();
+                    Logger.e(translate.toString());
+                }, throwable -> CustomerDialog.dismissProgress());
     }
 
     @Override
-    public void translateOnResult(Translate translate, String s, String s1) {
-        Logger.e("\ngetDictDeeplink = "
-                 + translate.getDictDeeplink()
-                 + "\ngetDictWebUrl = "
-                 + translate.getDictWebUrl()
-                 + "\ngetFrom = "
-                 + translate.getFrom()
-                 + "\ngetLe = "
-                 + translate.getLe()
-                 + "\ngetPhonetic = "
-                 + translate.getPhonetic()
-                 + "\ngetQuery = "
-                 + translate.getQuery()
-                 + "\ngetTo = "
-                 + translate.getTo()
-                 + "\ngetUkPhonetic = "
-                 + translate.getUkPhonetic()
-                 + "\ngetUsPhonetic = "
-                 + translate.getUsPhonetic()
-                 + "\ngetExplains = "
-                 + translate.getExplains()
-                 + "\ngetTranslations = "
-                 + translate.getTranslations()
-                 + "\ngetWebExplains = "
-                 + translate.getWebExplains()
-                 + "\ngetWebExplains = "
-                 + translate.getWebExplains()
-                 + "\ns ======  "
-                 + s
-                 + "\ns1======  "
-                 + s1);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Logger.e(mFilePath);
-        super.onActivityResult(requestCode, resultCode, data);
+    public void translateOnResult(Observable<Translate> translateObservable) {
+        //翻译成功
+        translateObservable
+                .compose(this.bindUntilEvent(FragmentEvent.DESTROY_VIEW))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(translate -> {
+                    CustomerDialog.dismissProgress();
+                    Logger.e("getWebExplains = "
+                             + translate.getWebExplains()
+                             + "\ngetTranslations = "
+                             + translate.getTranslations()
+                             + "\ngetExplains = "
+                             + translate.getExplains()
+                             + "\ngetUsPhonetic = "
+                             + translate.getUsPhonetic()
+                             + "\ngetUkPhonetic = "
+                             + translate.getUkPhonetic()
+                             + "\ngetTo = "
+                             + translate.getTo()
+                             + "\ngetQuery = "
+                             + translate.getQuery()
+                             + "\ngetPhonetic = "
+                             + translate.getPhonetic()
+                             + "\ngetLe = "
+                             + translate.getLe()
+                             + "\ngetFrom = "
+                             + translate.getFrom()
+                             + "\ngetDictWebUrl = "
+                             + translate.getDictWebUrl()
+                             + "\ngetDeeplink = "
+                             + translate.getDeeplink()
+                             + "\ngetDictDeeplink = "
+                             + translate.getDictDeeplink()
+                             + "\ngetErrorCode = "
+                             + translate.getErrorCode());
+                }, throwable -> CustomerDialog.dismissProgress());
     }
 }

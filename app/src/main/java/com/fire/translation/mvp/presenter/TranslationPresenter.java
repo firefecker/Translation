@@ -1,10 +1,10 @@
 package com.fire.translation.mvp.presenter;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
-import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -15,6 +15,7 @@ import com.fire.baselibrary.base.inter.IBasePresenter;
 import com.fire.translation.R;
 import com.fire.translation.mvp.model.TranslationModel;
 import com.fire.translation.mvp.view.TranslationView;
+import com.fire.translation.widget.EventBase;
 import com.fire.translation.widget.ListPopupWindow;
 import java.util.Arrays;
 import java.util.List;
@@ -59,9 +60,6 @@ public class TranslationPresenter implements IBasePresenter, ListPopupWindow.Dat
         mTranslationModel.translate(mTranslationView, from, to, string);
     }
 
-    public String takePhoto(Fragment fragment) {
-        return mTranslationModel.takePhoto(fragment);
-    }
 
     public void showPopup(Activity activity, LinearLayout mLayoutLanguage, LinearLayout layoutFrom,
             List<String> strings, ImageView transView, Animation mOperatingAnim1) {
@@ -99,5 +97,13 @@ public class TranslationPresenter implements IBasePresenter, ListPopupWindow.Dat
     @Override
     public void dismissBack(View view) {
         mTranslationView.dismissBack(view);
+    }
+
+    public void zipFile(EventBase eventBase,Context context) {
+        mTranslationModel.zipFile(mTranslationView,eventBase,context);
+    }
+
+    public void rxBus(Class mClass) {
+        mTranslationView.rxBus(mTranslationModel.rxBus(mClass));
     }
 }

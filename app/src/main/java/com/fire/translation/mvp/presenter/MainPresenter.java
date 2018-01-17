@@ -1,5 +1,7 @@
 package com.fire.translation.mvp.presenter;
 
+import android.content.Context;
+import android.content.Intent;
 import com.fire.baselibrary.base.inter.IBasePresenter;
 import com.fire.translation.mvp.model.MainModel;
 import com.fire.translation.mvp.view.MainView;
@@ -27,5 +29,9 @@ public class MainPresenter implements IBasePresenter {
 
     public void setTableStatus() {
         mMainView.loadStatus(mMainModel.setExistTableStatus());
+    }
+
+    public void loadPath(Context context,Intent data) {
+        mMainView.loadPath(mMainModel.loadPath(context,data));
     }
 }

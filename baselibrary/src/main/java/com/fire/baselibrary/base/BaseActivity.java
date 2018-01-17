@@ -1,12 +1,17 @@
 package com.fire.baselibrary.base;
 
+import android.Manifest;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.view.View;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import com.tbruyelle.rxpermissions2.Permission;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+import io.reactivex.Observable;
+import io.reactivex.functions.Consumer;
 
 /**
  * @author fire
@@ -17,6 +22,7 @@ import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 public abstract class BaseActivity extends RxAppCompatActivity {
 
     private Unbinder mBind;
+    private RxPermissions mRxPermissions;
 
     public abstract @LayoutRes int getLayout();
 
@@ -29,9 +35,16 @@ public abstract class BaseActivity extends RxAppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(getLayout());
         mBind = ButterKnife.bind(this);
+        onActivityCreate(savedInstanceState);
         initView();
         initData();
-        onActivityCreate(savedInstanceState);
+    }
+
+    private RxPermissions getRxPermission() {
+        if (mRxPermissions == null) {
+            mRxPermissions = new RxPermissions(this);
+        }
+        return mRxPermissions;
     }
 
     @Override
@@ -47,4 +60,9 @@ public abstract class BaseActivity extends RxAppCompatActivity {
     protected void onActivityCreate(@Nullable Bundle paramBundle) {
 
     }
+
+    public Observable<Permission> requestPermission(String... permission ) {
+        return getRxPermission().requestEach(permission);
+    }
+
 }

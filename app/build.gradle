@@ -49,14 +49,13 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':baselibrary')
-
     implementation "com.jakewharton:butterknife:${butterknife}" //woo new Gradle API!
     annotationProcessor "com.jakewharton:butterknife-compiler:${butterknife}"
-
     //sqlite
     implementation 'com.pushtorefresh.storio3:sqlite:3.0.0'
     implementation 'com.pushtorefresh.storio3:sqlite-annotations:3.0.0'
-
+    /*图片压缩*/
+    implementation 'top.zibin:Luban:1.1.3'
     annotationProcessor 'com.pushtorefresh.storio3:sqlite-annotations-processor:3.0.0'
     compile 'org.jetbrains:annotations:15.0'
 }

@@ -76,13 +76,12 @@
     <TextView
             android:background="@color/colordefault"
             android:layout_width="match_parent"
-            android:layout_height="0.5px"
+            android:layout_height="0.2px"
             />
 
     <LinearLayout
             android:elevation="@dimen/dp_6"
             android:background="@android:color/white"
-            app:layout_constraintTop_toBottomOf="@+id/tv_line1"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -146,6 +145,64 @@
                     />
         </LinearLayout>
     </LinearLayout>
+
+    <RelativeLayout
+            android:elevation="@dimen/dp_6"
+            android:layout_margin="@dimen/dp_10"
+            android:background="@drawable/result_shape"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/dp_150"
+            >
+        <TextView
+                android:id="@+id/tv_volume"
+                android:gravity="center"
+                android:text="英语"
+                android:drawablePadding="@dimen/dp_6"
+                android:textColor="@android:color/white"
+                android:layout_margin="@dimen/dp_10"
+                android:drawableLeft="@drawable/ic_volume_up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+        <ImageView
+                android:layout_margin="@dimen/dp_10"
+                android:layout_alignParentRight="true"
+                app:srcCompat="@drawable/ic_star_border"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+        <TextView
+                android:id="@+id/tv_content"
+                android:text="哈哈"
+                android:layout_margin="@dimen/dp_10"
+                android:layout_below="@+id/tv_volume"
+                android:textSize="@dimen/sp_20"
+                android:textColor="@android:color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+        <ImageView
+                android:id="@+id/iv_copy"
+                android:layout_margin="@dimen/dp_10"
+                android:layout_below="@+id/tv_content"
+                android:layout_toLeftOf="@+id/iv_more"
+                app:srcCompat="@drawable/ic_content_copy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+        <ImageView
+                android:id="@+id/iv_more"
+                android:layout_margin="@dimen/dp_10"
+                android:layout_below="@+id/tv_content"
+                android:layout_alignParentRight="true"
+                app:srcCompat="@drawable/ic_more_vert"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+    </RelativeLayout>
 
     <com.jude.easyrecyclerview.EasyRecyclerView
             android:id="@+id/recyclerview"

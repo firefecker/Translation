@@ -63,6 +63,8 @@ dependencies {
     api 'com.orhanobut:logger:2.1.1'
     //Gson
     api 'com.google.code.gson:gson:2.8.2'
+    //RxPermission2
+    api 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.5@aar'
     //butterknife
     implementation "com.jakewharton:butterknife:${butterknife}" //woo new Gradle API!
     annotationProcessor "com.jakewharton:butterknife-compiler:${butterknife}"

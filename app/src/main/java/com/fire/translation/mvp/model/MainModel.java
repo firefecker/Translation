@@ -1,5 +1,10 @@
 package com.fire.translation.mvp.model;
 
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.MediaStore;
 import com.fire.baselibrary.base.inter.IBaseModel;
 import com.fire.translation.constant.Constant;
 import com.fire.translation.db.Dbservice;
@@ -63,5 +68,14 @@ public class MainModel implements IBaseModel {
                         e.onComplete();
                     }
                 });
+    }
+
+    public String loadPath(Context context,Intent data) {
+        Uri selectedImage = data.getData();
+        String[] filePathColumns = { MediaStore.Images.Media.DATA};
+        Cursor c = context.getContentResolver().query(selectedImage, filePathColumns, null, null, null);
+        c.moveToFirst();
+        int columnIndex = c.getColumnIndex(filePathColumns[0]);
+        return c.getString(columnIndex);
     }
 }

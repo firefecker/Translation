@@ -29,10 +29,19 @@ public abstract class BaseFragment extends RxFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View inflate = inflater.inflate(resourceId(), container, false);
         ButterKnife.bind(this,inflate);
+        onFragmentCreate(savedInstanceState);
         initView();
         return inflate;
     }
     public abstract @LayoutRes int resourceId ();
 
     public abstract void initView ();
+
+    /**
+     * 实现父类的onActivityCreate，完成Presenter的生成以及P和V的绑定
+     * @param paramBundle
+     */
+    protected void onFragmentCreate(@Nullable Bundle paramBundle) {
+
+    }
 }

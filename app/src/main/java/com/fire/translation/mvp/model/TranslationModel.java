@@ -1,17 +1,22 @@
 package com.fire.translation.mvp.model;
 
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.FileProvider;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.text.TextUtils;
 import com.fire.baselibrary.base.inter.IBaseModel;
-import com.fire.baselibrary.utils.ToastUtils;
-import com.fire.translation.TransApplication;
 import com.fire.translation.mvp.view.TranslationView;
-import com.fire.translation.utils.FileUtils;
+import com.fire.translation.rx.BaseOnCompressListener;
+import com.fire.translation.rx.DefaultButtonTransformer;
+import com.fire.translation.rx.DefaultObservable;
+import com.fire.translation.rx.RxBus;
+import com.fire.translation.utils.FunctionUtils;
+import com.fire.translation.widget.EventBase;
+import com.youdao.ocr.online.ImageOCRecognizer;
+import com.youdao.ocr.online.OCRListener;
+import com.youdao.ocr.online.OCRParameters;
+import com.youdao.ocr.online.OCRResult;
+import com.youdao.ocr.online.OcrErrorCode;
+import com.youdao.sdk.app.EncryptHelper;
 import com.youdao.sdk.app.Language;
 import com.youdao.sdk.app.LanguageUtils;
 import com.youdao.sdk.ydonlinetranslate.Translator;
@@ -19,7 +24,10 @@ import com.youdao.sdk.ydtranslate.Translate;
 import com.youdao.sdk.ydtranslate.TranslateErrorCode;
 import com.youdao.sdk.ydtranslate.TranslateListener;
 import com.youdao.sdk.ydtranslate.TranslateParameters;
+import io.reactivex.Observable;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import top.zibin.luban.Luban;
 
 /**
  * Created by fire on 2018/1/15.
@@ -43,33 +51,81 @@ public class TranslationModel implements IBaseModel{
         translator.lookup(string, "requestId", new TranslateListener() {
             @Override
             public void onError(TranslateErrorCode translateErrorCode, String s) {
-                translationView.translateOnError(translateErrorCode,s);
+                translationView.translateOnError(DefaultObservable.create(translateErrorCode));
             }
 
             @Override
             public void onResult(Translate translate, String s, String s1) {
-                translationView.translateOnResult(translate,s,s1);
+                translationView.translateOnResult(DefaultObservable.create(translate));
             }
         });
     }
 
-    public String takePhoto(Fragment fragment) {
-        String state = Environment.getExternalStorageState(); // 判断是否存在sd卡
-        String filePath = null;
-        if (state.equals(Environment.MEDIA_MOUNTED)) { // 直接调用系统的照相机
-            Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-            filePath = FileUtils.getFileName();
-            Uri uri = null;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                uri = FileProvider.getUriForFile(TransApplication.mTransApp, "com.fire.translation.ui.fileprovider", new File(filePath));
-            } else {
-                uri = Uri.fromFile(new File(filePath));
-            }
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-            fragment.startActivityForResult(intent, 1);
-        } else {
-            ToastUtils.showToast("请检查手机是否有SD卡");
+
+    public void ocrBitmap(TranslationView translationView, Bitmap bitmap) {
+        OCRParameters tps = new OCRParameters.Builder()
+                .source("TransactionORC")
+                .timeout(100000)
+                .type("10011")
+                .lanType("zh-en")
+                .build();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        int quality = 100;
+        bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos);
+        byte[] datas = baos.toByteArray();
+        String bases64 = EncryptHelper.getBase64(datas);
+        int count = bases64.length();
+        while (count > 1.4 * 1024 * 1024) {
+            quality = quality - 10;
+            baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos);
+            datas = baos.toByteArray();
+            bases64 = EncryptHelper.getBase64(datas);
         }
-        return filePath;
+        final String base64 = bases64;
+        ImageOCRecognizer.getInstance(tps).recognize(base64,
+                new OCRListener() {
+                    @Override
+                    public void onResult(final OCRResult result, String input) {
+                        translationView.ocrOnResult(DefaultObservable.create(result));
+                    }
+
+                    @Override
+                    public void onError(final OcrErrorCode error) {
+                        translationView.ocrOnError(DefaultObservable.create(error));
+                    }
+                });
+    }
+
+    public void zipFile(TranslationView mTranslationView,EventBase eventBase, Context context) {
+        File imageFile = null;
+        if (TextUtils.isEmpty(eventBase.getArg2())) {
+            imageFile = FunctionUtils.getImageFile();
+        } else {
+            imageFile = new File(eventBase.getArg2());
+        }
+        Luban.with(context)
+                // 传人要压缩的图片列表
+                .load(imageFile)
+                // 忽略不压缩图片的大小
+                .ignoreBy(100)
+                //设置回调
+                .setCompressListener(new BaseOnCompressListener() {
+                    @Override
+                    public void onSuccess(File file) {
+                        if (TextUtils.isEmpty(eventBase.getArg2())) {
+                            FunctionUtils.getImageFile().delete();
+                        }
+                        ocrBitmap(mTranslationView,FunctionUtils.readBitmapFromFile(file.getAbsolutePath(),768));
+                    }
+                })
+                //启动压缩
+                .launch();
+    }
+
+    public Observable<EventBase> rxBus(Class mClass) {
+        return RxBus.getDefault()
+                .toObservable(mClass)
+                .compose(DefaultButtonTransformer.create());
     }
 }

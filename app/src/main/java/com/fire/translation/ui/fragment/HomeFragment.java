@@ -1,5 +1,7 @@
 package com.fire.translation.ui.fragment;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.widget.Button;
 import android.widget.TextView;
 import butterknife.BindView;
@@ -47,8 +49,13 @@ public class HomeFragment extends BaseFragment implements HomeView {
 
     @Override
     public void initView() {
-        mHomePresenter = new HomePresenter(this);
         mHomePresenter.loadRecord();
+    }
+
+    @Override
+    protected void onFragmentCreate(@Nullable Bundle paramBundle) {
+        super.onFragmentCreate(paramBundle);
+        mHomePresenter = new HomePresenter(this);
     }
 
     @Override

@@ -1,10 +1,26 @@
 package com.fire.translation.utils;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
+import android.os.Looper;
+import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.FileProvider;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
+import com.fire.baselibrary.utils.ToastUtils;
+import com.fire.translation.constant.Constant;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.lang.reflect.Field;
 
 /**
@@ -42,5 +58,88 @@ public class FunctionUtils {
             child.setLayoutParams(params);
             child.invalidate();
         }
+    }
+
+    /**
+     * 拍照
+     * @param context
+     * @return
+     */
+    public static Intent getNormalPictureIntent(Context context) {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Uri imageUri = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            imageUri = FileProvider.getUriForFile(context, "com.fire.translation.ui.fileprovider", getImageFile());
+        } else {
+            imageUri = Uri.fromFile(getImageFile());
+        }
+        intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
+        return intent;
+    }
+
+    /**
+     * 调用相册
+     * @return
+     */
+    public static Intent getAlbumIntent() {
+        Intent intent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        return intent;
+    }
+
+    public static File getImageFile() {
+        File file = new File((SDCardUtils.isSDCardEnable() ? Constant.SDCARD_DIRECTORY : Constant.PHONE_DIRECTORY));
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+        File imgFile = new File(file, "translation.jpg");
+        return imgFile;
+    }
+
+    public static Bitmap getNormalBitmap(File file) {
+        FileInputStream fis = null;
+        Bitmap bitmap = null;
+        try {
+            if (file.exists()) {
+                fis = new FileInputStream(file.getPath());
+                bitmap = BitmapFactory.decodeStream(fis);
+                file.delete();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return bitmap;
+        } finally {
+            try {
+                if (fis != null) {
+                    fis.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return bitmap;
+    }
+
+    public static boolean isInMainThread() {
+        return Looper.myLooper() == Looper.getMainLooper();
+    }
+
+    public static Bitmap readBitmapFromFile(String filePath, int size) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(filePath, options);
+        float srcWidth = options.outWidth;
+        float srcHeight = options.outHeight;
+        int inSampleSize = 1;
+        if (srcHeight > size || srcWidth > size) {
+            if (srcWidth < srcHeight) {
+                inSampleSize = Math.round(srcHeight / size);
+            } else {
+                inSampleSize = Math.round(srcWidth / size);
+            }
+        }
+        options.inJustDecodeBounds = false;
+        options.inSampleSize = inSampleSize;
+        return BitmapFactory.decodeFile(filePath, options);
     }
 }

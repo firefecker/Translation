@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">baseLibrary</string>
+    <string name="dialog_confirm_text_str">确认</string>
+    <string name="dialog_cancel_text_str">取消</string>
+    <string name="back_str">返回</string>
+    <string name="pointMessage">提示信息</string>
+    <string name="loading_data_str">正在加载\u2026</string>
+    <string name="next_time_str">下次再说</string>
+    <string name="down_now_str">立即下载</string>
+    <string name="version_update_str">版本更新提示</string>
+    <string name="version_update_tips_str">发现新版本，请尽快下载新程序！</string>
+    <string name="install_now_str">立即安装</string>
+    <string name="cancel_install_str">下次再说</string>
+    <string name="find_newversion_str">新版本已下载是否立即安装？</string>
+    <string name="current_version_str">当前版本号:\tV%1$s</string>
+    <string name="check_update_str">检查更新</string>
 </resources>
