@@ -70,10 +70,17 @@ public class MainModel implements IBaseModel {
                 });
     }
 
-    public String loadPath(Context context,Intent data) {
+    public String loadPath(Context context, Intent data) {
+        if (data == null) {
+            return "";
+        }
         Uri selectedImage = data.getData();
-        String[] filePathColumns = { MediaStore.Images.Media.DATA};
-        Cursor c = context.getContentResolver().query(selectedImage, filePathColumns, null, null, null);
+        if (selectedImage == null) {
+            return "";
+        }
+        String[] filePathColumns = { MediaStore.Images.Media.DATA };
+        Cursor c = context.getContentResolver()
+                .query(selectedImage, filePathColumns, null, null, null);
         c.moveToFirst();
         int columnIndex = c.getColumnIndex(filePathColumns[0]);
         return c.getString(columnIndex);

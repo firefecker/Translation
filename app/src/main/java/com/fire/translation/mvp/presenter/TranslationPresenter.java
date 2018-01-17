@@ -13,10 +13,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import com.fire.baselibrary.base.inter.IBasePresenter;
 import com.fire.translation.R;
+import com.fire.translation.db.entities.Tanslaterecord;
 import com.fire.translation.mvp.model.TranslationModel;
 import com.fire.translation.mvp.view.TranslationView;
 import com.fire.translation.widget.EventBase;
 import com.fire.translation.widget.ListPopupWindow;
+import com.pushtorefresh.storio3.sqlite.Changes;
+import com.youdao.ocr.online.OCRResult;
+import com.youdao.sdk.ydtranslate.Translate;
+import io.reactivex.Flowable;
+import io.reactivex.functions.Function;
 import java.util.Arrays;
 import java.util.List;
 
@@ -105,5 +111,24 @@ public class TranslationPresenter implements IBasePresenter, ListPopupWindow.Dat
 
     public void rxBus(Class mClass) {
         mTranslationView.rxBus(mTranslationModel.rxBus(mClass));
+    }
+
+    public Function<OCRResult, String> setOcrResult() {
+        return mTranslationModel.setOcrResult();
+    }
+
+    public Function<Translate,Tanslaterecord> settranslateResult() {
+        return mTranslationModel.settranslateResult();
+    }
+
+    public void updateStar(Tanslaterecord listTranslate) {
+        mTranslationModel.updateStar(mTranslationView,listTranslate);
+    }
+
+    public void getAllTranslateRecord() {
+        mTranslationView.getAllTranslateRecord(mTranslationModel.getAllTranslateRecord());
+    }
+    public void loadTranslateRecord() {
+        mTranslationView.loadTranslateRecord(mTranslationModel.loadTranslateRecord());
     }
 }

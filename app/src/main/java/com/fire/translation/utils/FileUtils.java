@@ -1,7 +1,11 @@
 package com.fire.translation.utils;
 
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Environment;
 import android.text.TextUtils;
+import com.fire.baselibrary.utils.ToastUtils;
+import com.fire.translation.TransApplication;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -75,5 +79,11 @@ public class FileUtils {
         // 用日期作为文件名，确保唯一性
         String fileName = saveDir + "/" + DateUtils.formatDateToString(new Date(),DateUtils.dateFormat3) + ".png";
         return fileName;
+    }
+
+    public static void copy(CharSequence text) {
+        ClipboardManager cm = (ClipboardManager) TransApplication.mTransApp.getSystemService(Context.CLIPBOARD_SERVICE);
+        cm.setText(text);
+        ToastUtils.showToast("复制成功");
     }
 }

@@ -3,6 +3,7 @@ package com.fire.translation.db;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import com.fire.translation.constant.Constant;
 import com.orhanobut.logger.Logger;
 
 /**
@@ -38,6 +39,24 @@ public class CipherOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         Logger.d("onCreate");
+        if (getDatabaseName().equals(Constant.BASESQLNAME)) {
+            sqLiteDatabase.execSQL(
+                    "create table if not exists translaterecord (_id TEXT primary key, "
+                    + "translations TEXT , "
+                    + "explains TEXT , "
+                    + "usphonetic TEXT, "
+                    + "ukphonetic TEXT, "
+                    + "cto TEXT, "
+                    + "mquery TEXT, "
+                    + "phonetic TEXT, "
+                    + "le TEXT, "
+                    + "mfrom TEXT, "
+                    + "dictweburl TEXT, "
+                    + "deeplink TEXT, "
+                    + "dictdeeplink TEXT, "
+                    + "errorcode INTEGER, "
+                    + "start INTEGER)");
+        }
         if (dbOpenHelperEvent != null) {
             dbOpenHelperEvent.onDBCreate(this, sqLiteDatabase);
         }
@@ -46,6 +65,24 @@ public class CipherOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onOpen(SQLiteDatabase db) {
         Logger.d("onOpen");
+        if (getDatabaseName().equals(Constant.BASESQLNAME)) {
+            db.execSQL(
+                    "create table if not exists translaterecord (_id varchar(256) primary key, "
+                    + "translations text , "
+                    + "explains text , "
+                    + "usphonetic text, "
+                    + "ukphonetic text, "
+                    + "cto text, "
+                    + "mquery text, "
+                    + "phonetic text, "
+                    + "le text, "
+                    + "mfrom text, "
+                    + "dictweburl text, "
+                    + "deeplink text, "
+                    + "dictdeeplink text, "
+                    + "errorcode integer, "
+                    + "start integer)");
+        }
         if (dbOpenHelperEvent != null) {
             dbOpenHelperEvent.onDBOpen(this, db);
         }

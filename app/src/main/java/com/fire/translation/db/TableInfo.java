@@ -4,6 +4,8 @@ import com.fire.translation.db.entities.Record;
 import com.fire.translation.db.entities.RecordSQLiteTypeMapping;
 import com.fire.translation.db.entities.TableName;
 import com.fire.translation.db.entities.TableNameSQLiteTypeMapping;
+import com.fire.translation.db.entities.Tanslaterecord;
+import com.fire.translation.db.entities.TanslaterecordSQLiteTypeMapping;
 import com.fire.translation.db.entities.Word;
 import com.fire.translation.db.entities.WordSQLiteTypeMapping;
 import com.pushtorefresh.storio3.sqlite.StorIOSQLite;
@@ -38,6 +40,7 @@ public class TableInfo {
         builder.addTypeMapping(Record.class,new RecordSQLiteTypeMapping());
         builder.addTypeMapping(TableName.class,new TableNameSQLiteTypeMapping());
         builder.addTypeMapping(Word.class,new WordSQLiteTypeMapping());
+        builder.addTypeMapping(Tanslaterecord.class,new TanslaterecordSQLiteTypeMapping());
         return builder.build();
     }
 }

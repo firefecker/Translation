@@ -4,6 +4,7 @@ import com.fire.translation.TransApplication;
 import com.fire.translation.constant.Constant;
 import com.fire.translation.db.entities.Record;
 import com.fire.translation.db.entities.TableName;
+import com.fire.translation.db.entities.Tanslaterecord;
 import com.fire.translation.db.entities.Word;
 import com.fire.translation.utils.DateUtils;
 import com.pushtorefresh.storio3.Optional;
@@ -11,6 +12,7 @@ import com.pushtorefresh.storio3.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio3.sqlite.operations.put.PutResult;
 import com.pushtorefresh.storio3.sqlite.queries.Query;
 import com.pushtorefresh.storio3.sqlite.queries.RawQuery;
+import com.youdao.sdk.ydtranslate.Translate;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -141,5 +143,53 @@ public class Dbservice {
                         .build())
                 .prepare()
                 .executeAsBlocking();
+    }
+
+    public Tanslaterecord getCurrentTranslateAsExecute(String translations,String to,String from,String query) {
+        return mStorIOSQLite
+                .get()
+                .object(Tanslaterecord.class)
+                .withQuery(Query.builder()
+                        .table(Tanslaterecord.__TABLE__)
+                        .where(String.format("%s = ? and %s = ? and %s = ? and %s = ?",
+                                Tanslaterecord.C_TRANSLATIONS,Tanslaterecord.C_CTO,Tanslaterecord.C_MFROM,Tanslaterecord.C_MQUERY))
+                        .whereArgs(translations,to,from,query)
+                        .build())
+                .prepare()
+                .executeAsBlocking();
+    }
+
+    public Flowable<Optional<Tanslaterecord>> getCurrentTranslateAsRx(String translations,String to,String from,String query) {
+        return mStorIOSQLite
+                .get()
+                .object(Tanslaterecord.class)
+                .withQuery(Query.builder()
+                        .table(Tanslaterecord.__TABLE__)
+                        .where(String.format("%s = ? and %s = ? and %s = ? and %s = ?",
+                                Tanslaterecord.C_TRANSLATIONS,Tanslaterecord.C_CTO,Tanslaterecord.C_MFROM,Tanslaterecord.C_MQUERY))
+                        .whereArgs(translations,to,from,query)
+                        .build())
+                .prepare()
+                .asRxFlowable(BackpressureStrategy.LATEST);
+    }
+
+    public PutResult insertTanslateRecord(Tanslaterecord currentTranslate) {
+        return mStorIOSQLite
+                .put()
+                .object(currentTranslate)
+                .prepare()
+                .executeAsBlocking();
+    }
+
+    public Flowable<List<Tanslaterecord>> getAllTranslateRecord() {
+        return mStorIOSQLite
+                .get()
+                .listOfObjects(Tanslaterecord.class)
+                .withQuery(Query.builder()
+                        .table(Tanslaterecord.__TABLE__)
+                        .build())
+                .prepare()
+                .asRxFlowable(BackpressureStrategy.LATEST)
+                .observeOn(AndroidSchedulers.mainThread());
     }
 }

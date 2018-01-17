@@ -3,11 +3,15 @@ package com.fire.translation.mvp.view;
 import android.view.View;
 import android.view.animation.Animation;
 import com.fire.baselibrary.base.inter.IBaseView;
+import com.fire.translation.db.entities.Tanslaterecord;
 import com.fire.translation.widget.EventBase;
+import com.pushtorefresh.storio3.sqlite.Changes;
+import com.pushtorefresh.storio3.sqlite.operations.put.PutResult;
 import com.youdao.ocr.online.OCRResult;
 import com.youdao.ocr.online.OcrErrorCode;
 import com.youdao.sdk.ydtranslate.Translate;
 import com.youdao.sdk.ydtranslate.TranslateErrorCode;
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import java.util.List;
 
@@ -35,4 +39,12 @@ public interface TranslationView extends IBaseView{
     void ocrOnError(Observable<OcrErrorCode> ocrResultObservable);
 
     void rxBus(Observable<EventBase> observable);
+
+    void starFailure(Throwable throwable);
+
+    void starSuccess(EventBase putResult);
+
+    void loadTranslateRecord(Flowable<Changes> changesFlowable);
+
+    void getAllTranslateRecord(Flowable<List<Tanslaterecord>> allTranslateRecord);
 }

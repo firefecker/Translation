@@ -1,5 +1,7 @@
 package com.fire.translation;
 
+import android.content.Context;
+import android.support.multidex.MultiDex;
 import com.fire.baselibrary.base.App;
 import com.fire.translation.constant.Constant;
 import com.fire.translation.db.CipherOpenHelper;
@@ -34,7 +36,12 @@ public class TransApplication extends App {
         mTransApp = this;
         unZipFile();
         initDBHelper();
+    }
 
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
     private void initDBHelper() {
