@@ -58,9 +58,19 @@ public class HomeModel implements IBaseModel {
             List<Word> allWords = Dbservice.getInstance()
                     .setDbConfig(Constant.SQLONENAME)
                     .getAllWords();
+            Record subRecord = Dbservice.getInstance()
+                    .defaultDbConfig()
+                    .getRecord(
+                            DateUtils.subDate(-1, new Date(), DateUtils.dateFormat1));
+            int recordDays = 1;
+            if (subRecord == null) {
+                recordDays = 1;
+            } else {
+                recordDays = subRecord.getRecordDays() + 1;
+            }
             record = Record.newRecord((int) System.currentTimeMillis(),
                     DateUtils.getFormatDate1(new Date(), DateUtils.dateFormat1),
-                    0, 30, 1, allWords.size(), 0);
+                    0, 30, recordDays, allWords.size(), 0);
             PutResult result = Dbservice.getInstance()
                     .defaultDbConfig()
                     .insertRecord(record);

@@ -22,7 +22,8 @@ public class Constant {
      * 手机存储目录
      */
     public static final String PHONE_DIRECTORY = Environment.getDataDirectory().getAbsolutePath();
-    public static final String SDCARD_DIRECTORY = Environment.getExternalStorageDirectory().getAbsolutePath();
+    public static final String SDCARD_DIRECTORY = Environment.getExternalStorageDirectory()
+            .getAbsolutePath();
 
     /**
      * 启动照相请求
@@ -40,6 +41,8 @@ public class Constant {
             Manifest.permission.ACCESS_NETWORK_STATE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS};
+            Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS,
+            Manifest.permission.WRITE_SETTINGS
+    };
     public static String FILEPATH = "";
 }

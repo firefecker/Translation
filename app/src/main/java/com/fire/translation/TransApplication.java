@@ -10,6 +10,7 @@ import com.fire.translation.db.DbModelSQLiteTypeMapping;
 import com.fire.translation.db.TableInfo;
 import com.fire.translation.db.entities.DbModel;
 import com.fire.translation.utils.AssetsUtils;
+import com.iflytek.cloud.SpeechUtility;
 import com.pushtorefresh.storio3.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio3.sqlite.impl.DefaultStorIOSQLite;
 import com.youdao.sdk.app.YouDaoApplication;
@@ -31,6 +32,7 @@ public class TransApplication extends App {
 
     @Override
     public void onCreate() {
+        SpeechUtility.createUtility(this, "appid=" + getString(R.string.app_id));
         super.onCreate();
         YouDaoApplication.init(this, "0a52ba2c9ab9f3e4");
         mTransApp = this;

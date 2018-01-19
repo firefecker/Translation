@@ -84,7 +84,7 @@ public class ReviewAdapter extends PagerAdapter {
         mLayoutAdd.setOnClickListener(v -> {
             Word mWord = word;
             boolean status = false;
-            if (mWord.getRemember() == 0) {
+            if (mWord.getNewWord() == 0) {
                 status = true;
                 mWord.setNewWord(1);
                 mWord.setTime(DateUtils.formatDateToString(new Date(),DateUtils.dateFormat1));
@@ -112,6 +112,9 @@ public class ReviewAdapter extends PagerAdapter {
                 mWord.setTime(DateUtils.formatDateToString(new Date(),DateUtils.dateFormat1));
             }
             mReviewPresenter.setUpDateRememberStatus(mSwRemember, mWord,status);
+        });
+        mTvPs.setOnClickListener(v -> {
+            mReviewPresenter.startSpeak(word.getWord());
         });
         container.addView(inflate);
         return inflate;

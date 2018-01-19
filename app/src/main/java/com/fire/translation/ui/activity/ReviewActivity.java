@@ -19,12 +19,12 @@ import com.fire.baselibrary.rx.RxBus;
 import com.fire.translation.rx.RxRvAdapterView;
 import com.fire.translation.ui.fragment.HomeFragment;
 import com.fire.baselibrary.rx.EventBase;
+import com.iflytek.cloud.SpeechSynthesizer;
 import com.orhanobut.logger.Logger;
 import com.pushtorefresh.storio3.sqlite.operations.put.PutResult;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +47,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView {
     private List<Word> mList = new ArrayList<>();
     private Record mRecord;
     private ReviewAdapter mReviewAdapter;
+    private SpeechSynthesizer mTts;
 
     @Override
     public int getLayout() {
@@ -57,6 +58,7 @@ public class ReviewActivity extends BaseActivity implements ReviewView {
     @Override
     public void initView() {
         setToolBar(mToolbar,"单词复习");
+        mTts = mReviewPresenter.setParam(this);
         mReviewAdapter = new ReviewAdapter(mList,mReviewPresenter);
         mViewPager.setAdapter(mReviewAdapter);
        RxRvAdapterView.pageChanges(mViewPager)
@@ -135,4 +137,10 @@ public class ReviewActivity extends BaseActivity implements ReviewView {
                     }
                 }, throwable -> Logger.e(throwable.toString()));
     }
+
+    @Override
+    public void startSpeak(String content) {
+        mReviewPresenter.speak(content,mTts,this);
+    }
+
 }

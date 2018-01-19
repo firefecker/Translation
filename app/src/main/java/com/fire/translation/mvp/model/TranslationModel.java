@@ -287,6 +287,13 @@ public class TranslationModel implements IBaseModel {
     public Flowable<List<Tanslaterecord>> getAllTranslateRecord() {
         return Dbservice.getInstance()
                 .defaultDbConfig()
-                .getAllTranslateRecord();
+                .getAllTranslateRecord()
+                .map(tanslaterecords -> {
+                    List<Tanslaterecord> list = new ArrayList<>();
+                    for (int i = tanslaterecords.size() - 1; i >= 0; i--) {
+                        list.add(tanslaterecords.get(i));
+                    }
+                    return list;
+                });
     }
 }

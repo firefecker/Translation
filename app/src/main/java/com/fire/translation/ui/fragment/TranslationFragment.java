@@ -27,6 +27,7 @@ import com.fire.translation.rx.RxRvAdapterView;
 import com.fire.translation.utils.FileUtils;
 import com.fire.translation.utils.FunctionUtils;
 import com.fire.baselibrary.rx.EventBase;
+import com.iflytek.cloud.SpeechSynthesizer;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.orhanobut.logger.Logger;
 import com.pushtorefresh.storio3.sqlite.Changes;
@@ -97,6 +98,7 @@ public class TranslationFragment extends BaseFragment implements TranslationView
     private TranslationPresenter mTranslationPresenter;
     private Tanslaterecord mListTranslate;
     private TranslateRecordAdapter mRecordAdapter;
+    private SpeechSynthesizer mTts;
 
     @Override
     public int resourceId() {
@@ -115,6 +117,7 @@ public class TranslationFragment extends BaseFragment implements TranslationView
         mRecyclerView.setAdapter(mRecordAdapter);
         mTranslationPresenter.init(mActivity);
         mTranslationPresenter.loadTranslateRecord();
+        mTts = mTranslationPresenter.setParam(mActivity);
         RxTextView.textChanges(mTvTo)
                 .compose(this.bindUntilEvent(FragmentEvent.DESTROY_VIEW))
                 .observeOn(AndroidSchedulers.mainThread())
@@ -174,6 +177,7 @@ public class TranslationFragment extends BaseFragment implements TranslationView
             case R.id.iv_gesture://手势
                 break;
             case R.id.tv_volume://发音
+                mTranslationPresenter.speak(mTvContent.getText().toString(),mTts,mActivity);
                 break;
             case R.id.iv_more://更多
                 break;
