@@ -1,6 +1,7 @@
 package com.fire.translation.db;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.fire.translation.constant.Constant;
@@ -82,10 +83,59 @@ public class CipherOpenHelper extends SQLiteOpenHelper {
                     + "dictdeeplink text, "
                     + "errorcode integer, "
                     + "start integer)");
+        } else {
+            if (exits("word",db) && !checkColumnExists2(db,"word","time")) {
+                db.execSQL("alter table word add time text;");
+            }
+
+            if (exits("word",db) && !checkColumnExists2(db,"word","new_word")) {
+                db.execSQL("alter table word add new_word integer;");
+            }
         }
         if (dbOpenHelperEvent != null) {
             dbOpenHelperEvent.onDBOpen(this, db);
         }
+    }
+
+    /**
+     * 检查表是否存在
+     * @param table
+     * @param db
+     * @return
+     */
+    public boolean exits(String table,SQLiteDatabase db){
+        boolean exits = false;
+        Cursor cursor = db.rawQuery("select * from sqlite_master where name="+"'"+table+"'", null);
+        if(cursor.getCount()!=0){
+            exits = true;
+        }
+        return exits;
+    }
+
+    /**
+     * 检查表中某列是否存在
+     * @param db
+     * @param tableName 表名
+     * @param columnName 列名
+     * @return
+     */
+    public static boolean checkColumnExists2(SQLiteDatabase db, String tableName
+            , String columnName) {
+        String queryStr = "select sql from sqlite_master where type = 'table' and name = '%s'";
+        queryStr = String.format(queryStr, tableName);
+        Cursor c = db.rawQuery(queryStr, null);
+        String tableCreateSql = null;
+        try {
+            if (c != null && c.moveToFirst()) {
+                tableCreateSql = c.getString(c.getColumnIndex("sql"));
+            }
+        } finally {
+            if (c != null)
+                c.close();
+        }
+        if (tableCreateSql != null && tableCreateSql.contains(columnName))
+            return true;
+        return false;
     }
 
     @Override

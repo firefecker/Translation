@@ -13,6 +13,7 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
 import com.fire.translation.R;
+import com.fire.translation.utils.DisplayUtil;
 
 /**
  * Created by fire on 2018/1/11.
@@ -29,6 +30,7 @@ public class NotifyTextView extends View {
     private int mLeftColor,mRightColor;
     private float mLeftSize,mRightSize;
     private Resources mR;
+    private boolean mShowUnit = true;
 
     public NotifyTextView(Context context) {
         this(context,null);
@@ -54,6 +56,7 @@ public class NotifyTextView extends View {
             mRightColor = array.getColor(R.styleable.NotifyTextView_rightColor, Color.GRAY);
             mLeftText = array.getString(R.styleable.NotifyTextView_leftText);
             mRightText = array.getString(R.styleable.NotifyTextView_rightText);
+            mShowUnit = array.getBoolean(R.styleable.NotifyTextView_showUnit, true);
         } else {
             mLeftSize = 20f;
             mRightSize = 6f;
@@ -84,9 +87,35 @@ public class NotifyTextView extends View {
     }
 
     @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int widthSpecMode = MeasureSpec.getMode(widthMeasureSpec);
+        int widthSpecSize = MeasureSpec.getSize(widthMeasureSpec);
+        int heightSpecMode = MeasureSpec.getMode(heightMeasureSpec);
+        int heightSpecSize = MeasureSpec.getSize(heightMeasureSpec);
+        // 在wrap_content的情况下默认长度为100dp
+        float dimension = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100,
+                mR.getDisplayMetrics());
+        int minSize = DisplayUtil.dip2px(getContext(), dimension);
+        // wrap_content的specMode是AT_MOST模式，这种情况下宽/高等同于specSize
+        // 查表得这种情况下specSize等同于parentSize，也就是父容器当前剩余的大小
+        // 在wrap_content的情况下如果特殊处理，效果等同martch_parent
+        if (widthSpecMode == MeasureSpec.AT_MOST && heightSpecMode == MeasureSpec.AT_MOST) {
+            setMeasuredDimension(minSize, minSize);
+        } else if (widthSpecMode == MeasureSpec.AT_MOST) {
+            setMeasuredDimension(minSize, heightSpecSize);
+        } else if (heightSpecMode == MeasureSpec.AT_MOST) {
+            setMeasuredDimension(widthSpecSize, minSize);
+        }
+    }
+
+    @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         canvas.drawText(mLeftText, getMeasuredWidth() / 2 - mBounds1.width() / 2 - mBounds2.width() / 2, getMeasuredHeight() - 30, mPaint1);
+        if (!mShowUnit) {
+            return;
+        }
         canvas.drawText(mRightText, getMeasuredWidth() / 2 + mBounds1.width() / 2, getMeasuredHeight() - 30, mPaint2);
     }
 
@@ -97,44 +126,43 @@ public class NotifyTextView extends View {
         mRightColor = rightColor;
         mLeftSize = leftSize;
         mRightSize = rightSize;
-        init();
         postInvalidate();
     }
 
     public void setLeftText(String leftText) {
         mLeftText = leftText;
-        init();
         postInvalidate();
     }
 
     public void setRightText(String rightText) {
         mRightText = rightText;
-        init();
         postInvalidate();
     }
 
     public void setLeftColor(int leftColor) {
         mLeftColor = leftColor;
-        init();
         postInvalidate();
     }
 
     public void setRightColor(int rightColor) {
         mRightColor = rightColor;
-        init();
         postInvalidate();
     }
 
     public void setLeftSize(float leftSize) {
         mLeftSize = leftSize;
-        init();
         postInvalidate();
     }
 
     public void setRightSize(float rightSize) {
         mRightSize = rightSize;
-        init();
         postInvalidate();
+    }
+
+    @Override
+    public void postInvalidate() {
+        init();
+        super.postInvalidate();
     }
 
     public String getLeftText() {

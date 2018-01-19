@@ -5,6 +5,7 @@ import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 
 /**
@@ -139,5 +140,20 @@ public class DateUtils {
         SimpleDateFormat dateFormat = new SimpleDateFormat(formast);
         String format = dateFormat.format(date);
         return format+"";
+    }
+
+    /**
+     * 根据传入的时间进行加减天数并格式化
+     * @param amount
+     * @param date
+     * @param formast
+     * @return
+     */
+    public static String subDate(int amount,Date date,String formast) {
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        calendar.add(calendar.DATE,amount);//把日期往后增加一天.整数往后推,负数往前移动
+        date=calendar.getTime();   //这个时间就是日期往后推一天的结果
+        return formatDateToString(date,formast);
     }
 }

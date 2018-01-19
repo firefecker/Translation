@@ -121,14 +121,14 @@ public class Dbservice {
                 .executeAsBlocking();
     }
 
-    public Record getRecord() {
+    public Record getRecord(String data) {
         return mStorIOSQLite
                 .get()
                 .object(Record.class)
                 .withQuery(Query.builder()
                         .table(Record.__TABLE__)
                         .where(String.format("%s = ?", Record.C_RECORD_DATE))
-                        .whereArgs(DateUtils.getFormatDate1(new Date(),DateUtils.dateFormat1))
+                        .whereArgs(data)
                         .build())
                 .prepare()
                 .executeAsBlocking();
@@ -191,5 +191,47 @@ public class Dbservice {
                 .prepare()
                 .asRxFlowable(BackpressureStrategy.LATEST)
                 .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public List<Word> getCurrentWord(int reviews) {
+        return mStorIOSQLite .get()
+                .listOfObjects(Word.class)
+                .withQuery(Query.builder()
+                        .table(Word.__TABLE__)
+                        .where(String.format("%s = ? limit %d",Word.C_REMEMBER,reviews))
+                        .whereArgs("0")
+                        .build())
+                .prepare()
+              .executeAsBlocking();
+    }
+
+    public Flowable<PutResult> UpDateWordStatus(Word word) {
+        return mStorIOSQLite
+                .put()
+                .object(word)
+                .prepare()
+                .asRxFlowable(BackpressureStrategy.LATEST)
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Flowable<PutResult> updateJsnum(Record record) {
+        return mStorIOSQLite
+                .put()
+                .object(record)
+                .prepare()
+                .asRxFlowable(BackpressureStrategy.LATEST)
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public List<Word> getCurrentRememberWord(int reviews) {
+        return mStorIOSQLite .get()
+                .listOfObjects(Word.class)
+                .withQuery(Query.builder()
+                        .table(Word.__TABLE__)
+                        .where(String.format("%s = ? and %s = ? limit %d",Word.C_REMEMBER,Word.C_TIME,reviews))
+                        .whereArgs("1",DateUtils.formatDateToString(new Date(),DateUtils.dateFormat1))
+                        .build())
+                .prepare()
+                .executeAsBlocking();
     }
 }

@@ -1,12 +1,7 @@
 package com.fire.translation.ui.activity;
 
-import android.Manifest;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
@@ -22,24 +17,21 @@ import com.fire.translation.constant.Constant;
 import com.fire.translation.db.entities.TableName;
 import com.fire.translation.mvp.presenter.MainPresenter;
 import com.fire.translation.mvp.view.MainView;
-import com.fire.translation.rx.DefaultButtonTransformer;
-import com.fire.translation.rx.RxBus;
+import com.fire.baselibrary.rx.DefaultButtonTransformer;
+import com.fire.baselibrary.rx.RxBus;
 import com.fire.translation.ui.fragment.DashboardFragment;
 import com.fire.translation.ui.fragment.HomeFragment;
 import com.fire.translation.ui.fragment.MineFragment;
 import com.fire.translation.ui.fragment.TranslationFragment;
 import com.fire.translation.utils.FunctionUtils;
-import com.fire.translation.widget.EventBase;
+import com.fire.baselibrary.rx.EventBase;
 import com.orhanobut.logger.Logger;
 import com.pushtorefresh.storio3.Optional;
 import com.pushtorefresh.storio3.sqlite.operations.put.PutResult;
-import com.tbruyelle.rxpermissions2.Permission;
 import com.trello.rxlifecycle2.android.ActivityEvent;
-import com.trello.rxlifecycle2.android.FragmentEvent;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -193,7 +185,7 @@ public class MainActivity extends BaseActivity implements MainView {
         switch (requestCode) {
             case Constant.ACTION_IMAGE:
                 if (resultCode == RESULT_OK) {
-                    RxBus.getDefault().post(EventBase.builder().receiver(
+                    RxBus.getDefault().post(EventBase.builder().arg0(1).receiver(
                             TranslationFragment.class).build());
                 }
                 break;

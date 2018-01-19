@@ -3,6 +3,7 @@ package com.fire.translation.rx;
 import android.annotation.SuppressLint;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
+import android.support.v4.view.ViewPager;
 import com.jakewharton.rxbinding2.internal.Functions;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 import io.reactivex.Observable;
@@ -25,6 +26,14 @@ public final class RxRvAdapterView {
             @NonNull RecyclerArrayAdapter<T> adapter) {
         checkNotNull(adapter, "adapter == null");
         return new RvAdapterItemClickObservable(adapter);
+    }
+
+    @CheckResult
+    @NonNull
+    public static Observable<Integer> pageChanges(
+            @NonNull ViewPager viewPager) {
+        checkNotNull(viewPager, "adapter == null");
+        return new ViewPagerChangeObservable(viewPager);
     }
 
     @CheckResult

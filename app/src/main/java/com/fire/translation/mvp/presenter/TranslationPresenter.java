@@ -16,12 +16,10 @@ import com.fire.translation.R;
 import com.fire.translation.db.entities.Tanslaterecord;
 import com.fire.translation.mvp.model.TranslationModel;
 import com.fire.translation.mvp.view.TranslationView;
-import com.fire.translation.widget.EventBase;
+import com.fire.baselibrary.rx.EventBase;
 import com.fire.translation.widget.ListPopupWindow;
-import com.pushtorefresh.storio3.sqlite.Changes;
 import com.youdao.ocr.online.OCRResult;
 import com.youdao.sdk.ydtranslate.Translate;
-import io.reactivex.Flowable;
 import io.reactivex.functions.Function;
 import java.util.Arrays;
 import java.util.List;
@@ -66,7 +64,6 @@ public class TranslationPresenter implements IBasePresenter, ListPopupWindow.Dat
         mTranslationModel.translate(mTranslationView, from, to, string);
     }
 
-
     public void showPopup(Activity activity, LinearLayout mLayoutLanguage, LinearLayout layoutFrom,
             List<String> strings, ImageView transView, Animation mOperatingAnim1) {
         initPopupWindow(activity, mLayoutLanguage);
@@ -105,29 +102,37 @@ public class TranslationPresenter implements IBasePresenter, ListPopupWindow.Dat
         mTranslationView.dismissBack(view);
     }
 
-    public void zipFile(EventBase eventBase,Context context) {
-        mTranslationModel.zipFile(mTranslationView,eventBase,context);
+    public void zipFile(EventBase eventBase, Context context) {
+        mTranslationModel.zipFile(mTranslationView, eventBase, context);
     }
 
-    public void rxBus(Class mClass) {
-        mTranslationView.rxBus(mTranslationModel.rxBus(mClass));
+    @Override
+    public void rxBus(Class mClass, Class aClass) {
+        mTranslationView.rxBus(mTranslationModel.rxBus(mClass).map(eventBase -> {
+            if (eventBase.getReceiver() != aClass) {
+                return null;
+            } else {
+                return eventBase;
+            }
+        }));
     }
 
     public Function<OCRResult, String> setOcrResult() {
         return mTranslationModel.setOcrResult();
     }
 
-    public Function<Translate,Tanslaterecord> settranslateResult() {
+    public Function<Translate, Tanslaterecord> settranslateResult() {
         return mTranslationModel.settranslateResult();
     }
 
     public void updateStar(Tanslaterecord listTranslate) {
-        mTranslationModel.updateStar(mTranslationView,listTranslate);
+        mTranslationModel.updateStar(mTranslationView, listTranslate);
     }
 
     public void getAllTranslateRecord() {
         mTranslationView.getAllTranslateRecord(mTranslationModel.getAllTranslateRecord());
     }
+
     public void loadTranslateRecord() {
         mTranslationView.loadTranslateRecord(mTranslationModel.loadTranslateRecord());
     }

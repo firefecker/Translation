@@ -53,14 +53,14 @@ public class HomeModel implements IBaseModel {
     public Record getRecord() {
         Record record = Dbservice.getInstance()
                 .defaultDbConfig()
-                .getRecord();
+                .getRecord(DateUtils.getFormatDate1(new Date(),DateUtils.dateFormat1));
         if (record == null) {
             List<Word> allWords = Dbservice.getInstance()
                     .setDbConfig(Constant.SQLONENAME)
                     .getAllWords();
             record = Record.newRecord((int) System.currentTimeMillis(),
                     DateUtils.getFormatDate1(new Date(), DateUtils.dateFormat1),
-                    0, 30, 0, allWords.size(), 0);
+                    0, 30, 1, allWords.size(), 0);
             PutResult result = Dbservice.getInstance()
                     .defaultDbConfig()
                     .insertRecord(record);
@@ -71,5 +71,11 @@ public class HomeModel implements IBaseModel {
             }
         }
         return record;
+    }
+
+    public Flowable<PutResult> updateJsnum(Record record) {
+        return Dbservice.getInstance()
+                .defaultDbConfig()
+                .updateJsnum(record);
     }
 }

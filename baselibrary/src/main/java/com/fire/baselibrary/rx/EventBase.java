@@ -1,6 +1,4 @@
-package com.fire.translation.widget;
-
-import android.support.annotation.Nullable;
+package com.fire.baselibrary.rx;
 
 /**
  * Created by fire on 2018/1/15.

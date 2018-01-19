@@ -42,4 +42,19 @@ public class HomePresenter implements IBasePresenter {
     public Record getRecord() {
         return mHomeModel.getRecord();
     }
+
+    public void updateJsnum(Record record) {
+        mHomeView.updateJsnum(mHomeModel.updateJsnum(record));
+    }
+
+    @Override
+    public void rxBus(Class mClass,Class aClass) {
+        mHomeView.rxBus(mHomeModel.rxBus(mClass).map(eventBase -> {
+            if (eventBase.getReceiver() != aClass) {
+                return null;
+            } else {
+                return eventBase;
+            }
+        }));
+    }
 }

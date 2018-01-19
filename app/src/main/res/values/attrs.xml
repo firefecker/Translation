@@ -7,5 +7,6 @@
         <attr name="rightColor" format="color|reference"/>
         <attr name="leftText" format="string|reference"/>
         <attr name="rightText" format="string|reference"/>
+        <attr name="showUnit" format="boolean"/>
     </declare-styleable>
 </resources>

@@ -4,9 +4,8 @@ import android.view.View;
 import android.view.animation.Animation;
 import com.fire.baselibrary.base.inter.IBaseView;
 import com.fire.translation.db.entities.Tanslaterecord;
-import com.fire.translation.widget.EventBase;
+import com.fire.baselibrary.rx.EventBase;
 import com.pushtorefresh.storio3.sqlite.Changes;
-import com.pushtorefresh.storio3.sqlite.operations.put.PutResult;
 import com.youdao.ocr.online.OCRResult;
 import com.youdao.ocr.online.OcrErrorCode;
 import com.youdao.sdk.ydtranslate.Translate;
@@ -38,7 +37,6 @@ public interface TranslationView extends IBaseView{
 
     void ocrOnError(Observable<OcrErrorCode> ocrResultObservable);
 
-    void rxBus(Observable<EventBase> observable);
 
     void starFailure(Throwable throwable);
 

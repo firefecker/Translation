@@ -1,4 +1,4 @@
-package com.fire.translation.rx;
+package com.fire.baselibrary.rx;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;

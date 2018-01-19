@@ -5,17 +5,13 @@ import android.graphics.Bitmap;
 import android.text.TextUtils;
 import com.fire.baselibrary.base.inter.IBaseModel;
 import com.fire.translation.db.Dbservice;
-import com.fire.translation.db.entities.Record;
-import com.fire.translation.db.entities.TableName;
 import com.fire.translation.db.entities.Tanslaterecord;
 import com.fire.translation.mvp.view.TranslationView;
 import com.fire.translation.rx.BaseOnCompressListener;
-import com.fire.translation.rx.DefaultButtonTransformer;
 import com.fire.translation.rx.DefaultObservable;
-import com.fire.translation.rx.RxBus;
 import com.fire.translation.utils.FunctionUtils;
 import com.fire.translation.utils.ListUtils;
-import com.fire.translation.widget.EventBase;
+import com.fire.baselibrary.rx.EventBase;
 import com.orhanobut.logger.Logger;
 import com.pushtorefresh.storio3.sqlite.Changes;
 import com.pushtorefresh.storio3.sqlite.operations.put.PutResult;
@@ -37,7 +33,6 @@ import com.youdao.sdk.ydtranslate.TranslateListener;
 import com.youdao.sdk.ydtranslate.TranslateParameters;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -87,6 +82,11 @@ public class TranslationModel implements IBaseModel {
     }
 
     public void ocrBitmap(TranslationView translationView, Bitmap bitmap) {
+        if (bitmap == null) {
+            OcrErrorCode error = OcrErrorCode.INPUT_PARAM_ILLEGAL_SIGN_NOT_SUPPORTED;
+            translationView.ocrOnError(DefaultObservable.create(error));
+            return;
+        }
         OCRParameters tps = new OCRParameters.Builder()
                 .source("TransactionORC")
                 .timeout(100000)
@@ -124,6 +124,9 @@ public class TranslationModel implements IBaseModel {
     public void zipFile(TranslationView mTranslationView, EventBase eventBase, Context context) {
         File imageFile = null;
         if (TextUtils.isEmpty(eventBase.getArg2())) {
+            if (eventBase.getArg0() != 1) {
+                return;
+            }
             imageFile = FunctionUtils.getImageFile();
         } else {
             imageFile = new File(eventBase.getArg2());
@@ -146,12 +149,6 @@ public class TranslationModel implements IBaseModel {
                 })
                 //启动压缩
                 .launch();
-    }
-
-    public Observable<EventBase> rxBus(Class mClass) {
-        return RxBus.getDefault()
-                .toObservable(mClass)
-                .compose(DefaultButtonTransformer.create());
     }
 
     public Function<OCRResult, String> setOcrResult() {

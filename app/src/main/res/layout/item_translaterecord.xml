@@ -5,13 +5,13 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp_4"
         android:background="?attr/selectableItemBackground"
-        app:cardBackgroundColor="@android:color/white"
         app:cardCornerRadius="@dimen/dp_2"
         app:cardElevation="@dimen/dp_4"
         app:cardPreventCornerOverlap="true"
         app:cardUseCompatPadding="true"
         >
     <RelativeLayout
+            android:background="@android:color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             >
@@ -38,6 +38,7 @@
                 />
         <ImageView
                 android:id="@+id/iv_star"
+                android:background="?attr/selectableItemBackground"
                 android:layout_alignParentRight="true"
                 android:layout_margin="@dimen/dp_10"
                 app:srcCompat="@drawable/ic_star"

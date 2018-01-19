@@ -22,11 +22,11 @@ import com.fire.translation.constant.Constant;
 import com.fire.translation.db.entities.Tanslaterecord;
 import com.fire.translation.mvp.presenter.TranslationPresenter;
 import com.fire.translation.mvp.view.TranslationView;
-import com.fire.translation.rx.DefaultButtonTransformer;
+import com.fire.baselibrary.rx.DefaultButtonTransformer;
 import com.fire.translation.rx.RxRvAdapterView;
 import com.fire.translation.utils.FileUtils;
 import com.fire.translation.utils.FunctionUtils;
-import com.fire.translation.widget.EventBase;
+import com.fire.baselibrary.rx.EventBase;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.orhanobut.logger.Logger;
 import com.pushtorefresh.storio3.sqlite.Changes;
@@ -106,12 +106,12 @@ public class TranslationFragment extends BaseFragment implements TranslationView
     @Override
     protected void onFragmentCreate(@Nullable Bundle paramBundle) {
         mTranslationPresenter = new TranslationPresenter(this);
-        mTranslationPresenter.rxBus(EventBase.class);
+        mTranslationPresenter.rxBus(EventBase.class,getClass());
     }
 
     @Override
     public void initView() {
-        mRecordAdapter = new TranslateRecordAdapter(mActivity, new ArrayList<>());
+        mRecordAdapter = new TranslateRecordAdapter(mActivity,mTranslationPresenter);
         mRecyclerView.setAdapter(mRecordAdapter);
         mTranslationPresenter.init(mActivity);
         mTranslationPresenter.loadTranslateRecord();
@@ -119,8 +119,7 @@ public class TranslationFragment extends BaseFragment implements TranslationView
                 .compose(this.bindUntilEvent(FragmentEvent.DESTROY_VIEW))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(charSequence -> mTvVolume.setText(charSequence),
-                        throwable -> {
-                        });
+                        throwable -> {});
         RxTextView.textChanges(mEtInput)
                 .compose(this.bindUntilEvent(FragmentEvent.DESTROY_VIEW))
                 .observeOn(AndroidSchedulers.mainThread())

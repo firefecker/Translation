@@ -8,4 +8,6 @@ package com.fire.baselibrary.base.inter;
  */
 
 public interface IBasePresenter {
+    default void rxBus(Class mClass,Class aClass) {
+    }
 }

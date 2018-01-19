@@ -1,17 +1,17 @@
 package com.fire.baselibrary.base;
 
-import android.Manifest;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import com.fire.baselibrary.R;
 import com.tbruyelle.rxpermissions2.Permission;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import io.reactivex.Observable;
-import io.reactivex.functions.Consumer;
 
 /**
  * @author fire
@@ -63,6 +63,20 @@ public abstract class BaseActivity extends RxAppCompatActivity {
 
     public Observable<Permission> requestPermission(String... permission ) {
         return getRxPermission().requestEach(permission);
+    }
+
+    public void setToolBar(Toolbar toolbar , String title ) {
+        toolbar.setTitle(title + "");
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
+    }
+
+    public void setToolBarNoBack(Toolbar toolbar , String title ) {
+        toolbar.setTitle(title + "");
+        setSupportActionBar(toolbar);
     }
 
 }

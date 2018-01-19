@@ -1,8 +1,7 @@
-package com.fire.translation.rx;
+package com.fire.baselibrary.rx;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import com.fire.translation.widget.EventBase;
 import com.jakewharton.rxrelay2.PublishRelay;
 import com.jakewharton.rxrelay2.Relay;
 import io.reactivex.Observable;
