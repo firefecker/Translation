@@ -11,6 +11,13 @@
                 android:negativeButtonText="@null"
                 android:positiveButtonText="@null"
                 android:title="学习计划" />
+        <ListPreference
+            android:title="每日新词"
+            android:key="@+id/word_plan"
+            android:entries="@array/newword_value"
+            android:entryValues="@array/newword"
+            android:positiveButtonText="@null"
+            android:defaultValue="1"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

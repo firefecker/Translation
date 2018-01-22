@@ -1,6 +1,9 @@
 package com.fire.translation.ui.fragment;
 
 import android.preference.ListPreference;
+import android.preference.Preference;
+import android.support.annotation.ArrayRes;
+
 import com.fire.baselibrary.base.BasePreferenceFragment;
 import com.fire.translation.R;
 
@@ -12,6 +15,7 @@ import com.fire.translation.R;
 public class MineFragment  extends BasePreferenceFragment {
 
     private ListPreference mStudyPlan;
+    private ListPreference mWordPlan;
 
     @Override
     public int resourceId() {
@@ -21,18 +25,24 @@ public class MineFragment  extends BasePreferenceFragment {
     @Override
     public void initView() {
         mStudyPlan = (ListPreference) findPreference("study_plan");
-        initStudyPlan(mStudyPlan.getValue());
+        mWordPlan = (ListPreference) findPreference("word_plan");
+        initPlan(R.array.plan,R.array.plan_value,mStudyPlan.getValue(),mStudyPlan);
+        initPlan(R.array.newword,R.array.newword_value,mWordPlan.getValue(),mWordPlan);
         mStudyPlan.setOnPreferenceChangeListener((preference, newValue) -> {
-            initStudyPlan((String) newValue);
+            initPlan(R.array.plan,R.array.plan_value,(String) newValue,mStudyPlan);
+            return true;
+        });
+        mWordPlan.setOnPreferenceChangeListener((preference, newValue) -> {
+            initPlan(R.array.newword,R.array.newword_value,(String) newValue,mWordPlan);
             return true;
         });
     }
 
-    private void initStudyPlan(String newValue) {
-        String[] stringArray = getResources().getStringArray(R.array.plan);
+    private void initPlan(@ArrayRes int array, @ArrayRes int arrayValue, String newValue, Preference perference) {
+        String[] stringArray = getResources().getStringArray(array);
         for (int i = 0; i < stringArray.length; i++) {
             if (stringArray[i].equals(newValue)) {
-                mStudyPlan.setSummary(getResources().getStringArray(R.array.plan_value)[i]);
+                perference.setSummary(getResources().getStringArray(arrayValue)[i]);
             }
         }
     }

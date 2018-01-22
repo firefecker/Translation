@@ -30,4 +30,16 @@
         <item>GRE高频</item>
         <item>托福核心</item>
     </string-array>
+    <string-array name="newword_value" >
+        <item>10</item>
+        <item>30</item>
+        <item>50</item>
+        <item>100</item>
+    </string-array>
+    <string-array name="newword" >
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
 </resources>
