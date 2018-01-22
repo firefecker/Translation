@@ -27,7 +27,6 @@ public class HomePresenter implements IBasePresenter {
         }
         mHomeModel.getDsapi(date)
         .subscribe(test -> {
-            //mHomeView.setData(test);
             mHomeView.dismissLoadingView();
         },
         throwable -> {
@@ -49,8 +48,9 @@ public class HomePresenter implements IBasePresenter {
 
     @Override
     public void rxBus(Class mClass,Class aClass) {
+        Class mClazz = aClass;
         mHomeView.rxBus(mHomeModel.rxBus(mClass).map(eventBase -> {
-            if (eventBase.getReceiver() != aClass) {
+            if (eventBase.getReceiver() != mClazz) {
                 return null;
             } else {
                 return eventBase;

@@ -132,6 +132,12 @@ public class ReviewActivity extends BaseActivity implements ReviewView {
                 .subscribe(putResult -> {
                     if (putResult.wasUpdated()) {
                         mCbAdd.setChecked(status);
+                        RxBus.getDefault()
+                            .postEventBase(EventBase
+                                .builder()
+                                .arg0(0)
+                                .receiver(HomeFragment.class)
+                                .build());
                     } else {
                         ToastUtils.showToast("添加失败");
                     }

@@ -11,9 +11,7 @@ import android.widget.TextView;
 import com.fire.translation.R;
 import com.fire.translation.db.entities.Word;
 import com.fire.translation.mvp.presenter.ReviewPresenter;
-import com.fire.translation.utils.DateUtils;
 import io.reactivex.functions.Consumer;
-import java.util.Date;
 import java.util.List;
 
 
@@ -83,35 +81,15 @@ public class ReviewAdapter extends PagerAdapter {
         }
         mLayoutAdd.setOnClickListener(v -> {
             Word mWord = word;
-            boolean status = false;
-            if (mWord.getNewWord() == 0) {
-                status = true;
-                mWord.setNewWord(1);
-                mWord.setTime(DateUtils.formatDateToString(new Date(),DateUtils.dateFormat1));
-            } else {
-                status = false;
-                mWord.setNewWord(0);
-                mWord.setTime(DateUtils.formatDateToString(new Date(),DateUtils.dateFormat1));
-            }
-            mReviewPresenter.setUpDateNewwordStatus(mCbAdd, mWord,status);
+            mReviewPresenter.setUpDateNewwordStatus(mCbAdd, mWord);
         });
         mLayoutBg.setOnClickListener(v -> {
             mLayoutBg.setVisibility(View.GONE);
         });
 
         mLayoutRemember.setOnClickListener(v -> {
-            boolean status = false;
             Word mWord = word;
-            if (mWord.getRemember() == 0) {
-                status = true;
-                mWord.setRemember(1);
-                mWord.setTime(DateUtils.formatDateToString(new Date(),DateUtils.dateFormat1));
-            } else {
-                status = false;
-                mWord.setRemember(0);
-                mWord.setTime(DateUtils.formatDateToString(new Date(),DateUtils.dateFormat1));
-            }
-            mReviewPresenter.setUpDateRememberStatus(mSwRemember, mWord,status);
+            mReviewPresenter.setUpDateRememberStatus(mSwRemember, mWord);
         });
         mTvPs.setOnClickListener(v -> {
             mReviewPresenter.startSpeak(word.getWord());

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/ic_check_box" android:state_checked="true">
+        <shape>
+            <padding android:right="@dimen/dp_6"
+                android:top="@dimen/dp_6"
+                android:bottom="@dimen/dp_6"
+                android:left="@dimen/dp_6"/>
+        </shape>
+    </item>
+    <item android:drawable="@drawable/ic_check_box_outline" android:state_checked="false" >
+        <shape>
+            <padding android:right="@dimen/dp_6"
+                    android:top="@dimen/dp_6"
+                    android:bottom="@dimen/dp_6"
+                    android:left="@dimen/dp_6"/>
+        </shape>
+    </item>
+
+</selector>

@@ -149,8 +149,9 @@ public class TranslationPresenter implements IBasePresenter, ListPopupWindow.Dat
 
     @Override
     public void rxBus(Class mClass, Class aClass) {
+        Class aClazz = aClass;
         mTranslationView.rxBus(mTranslationModel.rxBus(mClass).map(eventBase -> {
-            if (eventBase.getReceiver() != aClass) {
+            if (eventBase.getReceiver() != aClazz) {
                 return null;
             } else {
                 return eventBase;

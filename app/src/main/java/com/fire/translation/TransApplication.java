@@ -47,6 +47,9 @@ public class TransApplication extends App {
     }
 
     private void initDBHelper() {
+        DBConfig build = DBConfig.builder().dbDir(TransApplication.mTransApp.getDatabasePath(".").getAbsolutePath()).dbName(Constant.SQLONENAME).version(1).build();
+        CipherOpenHelper cipherOpenHelper = new CipherOpenHelper(TransApplication.mTransApp, build.getDbDir(), build.getDbName(), build.getVersion());
+        initSqlite(cipherOpenHelper);
         mDbConfig = DBConfig.builder().dbDir(getDatabasePath(".").getAbsolutePath()).dbName(Constant.BASESQLNAME).version(1).build();
         mDbOpenHelper = new CipherOpenHelper(this, mDbConfig.getDbDir(), mDbConfig.getDbName(), mDbConfig.getVersion());
     }

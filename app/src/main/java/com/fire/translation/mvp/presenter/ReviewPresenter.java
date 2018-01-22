@@ -10,10 +10,12 @@ import com.fire.translation.db.entities.Record;
 import com.fire.translation.db.entities.Word;
 import com.fire.translation.mvp.model.ReviewModel;
 import com.fire.translation.mvp.view.ReviewView;
+import com.fire.translation.utils.DateUtils;
 import com.iflytek.cloud.ErrorCode;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechSynthesizer;
 import com.iflytek.sunflower.FlowerCollector;
+import java.util.Date;
 
 /**
  * Created by fire on 2018/1/18.
@@ -36,7 +38,21 @@ public class ReviewPresenter implements IBasePresenter {
         mReviewView.loadData(mReviewModel.loadData(reviews));
     }
 
-    public void setUpDateRememberStatus(Switch mSwRemember, Word word, boolean status) {
+    public void setUpDateRememberStatus(Switch mSwRemember, Word word) {
+        boolean status = false;
+        if (word.getRemember() == 0) {
+            status = true;
+            word.setRemember(1);
+            word.setTime(DateUtils.formatDateToString(new Date(),DateUtils.dateFormat1));
+        } else {
+            status = false;
+            word.setRemember(0);
+            if (word.getNewWord() == 0) {
+                word.setTime(null);
+            } else {
+                word.setTime(DateUtils.formatDateToString(new Date(),DateUtils.dateFormat1));
+            }
+        }
         mReviewView.setUpDateRememberStatus(mSwRemember,mReviewModel.setUpDateRememberStatus(word),status);
     }
 
@@ -44,7 +60,21 @@ public class ReviewPresenter implements IBasePresenter {
         mReviewView.updateRecordWords(mReviewModel.updateRecordWords(record));
     }
 
-    public void setUpDateNewwordStatus(CheckBox mCbAdd, Word word, boolean status) {
+    public void setUpDateNewwordStatus(CheckBox mCbAdd, Word word) {
+        boolean status = false;
+        if (word.getNewWord() == 0) {
+            status = true;
+            word.setNewWord(1);
+            word.setTime(DateUtils.formatDateToString(new Date(),DateUtils.dateFormat1));
+        } else {
+            status = false;
+            word.setNewWord(0);
+            if (word.getRemember() == 0) {
+                word.setTime(null);
+            } else {
+                word.setTime(DateUtils.formatDateToString(new Date(),DateUtils.dateFormat1));
+            }
+        }
         mReviewView.setUpDateNewwordStatus(mCbAdd,mReviewModel.setUpDateRememberStatus(word),status);
     }
 

@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.widget.EditText;
@@ -330,5 +333,21 @@ public class TranslationFragment extends BaseFragment implements TranslationView
                     starSuccess(EventBase.builder().arg0(translate.getStart()).build());
                     setData(mListTranslate.getTranslations(),mListTranslate.getExplains());
                 }, throwable -> CustomerDialog.dismissProgress());
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_translate,menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_notify:
+                ToastUtils.showToast("notify");
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

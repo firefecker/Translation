@@ -10,4 +10,24 @@
         <item>葡萄牙文</item>
         <item>西班牙文</item>
     </string-array>
+    <string-array name="plan" >
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+    </string-array>
+    <string-array name="plan_value" >
+        <item>初中词汇</item>
+        <item>高中词汇</item>
+        <item>考研核心</item>
+        <item>四级核心</item>
+        <item>六级核心</item>
+        <item>雅思核心</item>
+        <item>GRE高频</item>
+        <item>托福核心</item>
+    </string-array>
 </resources>

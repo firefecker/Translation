@@ -75,17 +75,17 @@ public class MainActivity extends BaseActivity implements MainView {
                         case R.id.navigation_home:
                             mToolbar.setTitle(R.string.title_home);
                             mTabLayout.setVisibility(View.GONE);
-                            updateShowSatus(true, mDashboardFragment, mMineFragment);
+                            updateShowSatus(true, mDashboardFragment, true);
                             return true;
                         case R.id.navigation_dashboard:
                             mToolbar.setTitle("");
                             mTabLayout.setVisibility(View.VISIBLE);
-                            updateShowSatus(false, mDashboardFragment, mMineFragment);
+                            updateShowSatus(false, mDashboardFragment, true);
                             return true;
                         case R.id.navigation_notifications:
                             mToolbar.setTitle(R.string.title_notifications);
                             mTabLayout.setVisibility(View.GONE);
-                            updateShowSatus(false, mMineFragment, mDashboardFragment);
+                            updateShowSatus(false, null, false);
                             return true;
                         default:
                             return false;
@@ -114,36 +114,45 @@ public class MainActivity extends BaseActivity implements MainView {
         mTabLayout.post(() -> FunctionUtils.setIndicator(mTabLayout, 10, 10));
     }
 
-    private void updateShowSatus(boolean isHome, Fragment fragment1, Fragment fragment2) {
-        if (isHome) {
-            mActionButton.setVisibility(View.GONE);
-            getSupportFragmentManager().beginTransaction()
-                    .hide(fragment1)
-                    .hide(fragment2)
-                    .show(mHomeFragment)
-                    .commit();
+    private void updateShowSatus(boolean isHome, Fragment fragment1, boolean isShow) {
+        if (isShow) {
+            if (isHome) {
+                mActionButton.setVisibility(View.GONE);
+                getSupportFragmentManager().beginTransaction()
+                        .hide(fragment1)
+                        .show(mHomeFragment)
+                        .commit();
+            } else {
+                mActionButton.setVisibility(View.GONE);
+                getSupportFragmentManager().beginTransaction()
+                        .hide(mHomeFragment)
+                        .show(fragment1)
+                        .commit();
+            }
+            getFragmentManager().beginTransaction().hide(mMineFragment).commit();
         } else {
-            mActionButton.setVisibility(View.GONE);
             getSupportFragmentManager().beginTransaction()
                     .hide(mHomeFragment)
-                    .hide(fragment2)
-                    .show(fragment1)
+                    .hide(mDashboardFragment)
                     .commit();
+            getFragmentManager().beginTransaction().show(mMineFragment).commit();
         }
         supportInvalidateOptionsMenu();
     }
 
     @Override
     public void initData() {
-        mToolbar.setTitle(R.string.title_home);
+        setToolBarNoBack(mToolbar, getString(R.string.title_home));
         mTabLayout.setVisibility(View.GONE);
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.layout_frame, mHomeFragment)
                 .add(R.id.layout_frame, mDashboardFragment)
-                .add(R.id.layout_frame, mMineFragment)
                 .hide(mDashboardFragment)
-                .hide(mMineFragment)
                 .show(mHomeFragment)
+                .commit();
+        getFragmentManager().beginTransaction()
+                .add(R.id.layout_frame, mMineFragment)
+                .hide(mMineFragment)
                 .commit();
     }
 
@@ -152,10 +161,10 @@ public class MainActivity extends BaseActivity implements MainView {
         existTableName.compose(this.bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(tableNameOptional -> {
                     if (tableNameOptional == null || tableNameOptional.get() == null) {
-                        mMainPresenter.setTableStatus();
+                        //mMainPresenter.setTableStatus();
                     }
                 }, throwable -> {
-                    mMainPresenter.setTableStatus();
+                    //mMainPresenter.setTableStatus();
                 });
     }
 
@@ -190,7 +199,7 @@ public class MainActivity extends BaseActivity implements MainView {
                 }
                 break;
             case Constant.ACTION_ALBUM:
-                mMainPresenter.loadPath(this,data);
+                mMainPresenter.loadPath(this, data);
                 break;
         }
     }

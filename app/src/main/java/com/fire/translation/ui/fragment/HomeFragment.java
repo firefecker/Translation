@@ -89,9 +89,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
                     if (eventBase.getArg0() == 0) {
                         mHomePresenter.loadRecord();
                     }
-                }, throwable -> {
-                    Logger.e(throwable.toString());
-                });
+                }, throwable -> Logger.e(throwable.toString()));
     }
 
     @Override
@@ -113,9 +111,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
                     mNvReview.setLeftText(mRecord.getReview() + "");
                     mNvType.setLeftText(mRecord.getRecordCount() + "");
                     mNvZwnum.setLeftText(mRecord.getRecordWords() + "");
-                }, throwable -> {
-                    Logger.e(throwable.toString());
-                });
+                }, throwable -> Logger.e(throwable.toString()));
     }
 
     @Override

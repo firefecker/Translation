@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import butterknife.ButterKnife;
-import com.trello.rxlifecycle2.components.support.RxFragment;
+import com.trello.rxlifecycle2.components.RxFragment;
 
 /**
  *
@@ -17,7 +17,7 @@ import com.trello.rxlifecycle2.components.support.RxFragment;
  * Description:
  */
 
-public abstract class BaseFragment extends RxFragment {
+public abstract class BaseAppFragment extends RxFragment {
 
     public Activity mActivity;
 

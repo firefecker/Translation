@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_6"
+        android:drawablePadding="@dimen/dp_10"
+        android:drawableLeft="@drawable/ic_access_time"
+        android:background="#881e93dc"
+        android:paddingLeft="@dimen/dp_10"
+        android:gravity="center_vertical"
+        android:textSize="@dimen/sp_14"
+        android:text="2017-09-19"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#fff">
+
+</TextView>

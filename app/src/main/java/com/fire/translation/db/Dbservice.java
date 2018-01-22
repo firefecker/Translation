@@ -1,7 +1,6 @@
 package com.fire.translation.db;
 
 import com.fire.translation.TransApplication;
-import com.fire.translation.constant.Constant;
 import com.fire.translation.db.entities.Record;
 import com.fire.translation.db.entities.TableName;
 import com.fire.translation.db.entities.Tanslaterecord;
@@ -12,7 +11,6 @@ import com.pushtorefresh.storio3.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio3.sqlite.operations.put.PutResult;
 import com.pushtorefresh.storio3.sqlite.queries.Query;
 import com.pushtorefresh.storio3.sqlite.queries.RawQuery;
-import com.youdao.sdk.ydtranslate.Translate;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -233,5 +231,39 @@ public class Dbservice {
                         .build())
                 .prepare()
                 .executeAsBlocking();
+    }
+
+    public Flowable<List<Record>> getAllRecordData() {
+        // WHERE %s NOTNULL
+        String query = String.format("SELECT * FROM %s",Record.__TABLE__);
+        return mStorIOSQLite.get()
+                .listOfObjects(Record.class)
+                .withQuery(RawQuery.builder().query(query).build())
+                .prepare()
+                .asRxFlowable(BackpressureStrategy.BUFFER)
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Flowable<List<Word>> getAllWordData(int newWord,int remomber) {
+        String query = "";
+        if (newWord == 1) {
+            if (remomber == 0) {
+                query = String.format("SELECT * FROM %s where %s = '1'",Word.__TABLE__,Word.C_NEWWORD);
+            } else {
+                query = String.format("SELECT * FROM %s where %s = '1' or %s = '1'",Word.__TABLE__,Word.C_REMEMBER,Word.C_NEWWORD);
+            }
+        } else {
+            if (remomber == 0) {
+                query = String.format("SELECT * FROM %s where %s = '0' and %s = '0' limit 0",Word.__TABLE__,Word.C_REMEMBER,Word.C_NEWWORD);
+            } else {
+                query = String.format("SELECT * FROM %s where %s = '1'",Word.__TABLE__,Word.C_REMEMBER);
+            }
+        }
+        return mStorIOSQLite.get()
+                .listOfObjects(Word.class)
+                .withQuery(RawQuery.builder().query(query).build())
+                .prepare()
+                .asRxFlowable(BackpressureStrategy.BUFFER)
+                .observeOn(AndroidSchedulers.mainThread());
     }
 }
