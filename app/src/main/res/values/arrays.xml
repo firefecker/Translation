@@ -42,4 +42,14 @@
         <item>3</item>
         <item>4</item>
     </string-array>
+    <string-array name="sort_value" >
+        <item>正序</item>
+        <item>倒序</item>
+        <item>乱序</item>
+    </string-array>
+    <string-array name="sort" >
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
 </resources>

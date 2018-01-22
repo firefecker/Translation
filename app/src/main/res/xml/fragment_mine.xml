@@ -18,6 +18,13 @@
             android:entryValues="@array/newword"
             android:positiveButtonText="@null"
             android:defaultValue="1"/>
+        <ListPreference
+            android:title="单词顺序"
+            android:key="@+id/sort_plan"
+            android:entries="@array/sort_value"
+            android:entryValues="@array/sort"
+            android:positiveButtonText="@null"
+            android:defaultValue="1"/>
     </PreferenceCategory>
 
 </PreferenceScreen>
