@@ -1,10 +1,8 @@
 package com.fire.translation.ui.fragment;
 
 import android.preference.ListPreference;
-import android.preference.Preference;
 import com.fire.baselibrary.base.BasePreferenceFragment;
 import com.fire.translation.R;
-import com.fire.translation.R2;
 
 /**
  * Description:
