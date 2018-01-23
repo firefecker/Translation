@@ -2,13 +2,16 @@ package com.fire.baselibrary.base;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.support.annotation.ArrayRes;
 import android.support.annotation.CallSuper;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.XmlRes;
 import android.view.View;
+import com.fire.baselibrary.utils.ListUtils;
 import com.trello.rxlifecycle2.LifecycleProvider;
 import com.trello.rxlifecycle2.LifecycleTransformer;
 import com.trello.rxlifecycle2.RxLifecycle;
@@ -16,6 +19,9 @@ import com.trello.rxlifecycle2.android.FragmentEvent;
 import com.trello.rxlifecycle2.android.RxLifecycleAndroid;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by fire on 2018/1/22.
@@ -39,7 +45,11 @@ public abstract class BasePreferenceFragment extends PreferenceFragment  impleme
         addPreferencesFromResource(resourceId());
         onFragmentCreate(savedInstanceState);
         initView();
+        initData();
+
     }
+
+    protected abstract void initData();
 
     public abstract @XmlRes
     int resourceId ();
@@ -139,5 +149,29 @@ public abstract class BasePreferenceFragment extends PreferenceFragment  impleme
     public void onDetach() {
         lifecycleSubject.onNext(FragmentEvent.DETACH);
         super.onDetach();
+    }
+
+    public void initPlan(@ArrayRes int array, @ArrayRes int arrayValue, String newValue,
+            Preference perference) {
+        String[] stringArray = getResources().getStringArray(array);
+        for (int i = 0; i < stringArray.length; i++) {
+            if (stringArray[i].equals(newValue)) {
+                perference.setSummary(getResources().getStringArray(arrayValue)[i]);
+            }
+        }
+    }
+
+    public void initPlan(@ArrayRes int array, @ArrayRes int arrayValue, Set<String> newValue,
+            Preference perference) {
+        String[] stringArray = getResources().getStringArray(array);
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < stringArray.length; i++) {
+            for (String s : newValue) {
+                if (stringArray[i].equals(s)) {
+                    list.add(getResources().getStringArray(arrayValue)[i]);
+                }
+            }
+        }
+        perference.setSummary(ListUtils.listStrToString(list, ","));
     }
 }

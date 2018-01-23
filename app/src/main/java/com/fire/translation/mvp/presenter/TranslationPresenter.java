@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -13,6 +14,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import com.fire.baselibrary.base.inter.IBasePresenter;
+import com.fire.baselibrary.utils.ListUtils;
 import com.fire.baselibrary.utils.ToastUtils;
 import com.fire.translation.R;
 import com.fire.translation.db.entities.Tanslaterecord;
@@ -27,8 +29,9 @@ import com.iflytek.sunflower.FlowerCollector;
 import com.youdao.ocr.online.OCRResult;
 import com.youdao.sdk.ydtranslate.Translate;
 import io.reactivex.functions.Function;
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by fire on 2018/1/15.
@@ -61,9 +64,13 @@ public class TranslationPresenter implements IBasePresenter, ListPopupWindow.Dat
         mOperatingAnim2.setFillAfter(true);
         mOperatingAnim3.setInterpolator(lin3);
         mOperatingAnim3.setFillAfter(true);
-        List<String> mStrings = Arrays.asList(
-                activity.getResources().getStringArray(R.array.languages));
-        mTranslationView.initData(mOperatingAnim1, mOperatingAnim2, mOperatingAnim3, mStrings);
+        Set<String> strings = new HashSet<>();
+        strings.add("1");
+        strings.add("3");
+        Set<String> language_select = PreferenceManager.getDefaultSharedPreferences(activity)
+                .getStringSet("language_select", strings);
+        mTranslationView.initData(mOperatingAnim1, mOperatingAnim2, mOperatingAnim3,
+                ListUtils.setToList(activity, R.array.plan, R.array.languages, language_select));
     }
 
     public void translate(String from, String to, String string) {
@@ -116,7 +123,8 @@ public class TranslationPresenter implements IBasePresenter, ListPopupWindow.Dat
         // 清空参数
         //mTts.setParameter(SpeechConstant.PARAMS, null);
         // 根据合成引擎设置相应参数
-        SpeechSynthesizer mTts = SpeechSynthesizer.createSynthesizer(context, mTranslationView.mTtsInitListener);
+        SpeechSynthesizer mTts = SpeechSynthesizer.createSynthesizer(context,
+                mTranslationView.mTtsInitListener);
         mTts.setParameter(SpeechConstant.ENGINE_TYPE, SpeechConstant.TYPE_CLOUD);
         // 设置在线合成发音人
         mTts.setParameter(SpeechConstant.VOICE_NAME, "xiaoyan");
@@ -133,7 +141,8 @@ public class TranslationPresenter implements IBasePresenter, ListPopupWindow.Dat
         // 设置音频保存路径，保存音频格式支持pcm、wav，设置路径为sd卡请注意WRITE_EXTERNAL_STORAGE权限
         // 注：AUDIO_FORMAT参数语记需要更新版本才能生效
         mTts.setParameter(SpeechConstant.AUDIO_FORMAT, "wav");
-        mTts.setParameter(SpeechConstant.TTS_AUDIO_PATH, Environment.getExternalStorageDirectory() + "/translation/tts.wav");
+        mTts.setParameter(SpeechConstant.TTS_AUDIO_PATH,
+                Environment.getExternalStorageDirectory() + "/translation/tts.wav");
         return mTts;
     }
 

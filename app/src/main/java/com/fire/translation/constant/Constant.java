@@ -44,5 +44,6 @@ public class Constant {
             Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS,
             Manifest.permission.WRITE_SETTINGS
     };
+    public static String SORT = "正序";
     public static String FILEPATH = "";
 }

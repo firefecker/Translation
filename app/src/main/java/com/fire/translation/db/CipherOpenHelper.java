@@ -87,7 +87,6 @@ public class CipherOpenHelper extends SQLiteOpenHelper {
             if (exits("word",db) && !checkColumnExists2(db,"word","time")) {
                 db.execSQL("alter table word add time text;");
             }
-
             if (exits("word",db) && !checkColumnExists2(db,"word","new_word")) {
                 db.execSQL("alter table word add new_word integer;");
             }

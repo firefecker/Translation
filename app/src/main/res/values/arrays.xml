@@ -52,4 +52,12 @@
         <item>2</item>
         <item>3</item>
     </string-array>
+    <string-array name="wordselect_value" >
+        <item>掌握</item>
+        <item>生词</item>
+    </string-array>
+    <string-array name="wordselect" >
+        <item>1</item>
+        <item>2</item>
+    </string-array>
 </resources>

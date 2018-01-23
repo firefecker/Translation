@@ -10,7 +10,7 @@ import com.fire.translation.mvp.view.TranslationView;
 import com.fire.translation.rx.BaseOnCompressListener;
 import com.fire.translation.rx.DefaultObservable;
 import com.fire.translation.utils.FunctionUtils;
-import com.fire.translation.utils.ListUtils;
+import com.fire.baselibrary.utils.ListUtils;
 import com.fire.baselibrary.rx.EventBase;
 import com.orhanobut.logger.Logger;
 import com.pushtorefresh.storio3.sqlite.Changes;

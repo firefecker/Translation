@@ -90,4 +90,5 @@ public interface WordbookView extends IBaseView {
         }
     };
 
+    void initRememberAndWord(int remomber, int newWord);
 }

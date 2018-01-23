@@ -1,6 +1,10 @@
 package com.fire.translation.mvp.model;
 
+import android.content.Context;
+import android.preference.PreferenceManager;
 import com.fire.baselibrary.base.inter.IBaseModel;
+import com.fire.baselibrary.utils.ListUtils;
+import com.fire.translation.R;
 import com.fire.translation.constant.Constant;
 import com.fire.translation.db.Dbservice;
 import com.fire.translation.db.entities.Record;
@@ -50,7 +54,7 @@ public class HomeModel implements IBaseModel {
                 .startWith(Changes.newInstance(""));
     }
 
-    public Record getRecord() {
+    public Record getRecord(Context context) {
         Record record = Dbservice.getInstance()
                 .defaultDbConfig()
                 .getRecord(DateUtils.getFormatDate1(new Date(),DateUtils.dateFormat1));
@@ -68,9 +72,12 @@ public class HomeModel implements IBaseModel {
             } else {
                 recordDays = subRecord.getRecordDays() + 1;
             }
+            String review = ListUtils.stringToString(context, R.array.newword,
+                    R.array.newword_value, PreferenceManager.getDefaultSharedPreferences(context)
+                            .getString("word_plan", "2"));
             record = Record.newRecord((int) System.currentTimeMillis(),
                     DateUtils.getFormatDate1(new Date(), DateUtils.dateFormat1),
-                    0, 30, recordDays, allWords.size(), 0);
+                    0, Integer.parseInt(review), recordDays, allWords.size(), 0);
             PutResult result = Dbservice.getInstance()
                     .defaultDbConfig()
                     .insertRecord(record);

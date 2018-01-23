@@ -86,6 +86,10 @@ public class HomeFragment extends BaseFragment implements HomeView {
                     if (eventBase == null) {
                         return;
                     }
+                    if (getString(R.string.wordplan).equals(eventBase.getArg2())) {
+                        mRecord.setReview(Integer.parseInt(eventBase.getArg3()));
+                        mHomePresenter.updateJsnum(mRecord);
+                    }
                     if (eventBase.getArg0() == 0) {
                         mHomePresenter.loadRecord();
                     }
@@ -101,7 +105,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
     @Override
     public void setRecord(Flowable<Changes> listFlowable) {
         listFlowable.compose(this.bindUntilEvent(FragmentEvent.DESTROY_VIEW))
-                .map(changes -> mHomePresenter.getRecord())
+                .map(changes -> mHomePresenter.getRecord(getActivity()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(record -> {

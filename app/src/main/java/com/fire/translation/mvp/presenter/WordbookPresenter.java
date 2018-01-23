@@ -3,11 +3,13 @@ package com.fire.translation.mvp.presenter;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.support.annotation.AnimRes;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import com.fire.baselibrary.base.inter.IBasePresenter;
+import com.fire.baselibrary.utils.ListUtils;
 import com.fire.baselibrary.utils.ToastUtils;
 import com.fire.translation.R;
 import com.fire.translation.mvp.model.WordbookModel;
@@ -17,8 +19,11 @@ import com.iflytek.cloud.ErrorCode;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechSynthesizer;
 import com.iflytek.sunflower.FlowerCollector;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by fire on 2018/1/22.
@@ -79,7 +84,7 @@ public class WordbookPresenter implements IBasePresenter {
         // 移动数据分析，收集开始合成事件
         FlowerCollector.onEvent(context, "tts_play");
         // 设置参数
-        int code = tts.startSpeaking(content, mWordbookView.mTtsListener);
+        int code = tts.startSpeaking(content, WordbookView.mTtsListener);
         if (code != ErrorCode.SUCCESS) {
             ToastUtils.showToast("语音合成失败,错误码: " + code);
         }
@@ -91,5 +96,29 @@ public class WordbookPresenter implements IBasePresenter {
         mOperatingAnim1.setInterpolator(lin1);
         mOperatingAnim1.setFillAfter(true);
         return mOperatingAnim1;
+    }
+
+    public void initRememberAndWord(Activity activity) {
+        int remomber,newWord;
+        HashSet<String> strings = new HashSet<>();
+        strings.add("1");
+        Set<String> wordSelect = PreferenceManager.getDefaultSharedPreferences(activity)
+                .getStringSet("word_select", strings);
+        if (wordSelect.size() == 0) {
+            remomber = 0;
+            newWord = 0;
+        } else if (wordSelect.size() == 1) {
+            if ("1".equals(wordSelect.iterator().next())) {
+                remomber = 1;
+                newWord = 0;
+            } else {
+                remomber = 0;
+                newWord = 1;
+            }
+        } else {
+            remomber = 1;
+            newWord = 1;
+        }
+        mWordbookView.initRememberAndWord(remomber,newWord);
     }
 }

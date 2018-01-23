@@ -249,6 +249,10 @@ public class TranslationFragment extends BaseFragment implements TranslationView
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(eventBase -> {
                     if (eventBase != null) {
+                        if (getString(R.string.language).equals(eventBase.getArg2())) {
+                            mTranslationPresenter.init(mActivity);
+                            return;
+                        }
                         CustomerDialog.showProgress(mActivity);
                         mTranslationPresenter.zipFile(eventBase, mActivity);
                     }

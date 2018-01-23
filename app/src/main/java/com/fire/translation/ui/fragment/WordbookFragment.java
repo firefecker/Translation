@@ -2,6 +2,7 @@ package com.fire.translation.ui.fragment;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.Menu;
@@ -24,7 +25,9 @@ import com.trello.rxlifecycle2.android.FragmentEvent;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by fire on 2018/1/15.
@@ -42,6 +45,8 @@ public class WordbookFragment extends BaseFragment implements WordbookView {
     private  int newWord = 0,remomber = 1;
     private WordBookAdapter mWordBookAdapter;
     private  SpeechSynthesizer mTts;
+    private CheckBox mCbRemember;
+    private CheckBox mCbNewWord;
 
     @Override
     public int resourceId() {
@@ -58,33 +63,22 @@ public class WordbookFragment extends BaseFragment implements WordbookView {
         mWordBookAdapter = new WordBookAdapter(mActivity,mWordbookPresenter);
         mRecyclerView.setAdapter(mWordBookAdapter);
         mTts = mWordbookPresenter.setParam(mActivity);
+        mWordbookPresenter.initRememberAndWord(mActivity);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_workbook,menu);
-        CheckBox mCbRemember = (CheckBox) menu.findItem(R.id.cb_remember).getActionView();
-        CheckBox mCbNewWord = (CheckBox) menu.findItem(R.id.cb_newword).getActionView();
+        mCbRemember = (CheckBox) menu.findItem(R.id.cb_remember).getActionView();
+        mCbNewWord = (CheckBox) menu.findItem(R.id.cb_newword).getActionView();
         mCbNewWord.setText("生词");
         mCbRemember.setText("掌握");
         mCbNewWord.setButtonDrawable(R.drawable.selector_click_bg);
         mCbRemember.setButtonDrawable(R.drawable.selector_click_bg);
         mCbNewWord.setTextColor(Color.WHITE);
         mCbRemember.setTextColor(Color.WHITE);
-        if (remomber == 1) {
-            mCbRemember.setChecked(true);
-        } else {
-            mCbRemember.setChecked(false);
-        }
-        if (newWord == 1) {
-            mCbNewWord.setChecked(true);
-        } else {
-            mCbNewWord.setChecked(false);
-        }
-        if (mWordBookAdapter.getAllData().size() == 0) {
-            mWordbookPresenter.loadData(newWord,remomber);
-        }
+        setStatus(false);
         mCbNewWord.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 newWord = 1;
@@ -101,6 +95,29 @@ public class WordbookFragment extends BaseFragment implements WordbookView {
             }
             mWordbookPresenter.loadData(newWord,remomber);
         });
+    }
+
+    private void setStatus(boolean status) {
+        if (mCbNewWord == null || mCbRemember == null) {
+            return;
+        }
+        if (remomber == 1) {
+            mCbRemember.setChecked(true);
+        } else {
+            mCbRemember.setChecked(false);
+        }
+        if (newWord == 1) {
+            mCbNewWord.setChecked(true);
+        } else {
+            mCbNewWord.setChecked(false);
+        }
+        if (status) {
+            mWordbookPresenter.loadData(newWord,remomber);
+            return;
+        }
+        if (mWordBookAdapter.getAllData().size() == 0) {
+            mWordbookPresenter.loadData(newWord,remomber);
+        }
     }
 
     @Override
@@ -121,6 +138,9 @@ public class WordbookFragment extends BaseFragment implements WordbookView {
                     if (eventBase.getArg0() == 0) {
                         mWordbookPresenter.loadData(newWord,remomber);
                     }
+                    if (getString(R.string.wordselect).equals(eventBase.getArg2())) {
+                        mWordbookPresenter.initRememberAndWord(mActivity);
+                    }
                 },throwable -> Logger.e(throwable.toString()));
     }
 
@@ -137,4 +157,10 @@ public class WordbookFragment extends BaseFragment implements WordbookView {
         mWordbookPresenter.speak(content,mTts,mActivity);
     }
 
+    @Override
+    public void initRememberAndWord(int remomber, int newWord) {
+        this.remomber = remomber;
+        this.newWord = newWord;
+        setStatus(true);
+    }
 }

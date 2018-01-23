@@ -1,6 +1,7 @@
 package com.fire.translation.db;
 
 import com.fire.translation.TransApplication;
+import com.fire.translation.constant.Constant;
 import com.fire.translation.db.entities.Record;
 import com.fire.translation.db.entities.TableName;
 import com.fire.translation.db.entities.Tanslaterecord;
@@ -192,11 +193,26 @@ public class Dbservice {
     }
 
     public List<Word> getCurrentWord(int reviews) {
+        String format = "";
+        switch (Constant.SORT) {
+            case "正序":
+                format = String.format("%s = ? ORDER BY %s ASC LIMIT '%d'", Word.C_REMEMBER, Word.C_ID, reviews);
+                break;
+            case "倒序":
+                format = String.format("%s = ? ORDER BY %s DESC LIMIT '%d'", Word.C_REMEMBER, Word.C_ID, reviews);
+                break;
+            case "乱序":
+                format = String.format("%s = ? ORDER BY RANDOM() LIMIT '%d'", Word.C_REMEMBER, reviews);
+                break;
+            default:
+                format = String.format("%s = ? limit '%d'", Word.C_REMEMBER, reviews);
+                break;
+        }
         return mStorIOSQLite .get()
                 .listOfObjects(Word.class)
                 .withQuery(Query.builder()
                         .table(Word.__TABLE__)
-                        .where(String.format("%s = ? limit %d",Word.C_REMEMBER,reviews))
+                        .where(format)
                         .whereArgs("0")
                         .build())
                 .prepare()

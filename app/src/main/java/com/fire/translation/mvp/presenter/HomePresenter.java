@@ -1,5 +1,6 @@
 package com.fire.translation.mvp.presenter;
 
+import android.content.Context;
 import com.fire.baselibrary.base.inter.IBasePresenter;
 import com.fire.translation.db.entities.Record;
 import com.fire.translation.mvp.model.HomeModel;
@@ -38,8 +39,8 @@ public class HomePresenter implements IBasePresenter {
         mHomeView.setRecord(mHomeModel.loadRecord());
     }
 
-    public Record getRecord() {
-        return mHomeModel.getRecord();
+    public Record getRecord(Context context) {
+        return mHomeModel.getRecord(context);
     }
 
     public void updateJsnum(Record record) {

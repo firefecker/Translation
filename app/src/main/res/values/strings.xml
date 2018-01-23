@@ -1,10 +1,19 @@
 <resources>
-    <string name="app_name">Translation</string>
+    <string name="app_name">简译</string>
     <string name="title_home">主页</string>
     <string name="title_dashboard">面板</string>
-    <string name="title_notifications">我的</string>
+    <string name="title_notifications">设置</string>
     <string name="translation">翻译</string>
     <string name="record">记录</string>
     <string name="word_book">单词</string>
     <string name="app_id">580313ee</string>
+
+    <string name="share_content">这是一款基于rxJava2写的一个android项目，主要功能有记单词，翻译等。apk下载地址：http://fir.im/yn4r</string>
+    <string name="alipay_urlcode">FKX09603UIELJZGF1HOME3</string>
+    <string name="alipay_notify">没有检测到支付宝客户端</string>
+    <string name="clear_cache">已经清除缓存</string>
+    <string name="no_cache">缓存已经清除干净</string>
+    <string name="language">language</string>
+    <string name="wordselect">wordselect</string>
+    <string name="wordplan">wordplan</string>
 </resources>
