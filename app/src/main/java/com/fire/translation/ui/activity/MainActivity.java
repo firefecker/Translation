@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.RelativeLayout;
 import butterknife.BindView;
+import com.fire.baselibrary.utils.ToastUtils;
 import com.fire.translation.R;
 import com.fire.baselibrary.base.BaseActivity;
 import com.fire.translation.constant.Constant;
@@ -19,10 +20,12 @@ import com.fire.translation.mvp.presenter.MainPresenter;
 import com.fire.translation.mvp.view.MainView;
 import com.fire.baselibrary.rx.DefaultButtonTransformer;
 import com.fire.baselibrary.rx.RxBus;
+import com.fire.translation.network.RetrofitClient;
 import com.fire.translation.ui.fragment.DashboardFragment;
 import com.fire.translation.ui.fragment.HomeFragment;
-import com.fire.translation.ui.fragment.MineFragment;
+import com.fire.translation.ui.fragment.SettingFragment;
 import com.fire.translation.ui.fragment.TranslationFragment;
+import com.fire.translation.utils.FileUtils;
 import com.fire.translation.utils.FunctionUtils;
 import com.fire.baselibrary.rx.EventBase;
 import com.orhanobut.logger.Logger;
@@ -52,7 +55,7 @@ public class MainActivity extends BaseActivity implements MainView {
 
     private HomeFragment mHomeFragment;
     private DashboardFragment mDashboardFragment;
-    private MineFragment mMineFragment;
+    private SettingFragment mMineFragment;
 
     private MainPresenter mMainPresenter;
 
@@ -67,7 +70,7 @@ public class MainActivity extends BaseActivity implements MainView {
         mMainPresenter.loadExistTable();
         mHomeFragment = new HomeFragment();
         mDashboardFragment = new DashboardFragment();
-        mMineFragment = new MineFragment();
+        mMineFragment = new SettingFragment();
 
         mNavigationView.setOnNavigationItemSelectedListener(
                 item -> {

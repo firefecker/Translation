@@ -58,4 +58,8 @@ public class HomePresenter implements IBasePresenter {
             }
         }));
     }
+
+    public void deleteRecord(Record record) {
+        mHomeView.deleteRecord(mHomeModel.deleteRecord(record));
+    }
 }

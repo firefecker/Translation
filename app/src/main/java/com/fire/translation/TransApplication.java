@@ -9,13 +9,18 @@ import com.fire.translation.constant.Constant;
 import com.fire.translation.db.CipherOpenHelper;
 import com.fire.translation.db.DBConfig;
 import com.fire.translation.db.DbModelSQLiteTypeMapping;
+import com.fire.translation.db.Dbservice;
 import com.fire.translation.db.TableInfo;
 import com.fire.translation.db.entities.DbModel;
+import com.fire.translation.db.entities.TableName;
 import com.fire.translation.utils.AssetsUtils;
 import com.iflytek.cloud.SpeechUtility;
+import com.orhanobut.logger.Logger;
+import com.pushtorefresh.storio3.Optional;
 import com.pushtorefresh.storio3.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio3.sqlite.impl.DefaultStorIOSQLite;
 import com.youdao.sdk.app.YouDaoApplication;
+import io.reactivex.functions.Function;
 import java.io.File;
 import java.io.IOException;
 
@@ -42,6 +47,15 @@ public class TransApplication extends App {
                 PreferenceManager.getDefaultSharedPreferences(this).getString("sort_plan", "1"));
         unZipFile();
         initDBHelper();
+        Dbservice.getInstance()
+                .defaultDbConfig()
+                .getExistTableName(ListUtils.stringToString(this, R.array.plan, R.array.plan_value,
+                        PreferenceManager.getDefaultSharedPreferences(this).getString("study_plan", "1")))
+                .map(tableNameOptional -> tableNameOptional.get())
+                .subscribe(tableName -> {
+                    Constant.SQLONENAME = String.format("%s.db",tableName.getName());
+                    Constant.SQLTYPE = tableName.getCikuName();
+                },throwable -> Logger.e(throwable.toString()));
     }
 
     @Override
@@ -52,11 +66,29 @@ public class TransApplication extends App {
 
     private void initDBHelper() {
         DBConfig build = DBConfig.builder()
-                .dbDir(TransApplication.mTransApp.getDatabasePath(".").getAbsolutePath())
+                .dbDir(getDatabasePath(".").getAbsolutePath())
                 .dbName(Constant.SQLONENAME)
                 .version(1)
                 .build();
-        CipherOpenHelper cipherOpenHelper = new CipherOpenHelper(TransApplication.mTransApp,
+        CipherOpenHelper cipherOpenHelper = new CipherOpenHelper(this,
+                build.getDbDir(), build.getDbName(), build.getVersion());
+        initSqlite(cipherOpenHelper);
+        mDbConfig = DBConfig.builder()
+                .dbDir(getDatabasePath(".").getAbsolutePath())
+                .dbName(Constant.BASESQLNAME)
+                .version(1)
+                .build();
+        mDbOpenHelper = new CipherOpenHelper(this, mDbConfig.getDbDir(), mDbConfig.getDbName(),
+                mDbConfig.getVersion());
+    }
+
+    public void initDBHelper(String dbName) {
+        DBConfig build = DBConfig.builder()
+                .dbDir(getDatabasePath(".").getAbsolutePath())
+                .dbName(dbName)
+                .version(1)
+                .build();
+        CipherOpenHelper cipherOpenHelper = new CipherOpenHelper(this,
                 build.getDbDir(), build.getDbName(), build.getVersion());
         initSqlite(cipherOpenHelper);
         mDbConfig = DBConfig.builder()
@@ -101,4 +133,5 @@ public class TransApplication extends App {
             e.printStackTrace();
         }
     }
+
 }

@@ -14,9 +14,11 @@ public class Constant {
 
     public static final String BASESQLNAME = "Beidanci.db";
     public static final String BASEZIPNAME = "Beidanci.zip";
+    public static final String DOWNLOADBASE_URL = "http://api.secretlisa.com/dcsp/file/";
 
     ///data/data/com.fire.translation/databases/ciku_01.db
-    public static final String SQLONENAME = "ciku_01.db";
+    public static String SQLONENAME = "ciku_01.db";
+    public static String SQLTYPE = "初中词汇";
     public static final String ZIPONENAME = "ciku_01.zip";
     /**
      * 手机存储目录

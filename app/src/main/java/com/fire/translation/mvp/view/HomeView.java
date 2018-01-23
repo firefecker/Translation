@@ -2,6 +2,7 @@ package com.fire.translation.mvp.view;
 
 import com.fire.baselibrary.base.inter.IBaseView;
 import com.pushtorefresh.storio3.sqlite.Changes;
+import com.pushtorefresh.storio3.sqlite.operations.delete.DeleteResult;
 import com.pushtorefresh.storio3.sqlite.operations.put.PutResult;
 import io.reactivex.Flowable;
 
@@ -22,4 +23,6 @@ public interface HomeView extends IBaseView {
     void setRecord(Flowable<Changes> listFlowable);
 
     void updateJsnum(Flowable<PutResult> putResultFlowable);
+
+    void deleteRecord(Flowable<DeleteResult> deleteResultFlowable);
 }

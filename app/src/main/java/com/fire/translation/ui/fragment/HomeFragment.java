@@ -9,6 +9,7 @@ import butterknife.BindView;
 import com.fire.baselibrary.base.BaseFragment;
 import com.fire.baselibrary.utils.ToastUtils;
 import com.fire.translation.R;
+import com.fire.translation.constant.Constant;
 import com.fire.translation.db.entities.Record;
 import com.fire.translation.mvp.presenter.HomePresenter;
 import com.fire.translation.mvp.view.HomeView;
@@ -20,6 +21,7 @@ import com.fire.baselibrary.rx.EventBase;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.orhanobut.logger.Logger;
 import com.pushtorefresh.storio3.sqlite.Changes;
+import com.pushtorefresh.storio3.sqlite.operations.delete.DeleteResult;
 import com.pushtorefresh.storio3.sqlite.operations.put.PutResult;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 import io.reactivex.Flowable;
@@ -86,14 +88,27 @@ public class HomeFragment extends BaseFragment implements HomeView {
                     if (eventBase == null) {
                         return;
                     }
-                    if (getString(R.string.wordplan).equals(eventBase.getArg2())) {
-                        mRecord.setReview(Integer.parseInt(eventBase.getArg3()));
-                        mHomePresenter.updateJsnum(mRecord);
-                    }
                     if (eventBase.getArg0() == 0) {
                         mHomePresenter.loadRecord();
                     }
+                    if (getString(R.string.wordplan).equals(eventBase.getArg2())) {
+                        mRecord.setReview(Integer.parseInt(eventBase.getArg3()));
+                        mHomePresenter.updateJsnum(mRecord);
+                    } else if ("delete".equals(eventBase.getArg2())) {
+                        mHomePresenter.deleteRecord(mRecord);
+                    }
                 }, throwable -> Logger.e(throwable.toString()));
+    }
+
+    @Override
+    public void deleteRecord(Flowable<DeleteResult> deleteResultFlowable) {
+        deleteResultFlowable.compose(this.bindUntilEvent(FragmentEvent.DESTROY_VIEW))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(deleteResult -> {
+                    if (deleteResult.numberOfRowsDeleted() == 1) {
+                        mHomePresenter.loadRecord();
+                    }
+                },throwable -> Logger.e(throwable.toString()));
     }
 
     @Override
@@ -110,11 +125,13 @@ public class HomeFragment extends BaseFragment implements HomeView {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(record -> {
                     mRecord = record;
-                    mNvJcnum.setLeftText(mRecord.getRecordDays() + "");
-                    mNvJsnum.setLeftText(mRecord.getRecordTime() + "");
-                    mNvReview.setLeftText(mRecord.getReview() + "");
-                    mNvType.setLeftText(mRecord.getRecordCount() + "");
-                    mNvZwnum.setLeftText(mRecord.getRecordWords() + "");
+                    Logger.e(mRecord.toString());
+                    mNvJcnum.setLeftText(record.getRecordDays() + "");
+                    mNvJsnum.setLeftText(record.getRecordTime() + "");
+                    mNvReview.setLeftText(record.getReview() + "");
+                    mNvType.setLeftText(record.getRecordCount() + "");
+                    mNvZwnum.setLeftText(record.getRecordWords() + "");
+                    mTvType.setText(Constant.SQLTYPE);
                 }, throwable -> Logger.e(throwable.toString()));
     }
 
@@ -123,8 +140,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
         putResultFlowable.compose(this.bindUntilEvent(FragmentEvent.DESTROY_VIEW))
                 .subscribe(putResult -> {
                     if (putResult.wasUpdated()) {
-                        RxBus.getDefault()
-                                .postEventBase(EventBase.builder()
+                        RxBus.getDefault().postEventBase(EventBase.builder()
                                         .arg0(0)
                                         .receiver(HomeFragment.class)
                                         .build());

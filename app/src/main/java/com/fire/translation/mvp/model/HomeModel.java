@@ -14,6 +14,7 @@ import com.fire.translation.entity.DailyEntity;
 import com.fire.translation.network.RetrofitClient;
 import com.fire.translation.utils.DateUtils;
 import com.pushtorefresh.storio3.sqlite.Changes;
+import com.pushtorefresh.storio3.sqlite.operations.delete.DeleteResult;
 import com.pushtorefresh.storio3.sqlite.operations.put.PutResult;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
@@ -58,14 +59,13 @@ public class HomeModel implements IBaseModel {
         Record record = Dbservice.getInstance()
                 .defaultDbConfig()
                 .getRecord(DateUtils.getFormatDate1(new Date(),DateUtils.dateFormat1));
+        List<Word> allWords = Dbservice.getInstance()
+                .setDbConfig(Constant.SQLONENAME)
+                .getAllWords();
         if (record == null) {
-            List<Word> allWords = Dbservice.getInstance()
-                    .setDbConfig(Constant.SQLONENAME)
-                    .getAllWords();
             Record subRecord = Dbservice.getInstance()
                     .defaultDbConfig()
-                    .getRecord(
-                            DateUtils.subDate(-1, new Date(), DateUtils.dateFormat1));
+                    .getRecord(DateUtils.subDate(-1, new Date(), DateUtils.dateFormat1));
             int recordDays = 1;
             if (subRecord == null) {
                 recordDays = 1;
@@ -86,6 +86,14 @@ public class HomeModel implements IBaseModel {
             } else {
                 return null;
             }
+        } else {
+            if (record.getRecordCount() != allWords.size()) {
+                record.setRecordCount(allWords.size());
+                Dbservice.getInstance()
+                        .defaultDbConfig()
+                        .updateRecord(record);
+                return record;
+            }
         }
         return record;
     }
@@ -94,5 +102,11 @@ public class HomeModel implements IBaseModel {
         return Dbservice.getInstance()
                 .defaultDbConfig()
                 .updateJsnum(record);
+    }
+
+    public Flowable<DeleteResult> deleteRecord(Record record) {
+        return Dbservice.getInstance()
+                .defaultDbConfig()
+                .deleteRecord(record);
     }
 }

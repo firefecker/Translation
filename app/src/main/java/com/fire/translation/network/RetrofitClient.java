@@ -10,12 +10,14 @@ import io.reactivex.Observable;
 import okhttp3.ConnectionPool;
 import okhttp3.JavaNetCookieJar;
 import okhttp3.OkHttpClient;
+import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
+import retrofit2.http.Streaming;
 
 /**
  *
@@ -82,6 +84,18 @@ public class RetrofitClient {
         mServiceApi = mRetrofit.create(Api.class);
     }
 
+    public RetrofitClient setUrl(String url){
+        mRetrofit = new Retrofit.Builder()
+                .baseUrl(url)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .client(mOkHttpClient)
+                .build();
+
+        mServiceApi = mRetrofit.create(Api.class);
+        return this;
+    }
+
     public RetrofitClient setmServiceApi(Api serviceApi) {
         mServiceApi = mRetrofit.create(Api.class);
         return this;
@@ -97,6 +111,14 @@ public class RetrofitClient {
 
         @GET("dsapi/")
         Observable<DailyEntity> beforeNews(@Query("date") String date);
+
+    //    filename=ciku_02.zip
+    //    http://open.iciba.com/dsapi?date=2017-12-26
+    //    http://api.secretlisa.com/dcsp/file/lexicon?filename=ciku_02.zip
+
+        @Streaming
+        @GET("lexicon/")
+        Observable<ResponseBody> downloadZip(@Query("filename") String filename);
     }
 
 }

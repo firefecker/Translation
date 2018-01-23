@@ -9,6 +9,7 @@ import com.fire.translation.db.entities.Word;
 import com.fire.translation.utils.DateUtils;
 import com.pushtorefresh.storio3.Optional;
 import com.pushtorefresh.storio3.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio3.sqlite.operations.delete.DeleteResult;
 import com.pushtorefresh.storio3.sqlite.operations.put.PutResult;
 import com.pushtorefresh.storio3.sqlite.queries.Query;
 import com.pushtorefresh.storio3.sqlite.queries.RawQuery;
@@ -85,6 +86,20 @@ public class Dbservice {
                         .table(TableName.__TABLE__)
                         .where(String.format("%s = ?", TableName.C_FLAG_1))
                         .whereArgs(1)
+                        .build())
+                .prepare()
+                .asRxFlowable(BackpressureStrategy.LATEST)
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Flowable<Optional<TableName>> getExistTableName(String summary) {
+        return mStorIOSQLite
+                .get()
+                .object(TableName.class)
+                .withQuery(Query.builder()
+                        .table(TableName.__TABLE__)
+                        .where(String.format("%s = ?", TableName.C_CIKU_NAME))
+                        .whereArgs(summary)
                         .build())
                 .prepare()
                 .asRxFlowable(BackpressureStrategy.LATEST)
@@ -237,6 +252,14 @@ public class Dbservice {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    public PutResult updateRecord(Record record) {
+        return mStorIOSQLite
+                .put()
+                .object(record)
+                .prepare()
+                .executeAsBlocking();
+    }
+
     public List<Word> getCurrentRememberWord(int reviews) {
         return mStorIOSQLite .get()
                 .listOfObjects(Word.class)
@@ -280,6 +303,15 @@ public class Dbservice {
                 .withQuery(RawQuery.builder().query(query).build())
                 .prepare()
                 .asRxFlowable(BackpressureStrategy.BUFFER)
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Flowable<DeleteResult> deleteRecord(Record record) {
+        return mStorIOSQLite
+                .delete()
+                .object(record)
+                .prepare()
+                .asRxFlowable(BackpressureStrategy.LATEST)
                 .observeOn(AndroidSchedulers.mainThread());
     }
 }
