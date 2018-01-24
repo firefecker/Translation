@@ -2,6 +2,7 @@ package com.fire.translation.widget;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import com.fire.translation.R;
+import com.fire.translation.utils.DisplayUtil;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +41,10 @@ public class ListPopupWindow extends PopupWindow {
         super(contentView, width, height, focusable);
         setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
         setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            contentView.setElevation(DisplayUtil.px2dip(contentView.getContext(),10f));
+            setElevation(10f);
+        }
         initView(contentView);
         initData();
     }

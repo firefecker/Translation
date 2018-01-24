@@ -124,7 +124,7 @@ public class TranslationPresenter implements IBasePresenter, ListPopupWindow.Dat
         //mTts.setParameter(SpeechConstant.PARAMS, null);
         // 根据合成引擎设置相应参数
         SpeechSynthesizer mTts = SpeechSynthesizer.createSynthesizer(context,
-                mTranslationView.mTtsInitListener);
+                TranslationView.mTtsInitListener);
         mTts.setParameter(SpeechConstant.ENGINE_TYPE, SpeechConstant.TYPE_CLOUD);
         // 设置在线合成发音人
         mTts.setParameter(SpeechConstant.VOICE_NAME, "xiaoyan");
