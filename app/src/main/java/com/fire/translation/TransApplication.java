@@ -47,15 +47,6 @@ public class TransApplication extends App {
                 PreferenceManager.getDefaultSharedPreferences(this).getString("sort_plan", "1"));
         unZipFile();
         initDBHelper();
-        Dbservice.getInstance()
-                .defaultDbConfig()
-                .getExistTableName(ListUtils.stringToString(this, R.array.plan, R.array.plan_value,
-                        PreferenceManager.getDefaultSharedPreferences(this).getString("study_plan", "1")))
-                .map(tableNameOptional -> tableNameOptional.get())
-                .subscribe(tableName -> {
-                    Constant.SQLONENAME = String.format("%s.db",tableName.getName());
-                    Constant.SQLTYPE = tableName.getCikuName();
-                },throwable -> Logger.e(throwable.toString()));
     }
 
     @Override

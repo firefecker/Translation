@@ -62,4 +62,8 @@ public class HomePresenter implements IBasePresenter {
     public void deleteRecord(Record record) {
         mHomeView.deleteRecord(mHomeModel.deleteRecord(record));
     }
+
+    public void setStatus(Context context) {
+        mHomeView.setStatus(mHomeModel.setStatus(context));
+    }
 }

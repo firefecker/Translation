@@ -10,7 +10,9 @@ import com.fire.baselibrary.base.BaseFragment;
 import com.fire.baselibrary.utils.ToastUtils;
 import com.fire.translation.R;
 import com.fire.translation.constant.Constant;
+import com.fire.translation.db.Dbservice;
 import com.fire.translation.db.entities.Record;
+import com.fire.translation.db.entities.TableName;
 import com.fire.translation.mvp.presenter.HomePresenter;
 import com.fire.translation.mvp.view.HomeView;
 import com.fire.baselibrary.rx.DefaultButtonTransformer;
@@ -20,6 +22,7 @@ import com.fire.translation.view.NotifyTextView;
 import com.fire.baselibrary.rx.EventBase;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.orhanobut.logger.Logger;
+import com.pushtorefresh.storio3.Optional;
 import com.pushtorefresh.storio3.sqlite.Changes;
 import com.pushtorefresh.storio3.sqlite.operations.delete.DeleteResult;
 import com.pushtorefresh.storio3.sqlite.operations.put.PutResult;
@@ -62,7 +65,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
 
     @Override
     public void initView() {
-        mHomePresenter.loadRecord();
+        mHomePresenter.setStatus(getActivity());
         RxView.clicks(mBtnStart)
                 .compose(DefaultButtonTransformer.create())
                 .compose(this.bindUntilEvent(FragmentEvent.DESTROY_VIEW))
@@ -108,6 +111,16 @@ public class HomeFragment extends BaseFragment implements HomeView {
                     if (deleteResult.numberOfRowsDeleted() == 1) {
                         mHomePresenter.loadRecord();
                     }
+                },throwable -> Logger.e(throwable.toString()));
+    }
+
+    @Override
+    public void setStatus(Flowable<Optional<TableName>> optionalFlowable) {
+        optionalFlowable.map(tableNameOptional -> tableNameOptional.get())
+                .subscribe(tableName -> {
+                    Constant.SQLONENAME = String.format("%s.db",tableName.getName());
+                    Constant.SQLTYPE = tableName.getCikuName();
+                    mHomePresenter.loadRecord();
                 },throwable -> Logger.e(throwable.toString()));
     }
 

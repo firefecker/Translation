@@ -13,6 +13,8 @@ import com.fire.translation.db.entities.Word;
 import com.fire.translation.entity.DailyEntity;
 import com.fire.translation.network.RetrofitClient;
 import com.fire.translation.utils.DateUtils;
+import com.orhanobut.logger.Logger;
+import com.pushtorefresh.storio3.Optional;
 import com.pushtorefresh.storio3.sqlite.Changes;
 import com.pushtorefresh.storio3.sqlite.operations.delete.DeleteResult;
 import com.pushtorefresh.storio3.sqlite.operations.put.PutResult;
@@ -108,5 +110,15 @@ public class HomeModel implements IBaseModel {
         return Dbservice.getInstance()
                 .defaultDbConfig()
                 .deleteRecord(record);
+    }
+
+    public Flowable<Optional<TableName>> setStatus(Context context) {
+        return Dbservice.getInstance()
+                .defaultDbConfig()
+                .getExistTableName(
+                        ListUtils.stringToString(context, R.array.plan, R.array.plan_value,
+                                PreferenceManager.getDefaultSharedPreferences(context)
+                                        .getString("study_plan", "1")));
+        /* */
     }
 }
