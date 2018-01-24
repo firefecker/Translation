@@ -84,8 +84,8 @@ android.applicationVariants.all { variant ->
     variant.outputs.all {
         def apkName = "Translation" + '_' + variant.versionName
         if (!variant.flavorName.isEmpty()) {
-            apkName += ('-' + variant.flavorName)
+            apkName += ('-' + variant.flavorName )
         }
-        outputFileName = apkName + '.apk'
+        outputFileName = apkName + "_" + variant.buildType.name + '.apk'
     }
 }
