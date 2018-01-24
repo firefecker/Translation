@@ -13,7 +13,6 @@ import com.fire.translation.db.entities.Word;
 import com.fire.translation.entity.DailyEntity;
 import com.fire.translation.network.RetrofitClient;
 import com.fire.translation.utils.DateUtils;
-import com.orhanobut.logger.Logger;
 import com.pushtorefresh.storio3.Optional;
 import com.pushtorefresh.storio3.sqlite.Changes;
 import com.pushtorefresh.storio3.sqlite.operations.delete.DeleteResult;

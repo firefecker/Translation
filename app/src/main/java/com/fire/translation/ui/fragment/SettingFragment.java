@@ -15,15 +15,16 @@ import com.fire.translation.R;
 import com.fire.translation.TransApplication;
 import com.fire.translation.constant.Constant;
 import com.fire.translation.db.Dbservice;
+import com.fire.translation.db.entities.Record;
 import com.fire.translation.db.entities.TableName;
 import com.fire.translation.mvp.presenter.SettingPresenter;
 import com.fire.translation.mvp.view.SettingView;
-import com.fire.translation.network.RetrofitClient;
 import com.fire.translation.utils.CacheUtils;
 import com.fire.translation.utils.FileUtils;
 import com.fire.translation.utils.IntentUtils;
 import com.orhanobut.logger.Logger;
 import com.pushtorefresh.storio3.Optional;
+import com.pushtorefresh.storio3.sqlite.operations.delete.DeleteResult;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
@@ -85,17 +86,17 @@ public class SettingFragment extends BasePreferenceFragment implements SettingVi
 
         mStudyPlan.setOnPreferenceChangeListener((preference, newValue) -> {
             initPlan(R.array.plan, R.array.plan_value, (String) newValue, preference);
-            mSettingPresenter.getTableName(preference.getSummary().toString());
+            mSettingPresenter.getRecord(getActivity());
             return true;
         });
         mWordPlan.setOnPreferenceChangeListener((preference, newValue) -> {
             RxBus.getDefault()
-                .post(EventBase.builder()
-                    .receiver(HomeFragment.class)
-                    .arg2(getString(R.string.wordplan))
-                    .arg3(ListUtils.stringToString(getActivity(), R.array.newword,
-                            R.array.newword_value, (String) newValue))
-                    .build());
+                    .post(EventBase.builder()
+                            .receiver(HomeFragment.class)
+                            .arg2(getString(R.string.wordplan))
+                            .arg3(ListUtils.stringToString(getActivity(), R.array.newword,
+                                    R.array.newword_value, (String) newValue))
+                            .build());
             initPlan(R.array.newword, R.array.newword_value, (String) newValue, preference);
             return true;
         });
@@ -186,39 +187,62 @@ public class SettingFragment extends BasePreferenceFragment implements SettingVi
                         ToastUtils.showToast("该类型的数据库不存在");
                         return;
                     }
-                    mSettingPresenter.setData(tableName,TransApplication.mTransApp);
-                },throwable -> Logger.e(throwable.toString()));
+                    mSettingPresenter.setData(tableName, TransApplication.mTransApp);
+                }, throwable -> Logger.e(throwable.toString()));
     }
 
     @Override
-    public void downloadData(String name,String tableName) {
+    public void downloadData(String name, String tableName) {
+
+        mSettingPresenter.downLoadData(getActivity(), name, tableName);
+    }
+
+    @Override
+    public void downLoadDataResult(Observable<Boolean> booleanObservable, String name,
+            String tableName) {
         String mName = name;
         String mTableName = tableName;
-        RetrofitClient.getInstance()
-                .setUrl(Constant.DOWNLOADBASE_URL)
-                .getServiceApi()
-                .downloadZip(mName)
-                .subscribeOn(Schedulers.io())
-                .map(responseBody -> FileUtils.writeResponseBodyToDisk(getActivity(), responseBody,
-                        mName))
+        booleanObservable.compose(this.bindUntilEvent(FragmentEvent.DESTROY_VIEW))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(aboolean -> {
                     dismissLoadingView();
                     if (aboolean) {
                         ToastUtils.showToast("下载成功");
-                        FileUtils.unZip(new File(TransApplication.mTransApp.getFilesDir() + File.separator + mName), TransApplication.mTransApp.getDatabasePath(".").getAbsolutePath());
-                        mSettingPresenter.updateDataBase(mTableName,String.format("%s.db",mTableName));
+                        FileUtils.unZip(new File(
+                                        TransApplication.mTransApp.getFilesDir() + File.separator
+                                        + mName),
+                                TransApplication.mTransApp.getDatabasePath(".").getAbsolutePath());
+                        mSettingPresenter.updateDataBase(mTableName,
+                                String.format("%s.db", mName.split("\\.")[0]));
                     } else {
                         ToastUtils.showToast("下载失败");
                     }
-                },throwable -> {
+                }, throwable -> {
                     Logger.e(throwable.toString());
                     dismissLoadingView();
                 });
     }
 
     @Override
-    public void updateDataBase(String mTableName,String mName) {
+    public void getRecord(Observable<Record> record) {
+        record.compose(this.bindUntilEvent(FragmentEvent.DESTROY_VIEW))
+                .subscribe(record1 -> mSettingPresenter.deleteRecord(record1),
+                        throwable -> Logger.e(throwable.toString()));
+    }
+
+    @Override
+    public void deleteRecord(Flowable<DeleteResult> deleteResultFlowable) {
+        deleteResultFlowable.compose(this.bindUntilEvent(FragmentEvent.DESTROY_VIEW))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(deleteResult -> {
+                    if (deleteResult != null) {
+                        mSettingPresenter.getTableName(mStudyPlan.getSummary().toString());
+                    }
+                }, throwable -> Logger.e(throwable.toString()));
+    }
+
+    @Override
+    public void updateDataBase(String mTableName, String mName) {
         CustomerDialog.dismissProgress();
         Constant.SQLONENAME = mName;
         Constant.SQLTYPE = mTableName;

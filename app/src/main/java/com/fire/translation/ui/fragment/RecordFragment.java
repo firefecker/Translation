@@ -56,10 +56,8 @@ public class RecordFragment extends BaseFragment implements RecordView {
                 DisplayUtil.dip2px(mActivity, 0.2f), 0, 0);
         itemDecoration.setDrawLastItem(false);
         mRecyclerView.addItemDecoration(itemDecoration);
-
         mRecordAdapter = new RecordAdapter(mActivity);
         mRecyclerView.setAdapter(mRecordAdapter);
-
         mActionButton.setOnClickListener(v -> mRecyclerView.scrollToPosition(0));
         mRecordPresenter.loadData();
     }

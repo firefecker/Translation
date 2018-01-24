@@ -1,17 +1,35 @@
 package com.fire.translation.mvp.model;
 
 import android.app.Application;
+import android.content.Context;
+import android.preference.PreferenceManager;
 import com.fire.baselibrary.base.inter.IBaseModel;
+import com.fire.baselibrary.utils.ListUtils;
+import com.fire.translation.R;
 import com.fire.translation.TransApplication;
+import com.fire.translation.constant.Constant;
 import com.fire.translation.db.Dbservice;
+import com.fire.translation.db.entities.Record;
 import com.fire.translation.db.entities.TableName;
+import com.fire.translation.db.entities.Word;
 import com.fire.translation.mvp.view.SettingView;
+import com.fire.translation.network.RetrofitClient;
+import com.fire.translation.rx.DefaultObservable;
 import com.fire.translation.utils.AssetsUtils;
+import com.fire.translation.utils.DateUtils;
 import com.fire.translation.utils.FileUtils;
 import com.pushtorefresh.storio3.Optional;
+import com.pushtorefresh.storio3.sqlite.operations.delete.DeleteResult;
+import com.pushtorefresh.storio3.sqlite.operations.put.PutResult;
 import io.reactivex.Flowable;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by fire on 2018/1/23.
@@ -43,7 +61,7 @@ public class SettingModel implements IBaseModel {
                 settingView.updateDataBase(tableName.getCikuName(),String.format("%s.db",tableName.getName()));
             } else {
                 //下载
-                settingView.downloadData(file.getName(),tableName.getName());
+                settingView.downloadData(file.getName(),tableName.getCikuName());
                 //解压
                 //切换数据库
             }
@@ -51,5 +69,35 @@ public class SettingModel implements IBaseModel {
             //切换数据库
             settingView.updateDataBase(tableName.getCikuName(),String.format("%s.db",tableName.getName()));
         }
+    }
+
+    public Observable<Boolean> downLoadData(Context context,String mName) {
+        String name = mName;
+        return RetrofitClient.getInstance()
+                .setUrl(Constant.DOWNLOADBASE_URL)
+                .getServiceApi()
+                .downloadZip(name)
+                .subscribeOn(Schedulers.io())
+                .map(responseBody -> FileUtils.writeResponseBodyToDisk(context, responseBody,
+                        name));
+    }
+
+    public Flowable<DeleteResult> deleteRecord(Record record) {
+        return Dbservice.getInstance()
+                .defaultDbConfig()
+                .deleteRecord(record);
+    }
+
+    public Observable<Record> getRecord(Context context) {
+        return DefaultObservable.create("")
+                .map(s -> {
+                    Record record = Dbservice.getInstance().defaultDbConfig().getRecord(DateUtils.getFormatDate1(new Date(),DateUtils.dateFormat1));
+                    if (record == null) {
+                        record = new Record();
+                    }
+                    return record;
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 }
