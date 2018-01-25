@@ -25,6 +25,7 @@ import com.fire.translation.utils.IntentUtils;
 import com.orhanobut.logger.Logger;
 import com.pushtorefresh.storio3.Optional;
 import com.pushtorefresh.storio3.sqlite.operations.delete.DeleteResult;
+import com.pushtorefresh.storio3.sqlite.operations.put.PutResult;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
@@ -86,17 +87,11 @@ public class SettingFragment extends BasePreferenceFragment implements SettingVi
 
         mStudyPlan.setOnPreferenceChangeListener((preference, newValue) -> {
             initPlan(R.array.plan, R.array.plan_value, (String) newValue, preference);
-            mSettingPresenter.getRecord(getActivity());
+            mSettingPresenter.getRecord();
             return true;
         });
         mWordPlan.setOnPreferenceChangeListener((preference, newValue) -> {
-            RxBus.getDefault()
-                    .post(EventBase.builder()
-                            .receiver(HomeFragment.class)
-                            .arg2(getString(R.string.wordplan))
-                            .arg3(ListUtils.stringToString(getActivity(), R.array.newword,
-                                    R.array.newword_value, (String) newValue))
-                            .build());
+            mSettingPresenter.getCurrentRecord((String) newValue);
             initPlan(R.array.newword, R.array.newword_value, (String) newValue, preference);
             return true;
         });
@@ -172,6 +167,28 @@ public class SettingFragment extends BasePreferenceFragment implements SettingVi
     }
 
     @Override
+    public void getCurrentRecord(Observable<Record> record, String value) {
+        String mValue = value;
+        record.compose(this.bindUntilEvent(FragmentEvent.DESTROY_VIEW))
+                .subscribe(
+                        record1 -> mSettingPresenter.updateRecord(record1, getActivity(), mValue),
+                        throwable -> Logger.e(throwable.toString()));
+    }
+
+    @Override
+    public void updateRecord(Flowable<PutResult> putResultFlowable, String value) {
+        String mValue = value;
+        putResultFlowable.compose(this.bindUntilEvent(FragmentEvent.DESTROY_VIEW))
+                .subscribe(putResult -> RxBus.getDefault()
+                        .post(EventBase.builder()
+                                .receiver(HomeFragment.class)
+                                .arg2(getString(R.string.wordplan))
+                                .arg3(ListUtils.stringToString(getActivity(), R.array.newword,
+                                        R.array.newword_value, mValue))
+                                .build()), throwable -> Logger.e(throwable.toString()));
+    }
+
+    @Override
     protected void onFragmentCreate(@Nullable Bundle paramBundle) {
         super.onFragmentCreate(paramBundle);
         mSettingPresenter = new SettingPresenter(this);
@@ -184,7 +201,7 @@ public class SettingFragment extends BasePreferenceFragment implements SettingVi
                 .map(tableNameOptional -> tableNameOptional.get())
                 .subscribe(tableName -> {
                     if (tableName == null) {
-                        ToastUtils.showToast("该类型的数据库不存在");
+                        ToastUtils.showToast(getString(R.string.sql_notify));
                         return;
                     }
                     mSettingPresenter.setData(tableName, TransApplication.mTransApp);
@@ -193,7 +210,6 @@ public class SettingFragment extends BasePreferenceFragment implements SettingVi
 
     @Override
     public void downloadData(String name, String tableName) {
-
         mSettingPresenter.downLoadData(getActivity(), name, tableName);
     }
 

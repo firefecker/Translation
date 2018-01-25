@@ -1,5 +1,6 @@
 package com.fire.translation.mvp.presenter;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import com.fire.baselibrary.base.inter.IBasePresenter;
@@ -47,8 +48,15 @@ public class SettingPresenter implements IBasePresenter {
     public void deleteRecord(Record record) {
         mSettingView.deleteRecord(mSettingModel.deleteRecord(record));
     }
-    public void getRecord(Context context) {
-        mSettingView.getRecord(mSettingModel.getRecord(context));
+    public void getRecord() {
+        mSettingView.getRecord(mSettingModel.getRecord());
     }
 
+    public void getCurrentRecord(String value) {
+        mSettingView.getCurrentRecord(mSettingModel.getRecord(),value);
+    }
+
+    public void updateRecord(Record record1, Context context,String value) {
+        mSettingView.updateRecord(mSettingModel.updateRecord(record1,context),value);
+    }
 }

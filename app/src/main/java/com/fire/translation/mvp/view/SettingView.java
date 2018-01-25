@@ -5,6 +5,7 @@ import com.fire.translation.db.entities.Record;
 import com.fire.translation.db.entities.TableName;
 import com.pushtorefresh.storio3.Optional;
 import com.pushtorefresh.storio3.sqlite.operations.delete.DeleteResult;
+import com.pushtorefresh.storio3.sqlite.operations.put.PutResult;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
 
@@ -27,4 +28,8 @@ public interface SettingView extends IBaseView {
     void deleteRecord(Flowable<DeleteResult> deleteResultFlowable);
 
     void getRecord(Observable<Record> record);
+
+    void getCurrentRecord(Observable<Record> record,String value);
+
+    void updateRecord(Flowable<PutResult> putResultFlowable,String value);
 }

@@ -88,7 +88,7 @@ public class SettingModel implements IBaseModel {
                 .deleteRecord(record);
     }
 
-    public Observable<Record> getRecord(Context context) {
+    public Observable<Record> getRecord() {
         return DefaultObservable.create("")
                 .map(s -> {
                     Record record = Dbservice.getInstance().defaultDbConfig().getRecord(DateUtils.getFormatDate1(new Date(),DateUtils.dateFormat1));
@@ -99,5 +99,15 @@ public class SettingModel implements IBaseModel {
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Flowable<PutResult> updateRecord(Record record1, Context context) {
+        String review = ListUtils.stringToString(context, R.array.newword,
+                R.array.newword_value, PreferenceManager.getDefaultSharedPreferences(context)
+                        .getString("word_plan", "2"));
+        record1.setReview(Integer.parseInt(review));
+        return Dbservice.getInstance()
+                .defaultDbConfig()
+                .updateJsnum(record1);
     }
 }

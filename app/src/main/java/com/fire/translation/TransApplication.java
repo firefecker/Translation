@@ -9,18 +9,13 @@ import com.fire.translation.constant.Constant;
 import com.fire.translation.db.CipherOpenHelper;
 import com.fire.translation.db.DBConfig;
 import com.fire.translation.db.DbModelSQLiteTypeMapping;
-import com.fire.translation.db.Dbservice;
 import com.fire.translation.db.TableInfo;
 import com.fire.translation.db.entities.DbModel;
-import com.fire.translation.db.entities.TableName;
 import com.fire.translation.utils.AssetsUtils;
 import com.iflytek.cloud.SpeechUtility;
-import com.orhanobut.logger.Logger;
-import com.pushtorefresh.storio3.Optional;
 import com.pushtorefresh.storio3.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio3.sqlite.impl.DefaultStorIOSQLite;
 import com.youdao.sdk.app.YouDaoApplication;
-import io.reactivex.functions.Function;
 import java.io.File;
 import java.io.IOException;
 

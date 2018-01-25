@@ -129,11 +129,13 @@ public class CipherOpenHelper extends SQLiteOpenHelper {
                 tableCreateSql = c.getString(c.getColumnIndex("sql"));
             }
         } finally {
-            if (c != null)
+            if (c != null) {
                 c.close();
+            }
         }
-        if (tableCreateSql != null && tableCreateSql.contains(columnName))
+        if (tableCreateSql != null && tableCreateSql.contains(columnName)) {
             return true;
+        }
         return false;
     }
 

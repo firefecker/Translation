@@ -97,7 +97,7 @@
                     android:layout_height="160dp"
                     android:background="@android:color/transparent"
                     android:gravity="top"
-                    android:hint="点击即可输入文本"
+                    android:hint="点击即可输入文本(注意中文可以翻译其他所有语种，其他语种之间不能互译)"
                     android:padding="@dimen/dp_10"
                     />
             <LinearLayout

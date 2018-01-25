@@ -36,7 +36,7 @@
                 android:title="单词设置" />
 
         <MultiSelectListPreference
-                android:defaultValue="@array/plan"
+                android:defaultValue="@array/sort"
                 android:dialogTitle="翻译语种开启设置"
                 android:entries="@array/languages"
                 android:entryValues="@array/plan"

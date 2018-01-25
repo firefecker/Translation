@@ -16,4 +16,5 @@
     <string name="language">language</string>
     <string name="wordselect">wordselect</string>
     <string name="wordplan">wordplan</string>
+    <string name="sql_notify">该类型的数据库不存在</string>
 </resources>
