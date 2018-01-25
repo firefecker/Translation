@@ -6,6 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
+import android.support.v4.content.FileProvider;
+import java.io.File;
 import java.net.URISyntaxException;
 
 /**
@@ -39,6 +43,21 @@ public class IntentUtils {
         intent.putExtra(Intent.EXTRA_TEXT, content);
         intent.setType("text/plain");
         return Intent.createChooser(intent, "分享到");
+    }
+
+
+    public static Intent getShareIntent(Context context,String path) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        //uri 是图片的地址
+        Uri imageUri = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            imageUri = FileProvider.getUriForFile(context, "com.fire.translation.ui.fileprovider", new File(path));
+        } else {
+            imageUri = Uri.fromFile(new File(path));
+        }
+        shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
+        shareIntent.setType("image/*");
+        return shareIntent;
     }
 
     /**

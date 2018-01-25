@@ -142,4 +142,6 @@ public class FunctionUtils {
         options.inSampleSize = inSampleSize;
         return BitmapFactory.decodeFile(filePath, options);
     }
+
+
 }

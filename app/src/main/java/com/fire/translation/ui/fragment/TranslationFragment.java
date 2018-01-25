@@ -1,6 +1,7 @@
 package com.fire.translation.ui.fragment;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,7 @@ import android.view.animation.Animation;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
@@ -27,11 +29,13 @@ import com.fire.translation.db.entities.Tanslaterecord;
 import com.fire.translation.mvp.presenter.TranslationPresenter;
 import com.fire.translation.mvp.view.TranslationView;
 import com.fire.baselibrary.rx.DefaultButtonTransformer;
+import com.fire.translation.rx.DefaultObservable;
 import com.fire.translation.rx.RxRvAdapterView;
 import com.fire.translation.ui.activity.RecordDetailActivity;
 import com.fire.translation.utils.FileUtils;
 import com.fire.translation.utils.FunctionUtils;
 import com.fire.baselibrary.rx.EventBase;
+import com.fire.translation.utils.IntentUtils;
 import com.fire.translation.utils.JsonParser;
 import com.fire.translation.widget.AudioDialog;
 import com.iflytek.cloud.RecognizerResult;
@@ -56,13 +60,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
- *
  * @author fire
  * @date 2018/1/15
  * Description:
  */
 
-public class TranslationFragment extends BaseFragment implements TranslationView {
+public class TranslationFragment extends BaseFragment implements TranslationView,
+        PopupMenu.OnMenuItemClickListener {
 
     @BindView(R.id.layout_from)
     LinearLayout mLayoutFrom;
@@ -114,6 +118,7 @@ public class TranslationFragment extends BaseFragment implements TranslationView
     private SpeechSynthesizer mTts;
     private SpeechRecognizer mIat;
     private AudioDialog mAudioDialog;
+    private PopupMenu mPopupMenu;
 
     @Override
     public int resourceId() {
@@ -123,12 +128,12 @@ public class TranslationFragment extends BaseFragment implements TranslationView
     @Override
     protected void onFragmentCreate(@Nullable Bundle paramBundle) {
         mTranslationPresenter = new TranslationPresenter(this);
-        mTranslationPresenter.rxBus(EventBase.class,getClass());
+        mTranslationPresenter.rxBus(EventBase.class, getClass());
     }
 
     @Override
     public void initView() {
-        mRecordAdapter = new TranslateRecordAdapter(mActivity,mTranslationPresenter);
+        mRecordAdapter = new TranslateRecordAdapter(mActivity, mTranslationPresenter);
         mRecyclerView.setAdapter(mRecordAdapter);
         mTranslationPresenter.init(mActivity);
         mTranslationPresenter.loadTranslateRecord();
@@ -139,16 +144,18 @@ public class TranslationFragment extends BaseFragment implements TranslationView
                 .compose(this.bindUntilEvent(FragmentEvent.DESTROY_VIEW))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(charSequence -> mTvVolume.setText(charSequence),
-                        throwable -> {});
+                        throwable -> {
+                        });
         RxTextView.textChanges(mEtInput)
                 .compose(this.bindUntilEvent(FragmentEvent.DESTROY_VIEW))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(charSequence -> {
-                            if (TextUtils.isEmpty(charSequence.toString().trim())) {
-                                mRecyclerView.setVisibility(View.VISIBLE);
-                                mLayoutResult.setVisibility(View.GONE);
-                            }
-                        }, throwable -> {});
+                    if (TextUtils.isEmpty(charSequence.toString().trim())) {
+                        mRecyclerView.setVisibility(View.VISIBLE);
+                        mLayoutResult.setVisibility(View.GONE);
+                    }
+                }, throwable -> {
+                });
         RxRvAdapterView.itemClicks(mRecordAdapter)
                 .compose(DefaultButtonTransformer.create())
                 .compose(this.bindUntilEvent(FragmentEvent.DESTROY_VIEW))
@@ -192,12 +199,18 @@ public class TranslationFragment extends BaseFragment implements TranslationView
                 FileUtils.copy(mTvContent.getText());
                 break;
             case R.id.iv_gesture://语音
-                mTranslationPresenter.startAudio(getActivity(),mIatResults,mIat);
+                mTranslationPresenter.startAudio(getActivity(), mIatResults, mIat);
                 break;
             case R.id.tv_volume://发音
-                mTranslationPresenter.speak(mTvContent.getText().toString(),mTts,mActivity);
+                mTranslationPresenter.speak(mTvContent.getText().toString(), mTts, mActivity);
                 break;
             case R.id.iv_more://更多
+                if (mPopupMenu == null) {
+                    mPopupMenu = new PopupMenu(getActivity(), mIvMore);
+                    mPopupMenu.getMenuInflater().inflate(R.menu.popup_menu, mPopupMenu.getMenu());
+                    mPopupMenu.setOnMenuItemClickListener(this);
+                }
+                mPopupMenu.show();
                 break;
             case R.id.iv_star:
                 mTranslationPresenter.updateStar(mListTranslate);
@@ -243,7 +256,7 @@ public class TranslationFragment extends BaseFragment implements TranslationView
                 .map(mTranslationPresenter.setOcrResult())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
-                    setData(result,"");
+                    setData(result, "");
                 }, throwable -> CustomerDialog.dismissProgress());
     }
 
@@ -254,7 +267,7 @@ public class TranslationFragment extends BaseFragment implements TranslationView
                 .compose(this.bindUntilEvent(FragmentEvent.DESTROY_VIEW))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(translate -> {
-                    setData("识别失败","");
+                    setData("识别失败", "");
                 }, throwable -> CustomerDialog.dismissProgress());
     }
 
@@ -317,25 +330,25 @@ public class TranslationFragment extends BaseFragment implements TranslationView
 
     @Override
     public void printTransResult(RecognizerResult recognizerResult) {
-        String trans  = JsonParser.parseTransResult(recognizerResult.getResultString(),"dst");
-        String oris = JsonParser.parseTransResult(recognizerResult.getResultString(),"src");
-        if( TextUtils.isEmpty(trans)||TextUtils.isEmpty(oris) ){
-            ToastUtils.showToast( getString(R.string.translate_notify) );
-        }else{
-            mEtInput.setText( "原始语言:\n"+oris+"\n目标语言:\n"+trans );
+        String trans = JsonParser.parseTransResult(recognizerResult.getResultString(), "dst");
+        String oris = JsonParser.parseTransResult(recognizerResult.getResultString(), "src");
+        if (TextUtils.isEmpty(trans) || TextUtils.isEmpty(oris)) {
+            ToastUtils.showToast(getString(R.string.translate_notify));
+        } else {
+            mEtInput.setText("原始语言:\n" + oris + "\n目标语言:\n" + trans);
             mEtInput.setSelection(mEtInput.length());
         }
     }
 
     @Override
     public void printResult(RecognizerResult recognizerResult) {
-        mEtInput.setText(mTranslationPresenter.parseResut(recognizerResult,mIatResults).toString());
+        mEtInput.setText(
+                mTranslationPresenter.parseResut(recognizerResult, mIatResults).toString());
         mEtInput.setSelection(mEtInput.length());
     }
 
     /**
      * 说话音量改变
-     * @param volume
      */
     @Override
     public void onVolumeChanged(int volume) {
@@ -357,7 +370,6 @@ public class TranslationFragment extends BaseFragment implements TranslationView
 
     /**
      * 语音出错
-     * @param error
      */
     @Override
     public void onSpeakError(SpeechError error) {
@@ -374,7 +386,7 @@ public class TranslationFragment extends BaseFragment implements TranslationView
         if (mAudioDialog.isAdded() || mAudioDialog.isVisible()) {
             mAudioDialog.dismiss();
         }
-        mAudioDialog.show(getChildFragmentManager(),"audioDialog");
+        mAudioDialog.show(getChildFragmentManager(), "audioDialog");
     }
 
     @Override
@@ -393,7 +405,7 @@ public class TranslationFragment extends BaseFragment implements TranslationView
                 .compose(this.bindUntilEvent(FragmentEvent.DESTROY_VIEW))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(translate -> {
-                    setData("翻译失败","");
+                    setData("翻译失败", "");
                 }, throwable -> CustomerDialog.dismissProgress());
     }
 
@@ -416,14 +428,14 @@ public class TranslationFragment extends BaseFragment implements TranslationView
                 .subscribe(translate -> {
                     mListTranslate = translate;
                     starSuccess(EventBase.builder().arg0(translate.getStart()).build());
-                    setData(mListTranslate.getTranslations(),mListTranslate.getExplains());
+                    setData(mListTranslate.getTranslations(), mListTranslate.getExplains());
                 }, throwable -> CustomerDialog.dismissProgress());
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.fragment_translate,menu);
+        inflater.inflate(R.menu.fragment_translate, menu);
     }
 
     @Override
@@ -434,5 +446,28 @@ public class TranslationFragment extends BaseFragment implements TranslationView
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_reverse:
+                mEtInput.setText(mTvContent.getText().toString());
+                mIvRevice.performClick();
+                mTranslationPresenter.sleepAfterUpdate();
+                break;
+            case R.id.action_screenshort:
+                FileUtils.GetandSaveCurrentImage(getActivity());
+                //startActivity(IntentUtils.getShareIntent(getActivity(),FileUtils.GetandSaveCurrentImage(getActivity())));
+                break;
+        }
+        return true;
+    }
+
+    @Override
+    public void sleepAfterUpdate(Observable<String> stringObservable) {
+        stringObservable.compose(this.bindUntilEvent(FragmentEvent.DESTROY_VIEW))
+                .subscribe(s -> mIvSend.performClick(),
+                        throwable -> Logger.e(throwable.toString()));
     }
 }

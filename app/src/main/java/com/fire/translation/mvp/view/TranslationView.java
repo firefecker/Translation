@@ -126,4 +126,6 @@ public interface TranslationView extends IBaseView{
     void onSpeakError(SpeechError error);
 
     void onBeginOfSpeech();
+
+    void sleepAfterUpdate(Observable<String> stringObservable);
 }

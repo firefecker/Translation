@@ -1,9 +1,15 @@
 package com.fire.translation.utils;
 
+import android.app.Activity;
+import android.app.Application;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Environment;
 import android.text.TextUtils;
+import android.view.Display;
+import android.view.View;
+import android.view.WindowManager;
 import com.fire.baselibrary.utils.ToastUtils;
 import com.fire.translation.TransApplication;
 import com.orhanobut.logger.Logger;
@@ -175,5 +181,46 @@ public class FileUtils {
             zipEntry = zipInputStream.getNextEntry();
         }
         zipInputStream.close();
+    }
+
+    /**
+     * 获取和保存当前屏幕的截图
+     */
+    public static String GetandSaveCurrentImage(Activity activity) {
+        //1.构建Bitmap
+        WindowManager windowManager = activity.getWindowManager();
+        Display display = windowManager.getDefaultDisplay();
+        int w = display.getWidth();
+        int h = display.getHeight();
+        Bitmap Bmp = Bitmap.createBitmap( w, h, Bitmap.Config.ARGB_8888 );
+        //2.获取屏幕
+        View decorview = activity.getWindow().getDecorView();
+        decorview.setDrawingCacheEnabled(true);
+        Bmp = decorview.getDrawingCache();
+        String SavePath = activity.getFilesDir() + File.separator +"ScreenImage";
+        String filepath = SavePath + "/Screen_1.png";
+        //3.保存Bitmap
+        try {
+            File path = new File(SavePath);
+            //文件
+            File file = new File(filepath);
+            if(!path.exists()){
+                path.mkdirs();
+            }
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileOutputStream fos = null;
+            fos = new FileOutputStream(file);
+            if (null != fos) {
+                Bmp.compress(Bitmap.CompressFormat.PNG, 90, fos);
+                fos.flush();
+                fos.close();
+                ToastUtils.showToast("截屏文件已保存至内置存储中");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return filepath;
     }
 }

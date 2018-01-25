@@ -371,4 +371,8 @@ public class TranslationPresenter implements IBasePresenter<Tanslaterecord>, Lis
         }
         return resultBuffer;
     }
+
+    public void sleepAfterUpdate() {
+        mTranslationView.sleepAfterUpdate(mTranslationModel.sleepAfterUpdate());
+    }
 }

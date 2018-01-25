@@ -33,6 +33,7 @@ import com.youdao.sdk.ydtranslate.TranslateListener;
 import com.youdao.sdk.ydtranslate.TranslateParameters;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -295,5 +296,15 @@ public class TranslationModel implements IBaseModel {
                     }
                     return list;
                 });
+    }
+
+    public Observable<String> sleepAfterUpdate() {
+        return DefaultObservable.create("")
+                .map(s -> {
+                    Thread.sleep(1000);
+                    return "";
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 }
