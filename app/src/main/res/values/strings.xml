@@ -26,4 +26,6 @@
     <string name="delete">delete</string>
     <string name="download_success">下载成功</string>
     <string name="doawnload_failure">下载失败</string>
+    <string name="text_begin">开始说话</string>
+    <string name="translate_notify">解析结果失败，请确认是否已开通翻译功能。</string>
 </resources>

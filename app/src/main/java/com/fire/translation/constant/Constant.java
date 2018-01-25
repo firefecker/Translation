@@ -44,7 +44,8 @@ public class Constant {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS,
-            Manifest.permission.WRITE_SETTINGS
+            Manifest.permission.WRITE_SETTINGS,
+            Manifest.permission.RECORD_AUDIO
     };
     public static String SORT = "正序";
     public static String FILEPATH = "";

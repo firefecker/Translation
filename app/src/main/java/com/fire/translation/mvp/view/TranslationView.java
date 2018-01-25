@@ -1,6 +1,7 @@
 package com.fire.translation.mvp.view;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import com.fire.baselibrary.base.inter.IBaseView;
@@ -9,8 +10,11 @@ import com.fire.translation.db.entities.Tanslaterecord;
 import com.fire.baselibrary.rx.EventBase;
 import com.iflytek.cloud.ErrorCode;
 import com.iflytek.cloud.InitListener;
+import com.iflytek.cloud.RecognizerListener;
+import com.iflytek.cloud.RecognizerResult;
 import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SynthesizerListener;
+import com.iflytek.cloud.ui.RecognizerDialogListener;
 import com.orhanobut.logger.Logger;
 import com.pushtorefresh.storio3.sqlite.Changes;
 import com.youdao.ocr.online.OCRResult;
@@ -52,6 +56,9 @@ public interface TranslationView extends IBaseView{
     void loadTranslateRecord(Flowable<Changes> changesFlowable);
 
     void getAllTranslateRecord(Flowable<List<Tanslaterecord>> allTranslateRecord);
+    void printTransResult(RecognizerResult recognizerResult);
+
+    void printResult(RecognizerResult recognizerResult);
 
     /**
      * 初始化监听。
@@ -109,12 +116,14 @@ public interface TranslationView extends IBaseView{
 
         @Override
         public void onEvent(int eventType, int arg1, int arg2, Bundle obj) {
-            // 以下代码用于获取与云端的会话id，当业务出错时将会话id提供给技术支持人员，可用于查询会话日志，定位出错原因
-            // 若使用本地能力，会话id为null
-            //	if (SpeechEvent.EVENT_SESSION_ID == eventType) {
-            //		String sid = obj.getString(SpeechEvent.KEY_EVENT_SESSION_ID);
-            //		Log.d(TAG, "session id =" + sid);
-            //	}
         }
     };
+
+    void onVolumeChanged(int volume);
+
+    void onEndOfSpeech();
+
+    void onSpeakError(SpeechError error);
+
+    void onBeginOfSpeech();
 }

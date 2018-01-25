@@ -14,4 +14,5 @@
     <string name="find_newversion_str">新版本已下载是否立即安装？</string>
     <string name="current_version_str">当前版本号:\tV%1$s</string>
     <string name="check_update_str">检查更新</string>
+    <string name="one_more_click_exit_str">再按一次返回键退出程序</string>
 </resources>

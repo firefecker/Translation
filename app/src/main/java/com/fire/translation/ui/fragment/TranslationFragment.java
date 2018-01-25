@@ -23,7 +23,6 @@ import com.fire.baselibrary.utils.ToastUtils;
 import com.fire.translation.R;
 import com.fire.translation.adapter.TranslateRecordAdapter;
 import com.fire.translation.constant.Constant;
-import com.fire.translation.db.entities.Record;
 import com.fire.translation.db.entities.Tanslaterecord;
 import com.fire.translation.mvp.presenter.TranslationPresenter;
 import com.fire.translation.mvp.view.TranslationView;
@@ -33,6 +32,11 @@ import com.fire.translation.ui.activity.RecordDetailActivity;
 import com.fire.translation.utils.FileUtils;
 import com.fire.translation.utils.FunctionUtils;
 import com.fire.baselibrary.rx.EventBase;
+import com.fire.translation.utils.JsonParser;
+import com.fire.translation.widget.AudioDialog;
+import com.iflytek.cloud.RecognizerResult;
+import com.iflytek.cloud.SpeechError;
+import com.iflytek.cloud.SpeechRecognizer;
 import com.iflytek.cloud.SpeechSynthesizer;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.orhanobut.logger.Logger;
@@ -47,12 +51,14 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
- * Created by fire on 2018/1/15.
- * Date：2018/1/15
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/15
  * Description:
  */
 
@@ -101,10 +107,13 @@ public class TranslationFragment extends BaseFragment implements TranslationView
     private Animation mOperatingAnim2;
     private Animation mOperatingAnim3;
     private List<String> mStrings = new ArrayList<>();
+    private HashMap<String, String> mIatResults = new LinkedHashMap<>();
     private TranslationPresenter mTranslationPresenter;
     private Tanslaterecord mListTranslate;
     private TranslateRecordAdapter mRecordAdapter;
     private SpeechSynthesizer mTts;
+    private SpeechRecognizer mIat;
+    private AudioDialog mAudioDialog;
 
     @Override
     public int resourceId() {
@@ -123,7 +132,9 @@ public class TranslationFragment extends BaseFragment implements TranslationView
         mRecyclerView.setAdapter(mRecordAdapter);
         mTranslationPresenter.init(mActivity);
         mTranslationPresenter.loadTranslateRecord();
-        mTts = mTranslationPresenter.setParam(mActivity);
+        mTts = mTranslationPresenter.setTtsParam(mActivity);
+        mIat = mTranslationPresenter.setIatParam(mActivity);
+        mAudioDialog = new AudioDialog();
         RxTextView.textChanges(mTvTo)
                 .compose(this.bindUntilEvent(FragmentEvent.DESTROY_VIEW))
                 .observeOn(AndroidSchedulers.mainThread())
@@ -180,7 +191,8 @@ public class TranslationFragment extends BaseFragment implements TranslationView
             case R.id.iv_copy:
                 FileUtils.copy(mTvContent.getText());
                 break;
-            case R.id.iv_gesture://手势
+            case R.id.iv_gesture://语音
+                mTranslationPresenter.startAudio(getActivity(),mIatResults,mIat);
                 break;
             case R.id.tv_volume://发音
                 mTranslationPresenter.speak(mTvContent.getText().toString(),mTts,mActivity);
@@ -301,6 +313,68 @@ public class TranslationFragment extends BaseFragment implements TranslationView
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mRecordAdapter.asLoadAction(), throwable -> {
                 });
+    }
+
+    @Override
+    public void printTransResult(RecognizerResult recognizerResult) {
+        String trans  = JsonParser.parseTransResult(recognizerResult.getResultString(),"dst");
+        String oris = JsonParser.parseTransResult(recognizerResult.getResultString(),"src");
+        if( TextUtils.isEmpty(trans)||TextUtils.isEmpty(oris) ){
+            ToastUtils.showToast( getString(R.string.translate_notify) );
+        }else{
+            mEtInput.setText( "原始语言:\n"+oris+"\n目标语言:\n"+trans );
+            mEtInput.setSelection(mEtInput.length());
+        }
+    }
+
+    @Override
+    public void printResult(RecognizerResult recognizerResult) {
+        mEtInput.setText(mTranslationPresenter.parseResut(recognizerResult,mIatResults).toString());
+        mEtInput.setSelection(mEtInput.length());
+    }
+
+    /**
+     * 说话音量改变
+     * @param volume
+     */
+    @Override
+    public void onVolumeChanged(int volume) {
+        if (mAudioDialog == null) {
+            return;
+        }
+        mAudioDialog.setVoice(volume);
+    }
+
+    /**
+     * 结束语音
+     */
+    @Override
+    public void onEndOfSpeech() {
+        if (mAudioDialog.isAdded() || mAudioDialog.isVisible()) {
+            mAudioDialog.dismiss();
+        }
+    }
+
+    /**
+     * 语音出错
+     * @param error
+     */
+    @Override
+    public void onSpeakError(SpeechError error) {
+        if (mAudioDialog.isAdded() || mAudioDialog.isVisible()) {
+            mAudioDialog.dismiss();
+        }
+    }
+
+    /**
+     * 开始语音
+     */
+    @Override
+    public void onBeginOfSpeech() {
+        if (mAudioDialog.isAdded() || mAudioDialog.isVisible()) {
+            mAudioDialog.dismiss();
+        }
+        mAudioDialog.show(getChildFragmentManager(),"audioDialog");
     }
 
     @Override

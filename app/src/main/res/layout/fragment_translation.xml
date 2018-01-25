@@ -133,7 +133,7 @@
                         android:layout_marginLeft="@dimen/dp_10"
                         android:layout_marginRight="@dimen/dp_10"
                         android:background="?attr/selectableItemBackground"
-                        app:srcCompat="@drawable/ic_gesture"
+                        app:srcCompat="@drawable/ic_keyboard_voice"
                         />
                 <View
                         android:layout_width="0dp"

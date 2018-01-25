@@ -194,6 +194,9 @@ public class MainActivity extends BaseActivity implements MainView {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK) {
+            return;
+        }
         switch (requestCode) {
             case Constant.ACTION_IMAGE:
                 if (resultCode == RESULT_OK) {
@@ -205,5 +208,10 @@ public class MainActivity extends BaseActivity implements MainView {
                 mMainPresenter.loadPath(this, data);
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        exitSystem(false);
     }
 }
