@@ -71,12 +71,20 @@
                 android:key="zhihu"
                 android:icon="@drawable/zhihu"
                 android:summary="基于kotlin和rxjava2开发并参照知乎日报的应用"
-                android:title="知乎日报" />
+                android:title="知乎日报" >
+            <intent
+                    android:action="android.intent.action.VIEW"
+                    android:data="	http://fir.im/yn4r" />
+        </Preference>
         <Preference
                 android:key="yuewen"
                 android:icon="@drawable/yuewen"
                 android:summary="简易的新闻阅读，图片浏览，视频观看的应用"
-                android:title="所见所闻" />
+                android:title="所荐所闻" >
+            <intent
+                    android:action="android.intent.action.VIEW"
+                    android:data="http://fir.im/mf8n" />
+        </Preference>
     </PreferenceCategory>
 
 </PreferenceScreen>

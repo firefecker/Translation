@@ -17,4 +17,5 @@
     <string name="wordselect">wordselect</string>
     <string name="wordplan">wordplan</string>
     <string name="sql_notify">该类型的数据库不存在</string>
+    <string name="yodaoappid">0a52ba2c9ab9f3e4</string>
 </resources>

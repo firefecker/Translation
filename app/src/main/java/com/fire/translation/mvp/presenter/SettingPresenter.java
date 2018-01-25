@@ -59,4 +59,8 @@ public class SettingPresenter implements IBasePresenter {
     public void updateRecord(Record record1, Context context,String value) {
         mSettingView.updateRecord(mSettingModel.updateRecord(record1,context),value);
     }
+
+    public void clearCache(Context context) {
+        mSettingView.clearChache(mSettingModel.clearCache(context));
+    }
 }

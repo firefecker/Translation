@@ -16,6 +16,7 @@ import com.fire.translation.mvp.view.SettingView;
 import com.fire.translation.network.RetrofitClient;
 import com.fire.translation.rx.DefaultObservable;
 import com.fire.translation.utils.AssetsUtils;
+import com.fire.translation.utils.CacheUtils;
 import com.fire.translation.utils.DateUtils;
 import com.fire.translation.utils.FileUtils;
 import com.pushtorefresh.storio3.Optional;
@@ -58,20 +59,22 @@ public class SettingModel implements IBaseModel {
                 //解压到数据库文件夹
                 FileUtils.unZip(file, mTransApp.getDatabasePath(".").getAbsolutePath());
                 //切换数据库
-                settingView.updateDataBase(tableName.getCikuName(),String.format("%s.db",tableName.getName()));
+                settingView.updateDataBase(tableName.getCikuName(),
+                        String.format("%s.db", tableName.getName()));
             } else {
                 //下载
-                settingView.downloadData(file.getName(),tableName.getCikuName());
+                settingView.downloadData(file.getName(), tableName.getCikuName());
                 //解压
                 //切换数据库
             }
         } else {
             //切换数据库
-            settingView.updateDataBase(tableName.getCikuName(),String.format("%s.db",tableName.getName()));
+            settingView.updateDataBase(tableName.getCikuName(),
+                    String.format("%s.db", tableName.getName()));
         }
     }
 
-    public Observable<Boolean> downLoadData(Context context,String mName) {
+    public Observable<Boolean> downLoadData(Context context, String mName) {
         String name = mName;
         return RetrofitClient.getInstance()
                 .setUrl(Constant.DOWNLOADBASE_URL)
@@ -91,7 +94,9 @@ public class SettingModel implements IBaseModel {
     public Observable<Record> getRecord() {
         return DefaultObservable.create("")
                 .map(s -> {
-                    Record record = Dbservice.getInstance().defaultDbConfig().getRecord(DateUtils.getFormatDate1(new Date(),DateUtils.dateFormat1));
+                    Record record = Dbservice.getInstance()
+                            .defaultDbConfig()
+                            .getRecord(DateUtils.getFormatDate1(new Date(), DateUtils.dateFormat1));
                     if (record == null) {
                         record = new Record();
                     }
@@ -109,5 +114,16 @@ public class SettingModel implements IBaseModel {
         return Dbservice.getInstance()
                 .defaultDbConfig()
                 .updateJsnum(record1);
+    }
+
+    public Observable<Object> clearCache(Context context) {
+        Context mContext = context;
+        return Observable.create(e -> {
+            CacheUtils.clearAllCache(mContext);
+            e.onNext(new Object());
+            e.onComplete();
+        })
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread());
     }
 }

@@ -32,4 +32,6 @@ public interface SettingView extends IBaseView {
     void getCurrentRecord(Observable<Record> record,String value);
 
     void updateRecord(Flowable<PutResult> putResultFlowable,String value);
+
+    void clearChache(Observable<Object> objectObservable);
 }

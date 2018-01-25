@@ -36,7 +36,7 @@ public class TransApplication extends App {
     public void onCreate() {
         SpeechUtility.createUtility(this, "appid=" + getString(R.string.app_id));
         super.onCreate();
-        YouDaoApplication.init(this, "0a52ba2c9ab9f3e4");
+        YouDaoApplication.init(this, getString(R.string.yodaoappid));
         mTransApp = this;
         Constant.SORT = ListUtils.stringToString(this, R.array.sort, R.array.sort_value,
                 PreferenceManager.getDefaultSharedPreferences(this).getString("sort_plan", "1"));

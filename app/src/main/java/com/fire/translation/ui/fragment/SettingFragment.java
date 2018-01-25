@@ -31,7 +31,6 @@ import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
-import io.reactivex.schedulers.Schedulers;
 import java.io.File;
 import java.util.Set;
 
@@ -51,8 +50,6 @@ public class SettingFragment extends BasePreferenceFragment implements SettingVi
     private Preference mClearCache;
     private Preference mShare;
     private Preference mSupportDeveloper;
-    private Preference mYuewen;
-    private Preference mZhihu;
 
     private SettingPresenter mSettingPresenter;
 
@@ -71,8 +68,6 @@ public class SettingFragment extends BasePreferenceFragment implements SettingVi
         mClearCache = findPreference("clear_cache");
         mShare = findPreference("share");
         mSupportDeveloper = findPreference("support_developer");
-        mZhihu = findPreference("zhihu");
-        mYuewen = findPreference("yuewen");
     }
 
     @Override
@@ -133,18 +128,7 @@ public class SettingFragment extends BasePreferenceFragment implements SettingVi
                 ToastUtils.showToast(getString(R.string.no_cache));
                 return true;
             }
-            Observable.create(e -> {
-                CacheUtils.clearAllCache(TransApplication.mTransApp);
-                e.onNext(new Object());
-                e.onComplete();
-            })
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(aVoid -> ToastUtils.showToast(getString(R.string.clear_cache)),
-                            throwable -> Logger.e(throwable.toString(), (Action) () -> {
-                                mClearCache.setSummary(String.format("缓存大小：%s",
-                                        CacheUtils.getTotalCacheSize(TransApplication.mTransApp)));
-                            }));
+            mSettingPresenter.clearCache(TransApplication.mTransApp);
             return true;
         });
 
@@ -156,14 +140,16 @@ public class SettingFragment extends BasePreferenceFragment implements SettingVi
             }
             return true;
         });
+    }
 
-        mZhihu.setOnPreferenceClickListener(preference -> {
-            return true;
-        });
-
-        mYuewen.setOnPreferenceClickListener(preference -> {
-            return true;
-        });
+    @Override
+    public void clearChache(Observable<Object> objectObservable) {
+        objectObservable.compose(this.bindUntilEvent(FragmentEvent.DESTROY_VIEW))
+                .subscribe(aVoid -> ToastUtils.showToast(getString(R.string.clear_cache)),
+                        throwable -> Logger.e(throwable.toString(), (Action) () -> {
+                            mClearCache.setSummary(String.format("缓存大小：%s",
+                                    CacheUtils.getTotalCacheSize(TransApplication.mTransApp)));
+                        }));
     }
 
     @Override
