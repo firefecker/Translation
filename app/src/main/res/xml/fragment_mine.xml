@@ -74,7 +74,7 @@
                 android:title="知乎日报" >
             <intent
                     android:action="android.intent.action.VIEW"
-                    android:data="	http://fir.im/yn4r" />
+                    android:data="http://fir.im/yn4r" />
         </Preference>
         <Preference
                 android:key="yuewen"

@@ -97,7 +97,7 @@ public class HomeFragment extends BaseFragment implements HomeView {
                     if (getString(R.string.wordplan).equals(eventBase.getArg2())) {
                         mRecord.setReview(Integer.parseInt(eventBase.getArg3()));
                         mHomePresenter.updateJsnum(mRecord);
-                    } else if ("delete".equals(eventBase.getArg2())) {
+                    } else if (getString(R.string.delete).equals(eventBase.getArg2())) {
                         mHomePresenter.deleteRecord(mRecord);
                     }
                 }, throwable -> Logger.e(throwable.toString()));

@@ -314,4 +314,13 @@ public class Dbservice {
                 .asRxFlowable(BackpressureStrategy.LATEST)
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+    public Flowable<DeleteResult> deleteTranslateRecord(Tanslaterecord tanslaterecord) {
+        return mStorIOSQLite
+                .delete()
+                .object(tanslaterecord)
+                .prepare()
+                .asRxFlowable(BackpressureStrategy.LATEST)
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 }

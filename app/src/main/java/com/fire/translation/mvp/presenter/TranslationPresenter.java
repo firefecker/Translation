@@ -40,7 +40,7 @@ import java.util.Set;
  * Description:
  */
 
-public class TranslationPresenter implements IBasePresenter, ListPopupWindow.DataBack {
+public class TranslationPresenter implements IBasePresenter<Tanslaterecord>, ListPopupWindow.DataBack {
 
     private TranslationModel mTranslationModel;
     private TranslationView mTranslationView;
@@ -150,7 +150,7 @@ public class TranslationPresenter implements IBasePresenter, ListPopupWindow.Dat
         // 移动数据分析，收集开始合成事件
         FlowerCollector.onEvent(context, "tts_play");
         // 设置参数
-        int code = mTts.startSpeaking(content, mTranslationView.mTtsListener);
+        int code = mTts.startSpeaking(content, TranslationView.mTtsListener);
         if (code != ErrorCode.SUCCESS) {
             ToastUtils.showToast("语音合成失败,错误码: " + code);
         }
@@ -176,6 +176,7 @@ public class TranslationPresenter implements IBasePresenter, ListPopupWindow.Dat
         return mTranslationModel.settranslateResult();
     }
 
+    @Override
     public void updateStar(Tanslaterecord listTranslate) {
         mTranslationModel.updateStar(mTranslationView, listTranslate);
     }

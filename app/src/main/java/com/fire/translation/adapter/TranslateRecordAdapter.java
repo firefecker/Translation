@@ -1,15 +1,14 @@
 package com.fire.translation.adapter;
 
 import android.content.Context;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
+import com.daimajia.swipe.SwipeLayout;
+import com.fire.baselibrary.base.inter.IBasePresenter;
 import com.fire.translation.R;
 import com.fire.translation.db.entities.Tanslaterecord;
-import com.fire.translation.mvp.presenter.TranslationPresenter;
-import com.fire.translation.mvp.view.TranslationView;
 import com.fire.translation.widget.BasesViewHolder;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 import java.util.ArrayList;
@@ -24,15 +23,15 @@ import java.util.List;
 
 public class TranslateRecordAdapter extends EasyRecyclerArrayAdapter<Tanslaterecord> {
 
-    private TranslationPresenter mTranslationPresenter;
+    private IBasePresenter mTranslationPresenter;
 
     public TranslateRecordAdapter(Context context,
-            List<Tanslaterecord> objects,TranslationPresenter mTranslationPresenter) {
+            List<Tanslaterecord> objects,IBasePresenter mTranslationPresenter) {
         super(context, objects);
         this.mTranslationPresenter = mTranslationPresenter;
     }
 
-    public TranslateRecordAdapter(Context context,TranslationPresenter mTranslationPresenter) {
+    public TranslateRecordAdapter(Context context,IBasePresenter mTranslationPresenter) {
         this(context, new ArrayList<>(),mTranslationPresenter);
     }
 
@@ -50,9 +49,9 @@ public class TranslateRecordAdapter extends EasyRecyclerArrayAdapter<Tanslaterec
         @BindView(R.id.iv_star)
         ImageView mIvStar;
 
-        private TranslationPresenter mTranslationPresenter;
+        private IBasePresenter mTranslationPresenter;
 
-        public TranslateRecordViewHolder(ViewGroup parent,TranslationPresenter mTranslationPresenter) {
+        public TranslateRecordViewHolder(ViewGroup parent,IBasePresenter mTranslationPresenter) {
             super(parent, R.layout.item_translaterecord);
             this.mTranslationPresenter = mTranslationPresenter;
         }

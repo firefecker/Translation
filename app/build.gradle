@@ -20,15 +20,13 @@ android {
             storePassword RELEASE_STORE_PASSWORD
             keyAlias RELEASE_KEY_ALIAS
             keyPassword RELEASE_KEY_PASSWORD
-            v1SigningEnabled true
-            v2SigningEnabled true
+            v2SigningEnabled false
         }
         debug {
             storeFile file(DEBUG_STORE_FILE)
             storePassword DEBUG_STORE_PASSWORD
             keyAlias DEBUG_KEY_ALIAS
-            v1SigningEnabled true
-            v2SigningEnabled true
+            v2SigningEnabled false
         }
     }
 
@@ -82,6 +80,8 @@ dependencies {
     annotationProcessor 'com.pushtorefresh.storio3:sqlite-annotations-processor:3.0.0'
     implementation 'org.jetbrains:annotations:15.0'
     implementation 'com.android.support:multidex:1.0.1'
+    implementation "com.daimajia.swipelayout:library:1.2.0@aar"
+    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
 }
 
 android.applicationVariants.all { variant ->

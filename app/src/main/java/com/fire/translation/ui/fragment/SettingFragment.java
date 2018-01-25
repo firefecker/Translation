@@ -209,7 +209,7 @@ public class SettingFragment extends BasePreferenceFragment implements SettingVi
                 .subscribe(aboolean -> {
                     dismissLoadingView();
                     if (aboolean) {
-                        ToastUtils.showToast("下载成功");
+                        ToastUtils.showToast(getString(R.string.download_success));
                         FileUtils.unZip(new File(
                                         TransApplication.mTransApp.getFilesDir() + File.separator
                                         + mName),
@@ -217,7 +217,7 @@ public class SettingFragment extends BasePreferenceFragment implements SettingVi
                         mSettingPresenter.updateDataBase(mTableName,
                                 String.format("%s.db", mName.split("\\.")[0]));
                     } else {
-                        ToastUtils.showToast("下载失败");
+                        ToastUtils.showToast(getString(R.string.doawnload_failure));
                     }
                 }, throwable -> {
                     Logger.e(throwable.toString());
@@ -254,7 +254,7 @@ public class SettingFragment extends BasePreferenceFragment implements SettingVi
         RxBus.getDefault()
                 .post(EventBase.builder()
                         .receiver(HomeFragment.class)
-                        .arg2("delete")
+                        .arg2(getString(R.string.delete))
                         .arg0(0)
                         .build());
     }

@@ -7,7 +7,11 @@ package com.fire.baselibrary.base.inter;
  * Description:
  */
 
-public interface IBasePresenter {
+public interface IBasePresenter<T> {
     default void rxBus(Class mClass,Class aClass) {
+    }
+
+    default void updateStar(T t) {
+
     }
 }

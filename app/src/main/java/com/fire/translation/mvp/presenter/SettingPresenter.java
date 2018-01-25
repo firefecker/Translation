@@ -3,7 +3,9 @@ package com.fire.translation.mvp.presenter;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.fire.baselibrary.base.inter.IBasePresenter;
+import com.fire.translation.R;
 import com.fire.translation.TransApplication;
 import com.fire.translation.db.entities.Record;
 import com.fire.translation.db.entities.TableName;
@@ -45,7 +47,7 @@ public class SettingPresenter implements IBasePresenter {
         mSettingView.downLoadDataResult(mSettingModel.downLoadData(context,mName),mName,mTableName);
     }
 
-    public void deleteRecord(Record record) {
+    public void deleteRecord( Record record) {
         mSettingView.deleteRecord(mSettingModel.deleteRecord(record));
     }
     public void getRecord() {

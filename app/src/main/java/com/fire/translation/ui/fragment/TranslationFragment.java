@@ -1,5 +1,6 @@
 package com.fire.translation.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -22,11 +23,13 @@ import com.fire.baselibrary.utils.ToastUtils;
 import com.fire.translation.R;
 import com.fire.translation.adapter.TranslateRecordAdapter;
 import com.fire.translation.constant.Constant;
+import com.fire.translation.db.entities.Record;
 import com.fire.translation.db.entities.Tanslaterecord;
 import com.fire.translation.mvp.presenter.TranslationPresenter;
 import com.fire.translation.mvp.view.TranslationView;
 import com.fire.baselibrary.rx.DefaultButtonTransformer;
 import com.fire.translation.rx.RxRvAdapterView;
+import com.fire.translation.ui.activity.RecordDetailActivity;
 import com.fire.translation.utils.FileUtils;
 import com.fire.translation.utils.FunctionUtils;
 import com.fire.baselibrary.rx.EventBase;
@@ -249,6 +252,10 @@ public class TranslationFragment extends BaseFragment implements TranslationView
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(eventBase -> {
                     if (eventBase != null) {
+                        if (eventBase.getArg0() == R.string.notify) {
+                            mTranslationPresenter.loadTranslateRecord();
+                            return;
+                        }
                         if (getString(R.string.language).equals(eventBase.getArg2())) {
                             mTranslationPresenter.init(mActivity);
                             return;
@@ -349,7 +356,7 @@ public class TranslationFragment extends BaseFragment implements TranslationView
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_notify:
-                ToastUtils.showToast("notify");
+                startActivity(new Intent(getActivity(), RecordDetailActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

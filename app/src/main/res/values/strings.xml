@@ -18,4 +18,12 @@
     <string name="wordplan">wordplan</string>
     <string name="sql_notify">该类型的数据库不存在</string>
     <string name="yodaoappid">0a52ba2c9ab9f3e4</string>
+    <string name="detail">详情</string>
+    <string name="notify">提示</string>
+    <string name="comfirm">确定</string>
+    <string name="cancel">取消</string>
+    <string name="delect_record_notify">确定删除该记录</string>
+    <string name="delete">delete</string>
+    <string name="download_success">下载成功</string>
+    <string name="doawnload_failure">下载失败</string>
 </resources>
