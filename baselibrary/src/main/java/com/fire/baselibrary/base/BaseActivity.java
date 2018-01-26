@@ -94,8 +94,7 @@ public abstract class BaseActivity extends RxAppCompatActivity {
      * 退出应用 true 完全退出 false 结束当前页面
      */
     protected void exitSystem(boolean isExitSystem) {
-        if (System.currentTimeMillis() - currentBackPressedTime > 2000
-            || System.currentTimeMillis() - currentBackPressedTime < 10000) {
+        if (System.currentTimeMillis() - currentBackPressedTime > 2000) {
             currentBackPressedTime = System.currentTimeMillis();
             ToastUtils.showToast(R.string.one_more_click_exit_str);
         } else {
