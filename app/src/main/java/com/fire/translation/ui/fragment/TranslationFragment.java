@@ -457,8 +457,9 @@ public class TranslationFragment extends BaseFragment implements TranslationView
                 mTranslationPresenter.sleepAfterUpdate();
                 break;
             case R.id.action_screenshort:
-                FileUtils.GetandSaveCurrentImage(getActivity());
-                //startActivity(IntentUtils.getShareIntent(getActivity(),FileUtils.GetandSaveCurrentImage(getActivity())));
+                //FileUtils.GetandSaveCurrentImage(getActivity());
+                startActivity(Intent.createChooser(IntentUtils.getShareIntent(getActivity(),
+                        FileUtils.GetandSaveCurrentImage(getActivity())), "Share Image"));
                 break;
         }
         return true;

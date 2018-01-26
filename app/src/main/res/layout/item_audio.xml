@@ -30,6 +30,7 @@
                 app:srcCompat="@drawable/ic_sort2"
                 android:scaleType="centerCrop"
                 android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginRight="@dimen/dp_6"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="match_parent"

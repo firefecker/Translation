@@ -197,7 +197,7 @@ public class FileUtils {
         View decorview = activity.getWindow().getDecorView();
         decorview.setDrawingCacheEnabled(true);
         Bmp = decorview.getDrawingCache();
-        String SavePath = activity.getFilesDir() + File.separator +"ScreenImage";
+        String SavePath = "/sdcard" + File.separator +"ScreenImage";
         String filepath = SavePath + "/Screen_1.png";
         //3.保存Bitmap
         try {
