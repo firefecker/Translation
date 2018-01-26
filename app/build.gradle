@@ -84,6 +84,7 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.1'
     implementation "com.daimajia.swipelayout:library:1.2.0@aar"
     implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+    implementation 'com.airbnb.android:lottie:2.5.0-beta3'
 }
 
 android.applicationVariants.all { variant ->
