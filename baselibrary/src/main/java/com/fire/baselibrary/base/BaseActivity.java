@@ -1,10 +1,12 @@
 package com.fire.baselibrary.base;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -26,12 +28,15 @@ public abstract class BaseActivity extends RxAppCompatActivity {
     private Unbinder mBind;
     private RxPermissions mRxPermissions;
 
+    protected View decorView;
+
     /**
      * 退出时间
      */
     private static long currentBackPressedTime = 0;
 
-    public abstract @LayoutRes int getLayout();
+    public abstract @LayoutRes
+    int getLayout();
 
     public abstract void initView();
 
@@ -62,17 +67,16 @@ public abstract class BaseActivity extends RxAppCompatActivity {
 
     /**
      * 实现父类的onActivityCreate，完成Presenter的生成以及P和V的绑定
-     * @param paramBundle
      */
     protected void onActivityCreate(@Nullable Bundle paramBundle) {
 
     }
 
-    public Observable<Permission> requestPermission(String... permission ) {
+    public Observable<Permission> requestPermission(String... permission) {
         return getRxPermission().requestEach(permission);
     }
 
-    public void setToolBar(Toolbar toolbar , String title ) {
+    public void setToolBar(Toolbar toolbar, String title) {
         toolbar.setTitle(title + "");
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         setSupportActionBar(toolbar);
@@ -81,7 +85,7 @@ public abstract class BaseActivity extends RxAppCompatActivity {
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
-    public void setToolBarNoBack(Toolbar toolbar , String title ) {
+    public void setToolBarNoBack(Toolbar toolbar, String title) {
         toolbar.setTitle(title + "");
         setSupportActionBar(toolbar);
     }
@@ -90,7 +94,8 @@ public abstract class BaseActivity extends RxAppCompatActivity {
      * 退出应用 true 完全退出 false 结束当前页面
      */
     protected void exitSystem(boolean isExitSystem) {
-        if (System.currentTimeMillis() - currentBackPressedTime > 2000) {
+        if (System.currentTimeMillis() - currentBackPressedTime > 2000
+            || System.currentTimeMillis() - currentBackPressedTime < 10000) {
             currentBackPressedTime = System.currentTimeMillis();
             ToastUtils.showToast(R.string.one_more_click_exit_str);
         } else {
@@ -112,4 +117,33 @@ public abstract class BaseActivity extends RxAppCompatActivity {
         System.exit(0);
     }
 
+    public void fitSystem(boolean hasFocus) {
+        if (hasFocus && Build.VERSION.SDK_INT >= 19) {
+            if (null == decorView) {
+                decorView = getWindow().getDecorView();
+            }
+            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                            | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                            | View.SYSTEM_UI_FLAG_FULLSCREEN);
+            decorView.setOnSystemUiVisibilityChangeListener(
+                    visibility -> decorView.setSystemUiVisibility(
+                            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN));
+        }
+    }
+
+    protected void translateStatubar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            // 透明状态栏
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
+    }
 }

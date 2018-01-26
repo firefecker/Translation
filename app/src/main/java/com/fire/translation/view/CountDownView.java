@@ -26,7 +26,6 @@ import com.fire.translation.R;
  * Author: fire
  * Description:
  */
-
 public class CountDownView extends View {
     private Context mContext;//上下文
     private Paint mPaintBackGround;//背景画笔
@@ -50,6 +49,7 @@ public class CountDownView extends View {
     private int mWidth;
     private int mHeight;
 
+
     public CountDownView(Context context) {
         this(context, null);
     }
@@ -58,7 +58,6 @@ public class CountDownView extends View {
         this(context, attrs, 0);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     public CountDownView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mContext = context;
@@ -81,10 +80,11 @@ public class CountDownView extends View {
         init();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     private void init() {
         //背景设为透明，然后造成圆形View的视觉错觉
-        this.setBackground(ContextCompat.getDrawable(mContext, android.R.color.transparent));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            setBackground(ContextCompat.getDrawable(mContext, android.R.color.transparent));
+        }
         mPaintBackGround = new Paint();
         mPaintBackGround.setStyle(Paint.Style.FILL);
         mPaintBackGround.setAntiAlias(true);
@@ -162,23 +162,17 @@ public class CountDownView extends View {
     public void start() {
         ValueAnimator animator = ValueAnimator.ofFloat(mmSweepAngleStart, mmSweepAngleEnd);
         animator.setInterpolator(new LinearInterpolator());
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                mSweepAngle = (float) valueAnimator.getAnimatedValue();
-                //获取到需要绘制的角度，重新绘制
-                invalidate();
-            }
+        animator.addUpdateListener(valueAnimator -> {
+            mSweepAngle = (float) valueAnimator.getAnimatedValue();
+            //获取到需要绘制的角度，重新绘制
+            invalidate();
         });
         //这里是时间获取和赋值
         ValueAnimator animator1 = ValueAnimator.ofInt(mLoadingTime, 0);
         animator1.setInterpolator(new LinearInterpolator());
-        animator1.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                int time = (int) valueAnimator.getAnimatedValue();
-                mText = time + mLoadingTimeUnit;
-            }
+        animator1.addUpdateListener(valueAnimator -> {
+            int time = (int) valueAnimator.getAnimatedValue();
+            mText = time + mLoadingTimeUnit;
         });
         AnimatorSet set = new AnimatorSet();
         set.playTogether(animator, animator1);
