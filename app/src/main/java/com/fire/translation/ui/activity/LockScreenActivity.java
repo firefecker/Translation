@@ -65,15 +65,6 @@ public class LockScreenActivity extends BaseActivity implements LockScreenView {
     public void initData() {
         mLockDate.setText(DateUtils.formatDateToString(new Date(), "yyyy/MM/dd/EEEE"));
         mLockScreenPresenter.getLocalData();
-        //RetrofitClient.getInstance()
-        //        .getServiceApi()
-        //        .beforeNews(DateUtils.getFormatDate1(new Date(), DateUtils.dateFormat1))
-        //        .subscribeOn(Schedulers.io())
-        //        .observeOn(AndroidSchedulers.mainThread())
-        //        .compose(this.bindUntilEvent(ActivityEvent.DESTROY))
-        //        .subscribe(dailyEntity -> {
-        //
-        //        }, throwable -> Logger.e(throwable.toString()));
     }
 
     @Override

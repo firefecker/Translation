@@ -13,9 +13,9 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 /**
- * Created by fire on 2018/1/29.
- * Date：2018/1/29
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/29
  * Description:
  */
 
@@ -96,8 +96,7 @@ public class SwipeBackLayout extends FrameLayout {
                         }
                     }
                     // 设置背景色变化
-                    setBackgroundColor(
-                            Color.argb((int) ((getWidth() - left) / (float) getWidth() * 160), 0, 0, 0));
+                    setBackgroundColor(Color.argb((int) ((getWidth() - left) / (float) getWidth() * 180), 0, 0, 0));
                 }
             }
 
@@ -108,7 +107,7 @@ public class SwipeBackLayout extends FrameLayout {
             @Override
             public void onViewReleased(View releasedChild, float xvel, float yvel) {
                 if (contentView.equals(releasedChild)) {
-                    if (contentView.getLeft() >= getWidth() / 3) {
+                    if (contentView.getLeft() >= getWidth() / 3 || contentView.getRight() >= getWidth() / 3) {
                         viewDragHelper.settleCapturedViewAt(getWidth(), getTop());
                     } else {
                         viewDragHelper.settleCapturedViewAt(0, getTop());
@@ -128,7 +127,6 @@ public class SwipeBackLayout extends FrameLayout {
                     return super.clampViewPositionHorizontal(child, left, dx);
                 }
             }
-
         });
     }
 
