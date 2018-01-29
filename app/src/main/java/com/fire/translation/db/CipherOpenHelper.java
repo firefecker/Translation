@@ -8,9 +8,9 @@ import com.fire.translation.constant.Constant;
 import com.orhanobut.logger.Logger;
 
 /**
- * Created by fire on 2018/1/12.
- * Date：2018/1/12
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/12
  * Description:
  */
 
@@ -57,6 +57,21 @@ public class CipherOpenHelper extends SQLiteOpenHelper {
                     + "dictdeeplink TEXT, "
                     + "errorcode INTEGER, "
                     + "start INTEGER)");
+            sqLiteDatabase.execSQL(
+                    "create table if not exists dialy (_id TEXT primary key, "
+                    + "tts TEXT , "
+                    + "content TEXT , "
+                    + "note TEXT, "
+                    + "love TEXT, "
+                    + "translation TEXT, "
+                    + "picture TEXT, "
+                    + "picture2 TEXT, "
+                    + "caption TEXT, "
+                    + "s_pv TEXT, "
+                    + "sp_pv TEXT, "
+                    + "tags TEXT, "
+                    + "dateline TEXT, "
+                    + "fenxiang_img INTEGER)");
         }
         if (dbOpenHelperEvent != null) {
             dbOpenHelperEvent.onDBCreate(this, sqLiteDatabase);
@@ -83,6 +98,21 @@ public class CipherOpenHelper extends SQLiteOpenHelper {
                     + "dictdeeplink text, "
                     + "errorcode integer, "
                     + "start integer)");
+            db.execSQL(
+                    "create table if not exists dialy (_id TEXT primary key, "
+                    + "tts TEXT , "
+                    + "content TEXT , "
+                    + "note TEXT, "
+                    + "love TEXT, "
+                    + "translation TEXT, "
+                    + "picture TEXT, "
+                    + "picture2 TEXT, "
+                    + "caption TEXT, "
+                    + "s_pv TEXT, "
+                    + "sp_pv TEXT, "
+                    + "tags TEXT, "
+                    + "dateline TEXT, "
+                    + "fenxiang_img INTEGER)");
         } else {
             if (exits("word",db) && !checkColumnExists2(db,"word","time")) {
                 db.execSQL("alter table word add time text;");

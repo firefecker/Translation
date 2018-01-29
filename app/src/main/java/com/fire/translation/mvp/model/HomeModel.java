@@ -10,7 +10,7 @@ import com.fire.translation.db.Dbservice;
 import com.fire.translation.db.entities.Record;
 import com.fire.translation.db.entities.TableName;
 import com.fire.translation.db.entities.Word;
-import com.fire.translation.entity.DailyEntity;
+import com.fire.translation.db.entities.DailyEntity;
 import com.fire.translation.network.RetrofitClient;
 import com.fire.translation.utils.DateUtils;
 import com.pushtorefresh.storio3.Optional;

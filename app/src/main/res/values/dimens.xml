@@ -31,4 +31,5 @@
     <dimen name="sp_4">4sp</dimen>
     <dimen name="dp_36">36dp</dimen>
     <dimen name="dp_120">120dp</dimen>
+    <dimen name="dp_140">140dp</dimen>
 </resources>

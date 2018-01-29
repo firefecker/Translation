@@ -21,6 +21,8 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <!--读取日志-->
     <uses-permission android:name="android.permission.READ_LOGS" />
+    <!--锁屏权限-->
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
 
     <application
         android:name=".TransApplication"
@@ -54,6 +56,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+                android:launchMode="singleInstance"
+                android:screenOrientation="portrait"
+                android:name=".ui.activity.LockScreenActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -64,6 +70,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+        <service android:name=".ui.service.ScreenOffService" />
     </application>
 
 </manifest>

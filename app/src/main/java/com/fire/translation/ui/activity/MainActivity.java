@@ -17,7 +17,6 @@ import com.fire.translation.constant.Constant;
 import com.fire.translation.db.entities.TableName;
 import com.fire.translation.mvp.presenter.MainPresenter;
 import com.fire.translation.mvp.view.MainView;
-import com.fire.baselibrary.rx.DefaultButtonTransformer;
 import com.fire.baselibrary.rx.RxBus;
 import com.fire.translation.ui.fragment.DashboardFragment;
 import com.fire.translation.ui.fragment.HomeFragment;
@@ -97,17 +96,6 @@ public class MainActivity extends BaseActivity implements MainView {
     protected void onActivityCreate(@Nullable Bundle paramBundle) {
         super.onActivityCreate(paramBundle);
         mMainPresenter = new MainPresenter(this);
-        requestPermission(Constant.PERMISSIONS)
-                .compose(DefaultButtonTransformer.create())
-                .compose(this.bindUntilEvent(ActivityEvent.DESTROY))
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(permission -> {
-                    if (permission.granted) {
-                        Logger.e("权限申请成功");
-                    } else {
-                        Logger.e("权限申请失败或者已经申请过权限了");
-                    }
-                });
     }
 
     public void setIndicator() {

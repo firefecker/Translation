@@ -2,6 +2,7 @@ package com.fire.translation.db;
 
 import com.fire.translation.TransApplication;
 import com.fire.translation.constant.Constant;
+import com.fire.translation.db.entities.DailyEntity;
 import com.fire.translation.db.entities.Record;
 import com.fire.translation.db.entities.TableName;
 import com.fire.translation.db.entities.Tanslaterecord;
@@ -319,6 +320,25 @@ public class Dbservice {
         return mStorIOSQLite
                 .delete()
                 .object(tanslaterecord)
+                .prepare()
+                .asRxFlowable(BackpressureStrategy.LATEST)
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public PutResult insertDaily(DailyEntity dailyEntity) {
+        return mStorIOSQLite
+                .put()
+                .object(dailyEntity)
+                .prepare()
+                .executeAsBlocking();
+    }
+
+    public Flowable<Optional<DailyEntity>> getCurrentDailyEntity() {
+        String query = String.format("SELECT * FROM %s where %s = '%s'",DailyEntity.__TABLE__,DailyEntity.C_DATELINE,DateUtils.getFormatDate1(new Date(), DateUtils.dateFormat1));
+        return mStorIOSQLite
+                .get()
+                .object(DailyEntity.class)
+                .withQuery(RawQuery.builder().query(query).build())
                 .prepare()
                 .asRxFlowable(BackpressureStrategy.LATEST)
                 .observeOn(AndroidSchedulers.mainThread());

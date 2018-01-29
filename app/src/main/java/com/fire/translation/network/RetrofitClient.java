@@ -1,7 +1,6 @@
 package com.fire.translation.network;
 
-import com.fire.translation.entity.DailyEntity;
-import com.orhanobut.logger.Logger;
+import com.fire.translation.db.entities.DailyEntity;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.util.concurrent.TimeUnit;

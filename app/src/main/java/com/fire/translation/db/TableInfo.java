@@ -1,5 +1,7 @@
 package com.fire.translation.db;
 
+import com.fire.translation.db.entities.DailyEntity;
+import com.fire.translation.db.entities.DailyEntitySQLiteTypeMapping;
 import com.fire.translation.db.entities.Record;
 import com.fire.translation.db.entities.RecordSQLiteTypeMapping;
 import com.fire.translation.db.entities.TableName;
@@ -41,6 +43,7 @@ public class TableInfo {
         builder.addTypeMapping(TableName.class,new TableNameSQLiteTypeMapping());
         builder.addTypeMapping(Word.class,new WordSQLiteTypeMapping());
         builder.addTypeMapping(Tanslaterecord.class,new TanslaterecordSQLiteTypeMapping());
+        builder.addTypeMapping(DailyEntity.class,new DailyEntitySQLiteTypeMapping());
         return builder.build();
     }
 }

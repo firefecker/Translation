@@ -1,6 +1,8 @@
 package com.fire.translation;
 
+import android.app.KeyguardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.preference.PreferenceManager;
 import android.support.multidex.MultiDex;
 import android.text.TextUtils;
@@ -13,22 +15,22 @@ import com.fire.translation.db.DBConfig;
 import com.fire.translation.db.DbModelSQLiteTypeMapping;
 import com.fire.translation.db.TableInfo;
 import com.fire.translation.db.entities.DbModel;
+import com.fire.translation.ui.service.ScreenOffService;
 import com.fire.translation.utils.AssetsUtils;
 import com.iflytek.cloud.SpeechUtility;
 import com.pushtorefresh.storio3.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio3.sqlite.impl.DefaultStorIOSQLite;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.youdao.sdk.app.YouDaoApplication;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
 /**
- * Created by fire on 2018/1/11.
- * Date：2018/1/11
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/11
  * Description:
  */
 
@@ -37,11 +39,14 @@ public class TransApplication extends App {
     public static TransApplication mTransApp;
     private CipherOpenHelper mDbOpenHelper;
     private DBConfig mDbConfig;
+    private Intent mScreenOffIntent;
+    private KeyguardManager keyguardManager;
+    private KeyguardManager.KeyguardLock keyguardLock;
 
     @Override
     public void onCreate() {
+        super.onCreate();
         initBugly();
-
         SpeechUtility.createUtility(this, "appid=" + getString(R.string.app_id));
         super.onCreate();
         YouDaoApplication.init(this, getString(R.string.yodaoappid));
@@ -50,6 +55,16 @@ public class TransApplication extends App {
                 PreferenceManager.getDefaultSharedPreferences(this).getString("sort_plan", "1"));
         unZipFile();
         initDBHelper();
+        initService();
+    }
+
+    private void initService() {
+        mScreenOffIntent = new Intent(this,ScreenOffService.class);
+        keyguardManager =
+                (KeyguardManager) getApplicationContext().getSystemService(Context.KEYGUARD_SERVICE);
+        keyguardLock = keyguardManager.newKeyguardLock("");
+        keyguardLock.disableKeyguard();//取消系统锁屏
+        startService(mScreenOffIntent);
     }
 
     private void initBugly() {
@@ -172,5 +187,10 @@ public class TransApplication extends App {
         return null;
     }
 
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        stopService(mScreenOffIntent);
+    }
 
 }
