@@ -21,9 +21,9 @@ import android.view.animation.LinearInterpolator;
 import com.fire.translation.R;
 
 /**
- * Created by fire on 2018/1/26.
- * Date：2018/1/26
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/26
  * Description:
  */
 public class CountDownView extends View {

@@ -111,10 +111,6 @@ public class RetrofitClient {
         @GET("dsapi/")
         Observable<DailyEntity> beforeNews(@Query("date") String date);
 
-    //    filename=ciku_02.zip
-    //    http://open.iciba.com/dsapi?date=2017-12-26
-    //    http://api.secretlisa.com/dcsp/file/lexicon?filename=ciku_02.zip
-
         @Streaming
         @GET("lexicon/")
         Observable<ResponseBody> downloadZip(@Query("filename") String filename);

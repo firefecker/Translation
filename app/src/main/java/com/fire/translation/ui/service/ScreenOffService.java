@@ -29,7 +29,9 @@ public class ScreenOffService extends Service {
 
     @Override public void onDestroy() {
         super.onDestroy();
-        unregisterComponent();
+        if (mScreenOffReceiver != null) {
+            unregisterReceiver(mScreenOffReceiver);
+        }
     }
 
     @Override public IBinder onBind(Intent arg0) {
@@ -50,11 +52,4 @@ public class ScreenOffService extends Service {
             }
         }
     };
-
-    public void unregisterComponent() {
-        // TODO Auto-generated method stub
-        if (mScreenOffReceiver != null) {
-            unregisterReceiver(mScreenOffReceiver);
-        }
-    }
 }

@@ -3,9 +3,9 @@ package com.fire.translation.widget;
 import com.fire.translation.view.ShimmerTextView;
 
 /**
- * Created by fire on 2018/1/29.
- * Date：2018/1/29
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/29
  * Description:
  */
 
