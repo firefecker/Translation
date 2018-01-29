@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Toast;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import com.fire.baselibrary.R;
