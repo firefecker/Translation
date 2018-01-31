@@ -60,6 +60,7 @@ public class SettingFragment extends BasePreferenceFragment implements SettingVi
 
     @Override
     public void initView() {
+
         mStudyPlan = (ListPreference) findPreference("study_plan");
         mWordPlan = (ListPreference) findPreference("word_plan");
         mSortPlan = (ListPreference) findPreference("sort_plan");
