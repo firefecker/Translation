@@ -53,7 +53,7 @@
                     android:background="#8fFFFFFF"
                     />
           <TextView
-                  android:text="每日一词"
+                  android:text="每日一句"
                   android:textColor="@android:color/white"
                   android:gravity="center"
                   android:padding="@dimen/dp_10"

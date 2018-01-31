@@ -140,6 +140,7 @@ public class SettingFragment extends BasePreferenceFragment implements SettingVi
             }
             return true;
         });
+
     }
 
     @Override

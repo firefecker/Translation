@@ -108,7 +108,7 @@ public class LockScreenActivity extends BaseActivity implements LockScreenView {
                     Shimmer shimmer1 = new Shimmer();
                     shimmer.start(mShimmerTextView);
                     shimmer1.start(mShimmerTextViews);
-                    ImageLoader.loadImage(dailyEntity.getPicture(), R.color.translate).into(mIvBg);
+                    ImageLoader.loadImage(dailyEntity.getPicture2(), R.color.translate).into(mIvBg);
                 }, throwable -> Logger.e(throwable.toString()));
     }
 }
