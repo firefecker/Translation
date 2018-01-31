@@ -56,6 +56,9 @@ public class TransApplication extends App {
         unZipFile();
         initDBHelper();
         initService();
+
+
+
     }
 
     private void initService() {

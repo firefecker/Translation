@@ -32,4 +32,5 @@
     <dimen name="dp_36">36dp</dimen>
     <dimen name="dp_120">120dp</dimen>
     <dimen name="dp_140">140dp</dimen>
+    <dimen name="dp_1">1dp</dimen>
 </resources>

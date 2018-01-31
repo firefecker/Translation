@@ -1,6 +1,8 @@
 package com.fire.translation.ui.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
@@ -8,11 +10,14 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import butterknife.BindView;
 import com.fire.translation.R;
 import com.fire.baselibrary.base.BaseActivity;
+import com.fire.translation.TransApplication;
 import com.fire.translation.constant.Constant;
 import com.fire.translation.db.entities.TableName;
 import com.fire.translation.mvp.presenter.MainPresenter;
@@ -54,6 +59,8 @@ public class MainActivity extends BaseActivity implements MainView {
     private SettingFragment mMineFragment;
 
     private MainPresenter mMainPresenter;
+    private WindowManager mWindowManager;
+    private View mInflate;
 
     @Override
     public int getLayout() {
@@ -62,6 +69,11 @@ public class MainActivity extends BaseActivity implements MainView {
 
     @Override
     public void initView() {
+
+        mWindowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        mInflate = LayoutInflater.from(TransApplication.mTransApp).inflate(R.layout.item_notify, null);
+        mMainPresenter.initWindowManager(mWindowManager, mInflate);
+
 
         mMainPresenter.loadExistTable();
         mHomeFragment = new HomeFragment();
