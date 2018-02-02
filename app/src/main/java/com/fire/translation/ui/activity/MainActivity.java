@@ -118,23 +118,14 @@ public class MainActivity extends BaseActivity implements MainView {
         if (isShow) {
             if (isHome) {
                 mActionButton.setVisibility(View.GONE);
-                getSupportFragmentManager().beginTransaction()
-                        .hide(fragment1)
-                        .show(mHomeFragment)
-                        .commit();
+                getSupportFragmentManager().beginTransaction().hide(fragment1).show(mHomeFragment).commit();
             } else {
                 mActionButton.setVisibility(View.GONE);
-                getSupportFragmentManager().beginTransaction()
-                        .hide(mHomeFragment)
-                        .show(fragment1)
-                        .commit();
+                getSupportFragmentManager().beginTransaction().hide(mHomeFragment).show(fragment1).commit();
             }
             getFragmentManager().beginTransaction().hide(mMineFragment).commit();
         } else {
-            getSupportFragmentManager().beginTransaction()
-                    .hide(mHomeFragment)
-                    .hide(mDashboardFragment)
-                    .commit();
+            getSupportFragmentManager().beginTransaction().hide(mHomeFragment).hide(mDashboardFragment).commit();
             getFragmentManager().beginTransaction().show(mMineFragment).commit();
         }
         supportInvalidateOptionsMenu();
@@ -144,16 +135,8 @@ public class MainActivity extends BaseActivity implements MainView {
     public void initData() {
         setToolBarNoBack(mToolbar, getString(R.string.title_home));
         mTabLayout.setVisibility(View.GONE);
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.layout_frame, mHomeFragment)
-                .add(R.id.layout_frame, mDashboardFragment)
-                .hide(mDashboardFragment)
-                .show(mHomeFragment)
-                .commit();
-        getFragmentManager().beginTransaction()
-                .add(R.id.layout_frame, mMineFragment)
-                .hide(mMineFragment)
-                .commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.layout_frame, mHomeFragment).add(R.id.layout_frame, mDashboardFragment).hide(mDashboardFragment).show(mHomeFragment).commit();
+        getFragmentManager().beginTransaction().add(R.id.layout_frame, mMineFragment).hide(mMineFragment).commit();
     }
 
     @Override
