@@ -5,7 +5,6 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.os.Build;
 import android.view.View;
-import com.fire.translation.view.ShimmerTextView;
 
 /**
  *

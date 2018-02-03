@@ -8,7 +8,6 @@ import com.fire.translation.adapter.PagerFragmentAdapter;
 import com.fire.translation.ui.activity.MainActivity;
 
 /**
- * Date：2018/1/3
  * Description:
  * @author fire
  */

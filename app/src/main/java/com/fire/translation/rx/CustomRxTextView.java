@@ -9,10 +9,10 @@ import com.jakewharton.rxbinding2.InitialValueObservable;
 import static com.jakewharton.rxbinding2.internal.Preconditions.checkNotNull;
 
 /**
- * Created by fire on 2018/1/17.
- * Date：2018/1/17
- * Author: fire
- * Description:
+ *
+ * @author fire
+ * @date 2018/1/17
+ * Description:主要针对TextView等文本控件的文件变化监听和焦点改变的功能，项目中暂时没有用到
  */
 @SuppressLint("RestrictedApi")
 public class CustomRxTextView {

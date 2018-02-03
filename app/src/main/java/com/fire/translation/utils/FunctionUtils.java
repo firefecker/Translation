@@ -7,16 +7,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.os.Looper;
 import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.FileProvider;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
-import com.fire.baselibrary.utils.ToastUtils;
 import com.fire.translation.constant.Constant;
 import java.io.File;
 import java.io.FileInputStream;
@@ -24,9 +21,9 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 
 /**
- * Created by fire on 2018/1/15.
- * Date：2018/1/15
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/15
  * Description:
  */
 

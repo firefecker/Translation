@@ -1,11 +1,8 @@
 package com.fire.translation.mvp.model;
 
 import com.fire.baselibrary.base.inter.IBaseModel;
-import com.fire.translation.adapter.StickyHeaderAdapter;
-import com.fire.translation.constant.Constant;
 import com.fire.translation.db.Dbservice;
 import com.fire.translation.db.entities.Record;
-import com.fire.translation.db.entities.Word;
 import com.fire.translation.utils.DateUtils;
 import io.reactivex.Flowable;
 import io.reactivex.functions.Function;
@@ -15,9 +12,9 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by fire on 2018/1/22.
- * Date：2018/1/22
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/22
  * Description:
  */
 

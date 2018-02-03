@@ -8,9 +8,9 @@ import io.reactivex.Flowable;
 import java.util.List;
 
 /**
- * Created by fire on 2018/1/22.
- * Date：2018/1/22
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/22
  * Description:
  */
 

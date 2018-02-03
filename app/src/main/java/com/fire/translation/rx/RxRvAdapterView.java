@@ -12,9 +12,9 @@ import java.util.concurrent.Callable;
 import static com.jakewharton.rxbinding2.internal.Preconditions.checkNotNull;
 
 /**
- * Created by fire on 2018/1/17.
- * Date：2018/1/17
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/17
  * Description:
  */
 @SuppressLint("RestrictedApi")

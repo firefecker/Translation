@@ -7,9 +7,9 @@ import android.support.annotation.RequiresApi;
 import java.io.File;
 
 /**
- * Created by fire on 2018/1/16.
- * Date：2018/1/16
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/16
  * Description:
  */
 

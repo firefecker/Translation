@@ -5,13 +5,12 @@ import android.content.ContextWrapper;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import com.fire.translation.utils.FileUtils;
-import com.orhanobut.logger.Logger;
 import java.io.File;
 
 /**
- * Created by fire on 2018/1/12.
- * Date：2018/1/12
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/12
  * Description:
  */
 

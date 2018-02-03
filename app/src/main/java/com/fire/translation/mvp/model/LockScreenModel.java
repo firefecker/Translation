@@ -7,9 +7,9 @@ import com.pushtorefresh.storio3.Optional;
 import io.reactivex.Flowable;
 
 /**
- * Created by fire on 2018/1/29.
- * Date：2018/1/29
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/29
  * Description:
  */
 

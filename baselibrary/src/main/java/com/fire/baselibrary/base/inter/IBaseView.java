@@ -4,9 +4,9 @@ import com.fire.baselibrary.rx.EventBase;
 import io.reactivex.Observable;
 
 /**
- * Created by fire on 2018/1/3.
- * Date：2018/1/3
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/3
  * Description:
  */
 

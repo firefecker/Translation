@@ -22,8 +22,6 @@ import java.util.Date;
 /**
  * @author fire
  * @date 2018/1/26
- * Date：2018/1/26
- * Author: fire
  * Description:
  */
 
@@ -42,6 +40,11 @@ public class SplashActivity extends BaseActivity implements SplashView {
     @Override
     public void initView() {
         mCountDownView.setOnLoadingFinishListener(() -> {
+            startActivity(new Intent(SplashActivity.this, MainActivity.class));
+            finish();
+        });
+
+        mCountDownView.setOnClickListener(v -> {
             startActivity(new Intent(SplashActivity.this, MainActivity.class));
             finish();
         });

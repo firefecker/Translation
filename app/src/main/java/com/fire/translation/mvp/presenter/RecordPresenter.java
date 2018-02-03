@@ -2,16 +2,15 @@ package com.fire.translation.mvp.presenter;
 
 import com.fire.baselibrary.base.inter.IBasePresenter;
 import com.fire.translation.db.entities.Record;
-import com.fire.translation.db.entities.Word;
 import com.fire.translation.mvp.model.RecordModel;
 import com.fire.translation.mvp.view.RecordView;
 import io.reactivex.functions.Function;
 import java.util.List;
 
 /**
- * Created by fire on 2018/1/22.
- * Date：2018/1/22
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/22
  * Description:
  */
 

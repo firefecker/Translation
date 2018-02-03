@@ -12,7 +12,6 @@ import com.orhanobut.logger.PrettyFormatStrategy;
  *
  * @author fire
  * @date 2017/12/28
- * Author: fire
  * Description:
  */
 

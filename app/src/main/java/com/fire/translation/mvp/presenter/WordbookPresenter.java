@@ -9,26 +9,20 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import com.fire.baselibrary.base.inter.IBasePresenter;
-import com.fire.baselibrary.utils.ListUtils;
 import com.fire.baselibrary.utils.ToastUtils;
-import com.fire.translation.R;
 import com.fire.translation.mvp.model.WordbookModel;
 import com.fire.translation.mvp.view.WordbookView;
-import com.fire.translation.ui.fragment.WordbookFragment;
 import com.iflytek.cloud.ErrorCode;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechSynthesizer;
 import com.iflytek.sunflower.FlowerCollector;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
- * Created by fire on 2018/1/22.
- * Date：2018/1/22
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/22
  * Description:
  */
 

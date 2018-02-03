@@ -8,16 +8,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.fire.translation.R;
 import com.fire.translation.db.entities.Record;
-import com.fire.translation.db.entities.Word;
 import com.fire.translation.utils.DateUtils;
 import com.jude.easyrecyclerview.decoration.StickyHeaderDecoration;
-import com.orhanobut.logger.Logger;
 import java.util.List;
 
 /**
- * Created by fire on 2018/1/22.
- * Date：2018/1/22
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/22
  * Description:
  */
 

@@ -9,8 +9,6 @@ import android.widget.Toast;
  *
  * @author fire
  * @date 2017/12/28
- * Date：2017/12/28
- * Author: fire
  * Description:
  */
 

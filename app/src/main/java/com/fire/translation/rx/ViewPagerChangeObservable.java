@@ -2,17 +2,15 @@ package com.fire.translation.rx;
 
 import android.annotation.SuppressLint;
 import android.support.v4.view.ViewPager;
-import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.MainThreadDisposable;
-
 import static com.jakewharton.rxbinding2.internal.Preconditions.checkMainThread;
 
 /**
- * Created by fire on 2018/1/18.
- * Date：2018/1/18
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/18
  * Description:
  */
 

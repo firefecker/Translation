@@ -47,9 +47,9 @@ import java.util.UUID;
 import top.zibin.luban.Luban;
 
 /**
- * Created by fire on 2018/1/15.
- * Date：2018/1/15
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/15
  * Description:
  */
 

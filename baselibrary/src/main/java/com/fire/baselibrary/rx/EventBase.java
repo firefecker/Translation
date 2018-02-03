@@ -1,9 +1,9 @@
 package com.fire.baselibrary.rx;
 
 /**
- * Created by fire on 2018/1/15.
- * Date：2018/1/15
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/15
  * Description:
  */
 

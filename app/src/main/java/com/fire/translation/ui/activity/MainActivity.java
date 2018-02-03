@@ -2,7 +2,6 @@ package com.fire.translation.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
@@ -27,7 +26,6 @@ import com.fire.translation.ui.fragment.DashboardFragment;
 import com.fire.translation.ui.fragment.HomeFragment;
 import com.fire.translation.ui.fragment.SettingFragment;
 import com.fire.translation.ui.fragment.TranslationFragment;
-import com.fire.translation.utils.FunctionUtils;
 import com.fire.baselibrary.rx.EventBase;
 import com.orhanobut.logger.Logger;
 import com.pushtorefresh.storio3.Optional;
@@ -39,6 +37,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 /**
+ *
  * @author fire
  */
 public class MainActivity extends BaseActivity implements MainView {
@@ -71,9 +70,9 @@ public class MainActivity extends BaseActivity implements MainView {
     public void initView() {
 
         mWindowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-        mInflate = LayoutInflater.from(TransApplication.mTransApp).inflate(R.layout.item_notify, null);
-        mMainPresenter.initWindowManager(mWindowManager, mInflate);
-
+        mInflate = LayoutInflater.from(TransApplication.mTransApp)
+                .inflate(R.layout.item_notify, null);
+        //mMainPresenter.initWindowManager(mWindowManager, mInflate);
 
         mMainPresenter.loadExistTable();
         mHomeFragment = new HomeFragment();
@@ -110,22 +109,27 @@ public class MainActivity extends BaseActivity implements MainView {
         mMainPresenter = new MainPresenter(this);
     }
 
-    public void setIndicator() {
-        mTabLayout.post(() -> FunctionUtils.setIndicator(mTabLayout, 10, 10));
-    }
-
     private void updateShowSatus(boolean isHome, Fragment fragment1, boolean isShow) {
         if (isShow) {
             if (isHome) {
                 mActionButton.setVisibility(View.GONE);
-                getSupportFragmentManager().beginTransaction().hide(fragment1).show(mHomeFragment).commit();
+                getSupportFragmentManager().beginTransaction()
+                        .hide(fragment1)
+                        .show(mHomeFragment)
+                        .commit();
             } else {
                 mActionButton.setVisibility(View.GONE);
-                getSupportFragmentManager().beginTransaction().hide(mHomeFragment).show(fragment1).commit();
+                getSupportFragmentManager().beginTransaction()
+                        .hide(mHomeFragment)
+                        .show(fragment1)
+                        .commit();
             }
             getFragmentManager().beginTransaction().hide(mMineFragment).commit();
         } else {
-            getSupportFragmentManager().beginTransaction().hide(mHomeFragment).hide(mDashboardFragment).commit();
+            getSupportFragmentManager().beginTransaction()
+                    .hide(mHomeFragment)
+                    .hide(mDashboardFragment)
+                    .commit();
             getFragmentManager().beginTransaction().show(mMineFragment).commit();
         }
         supportInvalidateOptionsMenu();
@@ -135,20 +139,23 @@ public class MainActivity extends BaseActivity implements MainView {
     public void initData() {
         setToolBarNoBack(mToolbar, getString(R.string.title_home));
         mTabLayout.setVisibility(View.GONE);
-        getSupportFragmentManager().beginTransaction().add(R.id.layout_frame, mHomeFragment).add(R.id.layout_frame, mDashboardFragment).hide(mDashboardFragment).show(mHomeFragment).commit();
-        getFragmentManager().beginTransaction().add(R.id.layout_frame, mMineFragment).hide(mMineFragment).commit();
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.layout_frame, mHomeFragment)
+                .add(R.id.layout_frame, mDashboardFragment)
+                .hide(mDashboardFragment)
+                .show(mHomeFragment)
+                .commit();
+        getFragmentManager().beginTransaction()
+                .add(R.id.layout_frame, mMineFragment)
+                .hide(mMineFragment)
+                .commit();
     }
 
     @Override
     public void loadExistTableName(Flowable<Optional<TableName>> existTableName) {
         existTableName.compose(this.bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(tableNameOptional -> {
-                    if (tableNameOptional == null || tableNameOptional.get() == null) {
-                        //mMainPresenter.setTableStatus();
-                    }
-                }, throwable -> {
-                    //mMainPresenter.setTableStatus();
-                });
+                }, throwable -> Logger.e(throwable.toString()));
     }
 
     @Override
@@ -157,12 +164,7 @@ public class MainActivity extends BaseActivity implements MainView {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(putResult -> {
-                    if (putResult.wasUpdated()) {
-
-                    }
-                }, throwable -> {
-                    Logger.e(throwable.toString());
-                });
+                }, throwable -> Logger.e(throwable.toString()));
     }
 
     @Override

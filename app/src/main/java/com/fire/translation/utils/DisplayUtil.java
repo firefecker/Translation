@@ -3,9 +3,9 @@ package com.fire.translation.utils;
 import android.content.Context;
 
 /**
- * Created by fire on 2018/1/18.
- * Date：2018/1/18
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/18
  * Description:
  */
 

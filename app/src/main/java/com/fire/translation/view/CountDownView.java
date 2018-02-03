@@ -12,13 +12,13 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Build;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 import com.fire.translation.R;
+import com.fire.translation.utils.DisplayUtil;
 
 /**
  *
@@ -65,10 +65,11 @@ public class CountDownView extends View {
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.CountDownView);
         mRetreatType = array.getInt(R.styleable.CountDownView_cd_retreat_type, 1);
         location = array.getInt(R.styleable.CountDownView_cd_location, 1);
-        mCircleRadius = (int) array.getDimension(R.styleable.CountDownView_cd_circle_radius, dip2px(context, 20));//默认25dp
-        mPaintArcWidth = array.getDimension(R.styleable.CountDownView_cd_arc_width, dip2px(context, 3));//默认3dp
+        mCircleRadius = (int) array.getDimension(R.styleable.CountDownView_cd_circle_radius,
+                DisplayUtil.dip2px(context, 20));//默认25dp
+        mPaintArcWidth = array.getDimension(R.styleable.CountDownView_cd_arc_width, DisplayUtil.dip2px(context, 3));//默认3dp
         mPaintArcColor = array.getColor(R.styleable.CountDownView_cd_arc_color, mPaintArcColor);
-        mTextSize = (int) array.getDimension(R.styleable.CountDownView_cd_text_size, dip2px(context, 14));//默认14sp
+        mTextSize = (int) array.getDimension(R.styleable.CountDownView_cd_text_size, DisplayUtil.dip2px(context, 14));//默认14sp
         mTextColor = array.getColor(R.styleable.CountDownView_cd_text_color, mTextColor);
         mPaintBackGroundColor = array.getColor(R.styleable.CountDownView_cd_bg_color, mPaintBackGroundColor);
         mLoadingTime = array.getInteger(R.styleable.CountDownView_cd_animator_time, 3);//默认3秒
@@ -202,11 +203,4 @@ public class CountDownView extends View {
         void finish();
     }
 
-    /**
-     * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
-     */
-    public static int dip2px(Context context, float dpValue) {
-        final float scale = context.getResources().getDisplayMetrics().density;
-        return (int) (dpValue * scale + 0.5f);
-    }
 }

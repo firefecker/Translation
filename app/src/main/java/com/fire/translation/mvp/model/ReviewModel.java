@@ -8,7 +8,6 @@ import com.fire.translation.db.entities.Word;
 import com.pushtorefresh.storio3.sqlite.operations.put.PutResult;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
-import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -16,9 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by fire on 2018/1/18.
- * Date：2018/1/18
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/18
  * Description:
  */
 

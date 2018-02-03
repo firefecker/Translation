@@ -9,7 +9,9 @@ import com.fire.baselibrary.R;
 import com.fire.baselibrary.base.App;
 
 /**
- * Created by fire on 2017/8/24.
+ *
+ * @author fire
+ * @date 2017/8/24
  */
 
 public class ImageLoader {

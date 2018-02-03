@@ -1,23 +1,18 @@
 package com.fire.translation.mvp.presenter;
 
-import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.fire.baselibrary.base.inter.IBasePresenter;
-import com.fire.translation.R;
-import com.fire.translation.TransApplication;
 import com.fire.translation.db.entities.Record;
 import com.fire.translation.db.entities.TableName;
 import com.fire.translation.mvp.model.SettingModel;
 import com.fire.translation.mvp.view.SettingView;
-import io.reactivex.Observable;
 import java.io.IOException;
 
 /**
- * Created by fire on 2018/1/23.
- * Date：2018/1/23
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/23
  * Description:
  */
 

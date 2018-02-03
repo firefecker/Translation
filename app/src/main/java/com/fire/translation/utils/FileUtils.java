@@ -1,7 +1,6 @@
 package com.fire.translation.utils;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -19,16 +18,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import okhttp3.ResponseBody;
 
 /**
- * Created by fire on 2018/1/12.
- * Date：2018/1/12
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/12
  * Description:
  */
 

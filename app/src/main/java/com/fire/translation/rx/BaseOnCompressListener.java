@@ -5,9 +5,9 @@ import java.io.File;
 import top.zibin.luban.OnCompressListener;
 
 /**
- * Created by fire on 2018/1/16.
- * Date：2018/1/16
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/16
  * Description:
  */
 

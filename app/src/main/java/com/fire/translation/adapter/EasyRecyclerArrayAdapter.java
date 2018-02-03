@@ -7,9 +7,9 @@ import io.reactivex.functions.Consumer;
 import java.util.List;
 
 /**
- * Created by fire on 2018/1/17.
- * Date：2018/1/17
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/17
  * Description:
  */
 

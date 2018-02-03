@@ -42,12 +42,7 @@ public class OkhttpClientImpl {
 
     private OkhttpClientImpl() {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor(
-                new HttpLoggingInterceptor.Logger() {
-                    @Override
-                    public void log(String message) {
-                        Logger.i(message);
-                    }
-                });
+                message -> Logger.i(message));
         logging.setLevel(HttpLoggingInterceptor.Level.HEADERS);
 
         mCookieManager = new CookieManager();

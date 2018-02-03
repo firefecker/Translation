@@ -9,9 +9,9 @@ import android.widget.TextView;
 import com.fire.baselibrary.R;
 
 /**
- * Created by fire on 2018/1/16.
- * Date：2018/1/16
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/16
  * Description:
  */
 

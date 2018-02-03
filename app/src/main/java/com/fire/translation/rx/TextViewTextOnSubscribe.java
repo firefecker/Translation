@@ -8,9 +8,9 @@ import io.reactivex.Observer;
 import io.reactivex.android.MainThreadDisposable;
 
 /**
- * Created by fire on 2018/1/17.
- * Date：2018/1/17
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/17
  * Description:
  */
 

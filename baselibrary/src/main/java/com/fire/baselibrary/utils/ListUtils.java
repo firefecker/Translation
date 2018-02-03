@@ -1,16 +1,15 @@
 package com.fire.baselibrary.utils;
 
 import android.content.Context;
-import android.preference.Preference;
 import android.support.annotation.ArrayRes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 /**
- * Created by fire on 2018/1/17.
- * Date：2018/1/17
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/17
  * Description:
  */
 

@@ -18,9 +18,9 @@ import com.iflytek.sunflower.FlowerCollector;
 import java.util.Date;
 
 /**
- * Created by fire on 2018/1/18.
- * Date：2018/1/18
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/18
  * Description:
  */
 

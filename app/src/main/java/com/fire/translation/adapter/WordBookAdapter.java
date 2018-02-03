@@ -15,9 +15,9 @@ import com.fire.translation.widget.BasesViewHolder;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 
 /**
- * Created by fire on 2018/1/22.
- * Date：2018/1/22
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/22
  * Description:
  */
 

@@ -1,12 +1,11 @@
 package com.fire.translation.rx;
 
-import com.youdao.ocr.online.OCRResult;
 import io.reactivex.Observable;
 
 /**
- * Created by fire on 2018/1/16.
- * Date：2018/1/16
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/16
  * Description:
  */
 

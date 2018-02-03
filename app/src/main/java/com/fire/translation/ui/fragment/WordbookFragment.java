@@ -2,7 +2,6 @@ package com.fire.translation.ui.fragment;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.Menu;
@@ -25,14 +24,12 @@ import com.trello.rxlifecycle2.android.FragmentEvent;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
- * Created by fire on 2018/1/15.
- * Date：2018/1/15
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/15
  * Description:
  */
 

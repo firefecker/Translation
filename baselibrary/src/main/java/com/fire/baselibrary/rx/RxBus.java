@@ -8,9 +8,9 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
 
 /**
- * Created by fire on 2018/1/15.
- * Date：2018/1/15
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/15
  * Description:
  */
 

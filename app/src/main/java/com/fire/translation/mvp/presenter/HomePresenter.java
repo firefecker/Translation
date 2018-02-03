@@ -1,16 +1,13 @@
 package com.fire.translation.mvp.presenter;
 
 import android.content.Context;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.fire.baselibrary.base.inter.IBasePresenter;
-import com.fire.translation.R;
 import com.fire.translation.db.entities.Record;
 import com.fire.translation.mvp.model.HomeModel;
 import com.fire.translation.mvp.view.HomeView;
 
 /**
  * Description:
- *
  * @author fire
  */
 

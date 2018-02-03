@@ -5,9 +5,9 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 /**
- * Created by fire on 2018/1/25.
- * Date：2018/1/25
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/25
  * Description:
  */
 

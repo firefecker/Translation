@@ -4,9 +4,9 @@ import android.Manifest;
 import android.os.Environment;
 
 /**
- * Created by fire on 2018/1/11.
- * Date：2018/1/11
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/11
  * Description:
  */
 

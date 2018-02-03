@@ -1,3 +1,41 @@
+### 项目介绍
+
+#### 前言
+
+>此项目是基于RxJava2，retrofit2，[storio](https://github.com/pushtorefresh/storio)和mvp实现的翻译和记单词双重功能的app,翻译功能是接入的有道云。具体的功能如下：
+
+#### Screenshot
+
+<table align="center">
+    <tr>
+        <td><img src="files/1.png"/></td>
+        <td><img src="files/2.png"/></td>
+    </tr>
+</table>
+
+</br>
+</br>
+
+<table align="center">
+    <tr>
+        <td><img src="files/3.png"/></td>
+        <td><img src="files/4.png"/></td>
+    </tr>
+</table>
+
+</br>
+</br>
+
+<table align="center">
+    <tr>
+        <td><img src="files/5.png"/></td>
+        <td><img src="files/6.png"/></td>
+    </tr>
+</table>
+
+</br>
+</br>
+
 ```
 MIT License
 

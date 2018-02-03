@@ -9,9 +9,9 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 /**
- * Created by fire on 2018/1/11.
- * Date：2018/1/11
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/11
  * Description:
  */
 

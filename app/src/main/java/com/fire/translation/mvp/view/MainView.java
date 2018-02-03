@@ -8,9 +8,9 @@ import io.reactivex.Flowable;
 import io.reactivex.Observable;
 
 /**
- * Created by fire on 2018/1/12.
- * Date：2018/1/12
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/12
  * Description:
  */
 

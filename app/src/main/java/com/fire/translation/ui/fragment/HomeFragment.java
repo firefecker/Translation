@@ -10,7 +10,6 @@ import com.fire.baselibrary.base.BaseFragment;
 import com.fire.baselibrary.utils.ToastUtils;
 import com.fire.translation.R;
 import com.fire.translation.constant.Constant;
-import com.fire.translation.db.Dbservice;
 import com.fire.translation.db.entities.Record;
 import com.fire.translation.db.entities.TableName;
 import com.fire.translation.mvp.presenter.HomePresenter;

@@ -8,9 +8,9 @@ import io.reactivex.android.MainThreadDisposable;
 import static com.jakewharton.rxbinding2.internal.Preconditions.checkMainThread;
 
 /**
- * Created by fire on 2018/1/17.
- * Date：2018/1/17
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/17
  * Description:
  */
 public class RvAdapterItemClickObservable<T> extends Observable<Integer> {

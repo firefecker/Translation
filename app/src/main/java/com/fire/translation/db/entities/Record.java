@@ -3,14 +3,13 @@ package com.fire.translation.db.entities;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.pushtorefresh.storio3.sqlite.annotations.StorIOSQLiteColumn;
-import com.pushtorefresh.storio3.sqlite.annotations.StorIOSQLiteCreator;
 import com.pushtorefresh.storio3.sqlite.annotations.StorIOSQLiteType;
 import java.io.Serializable;
 
 /**
- * Created by fire on 2018/1/12.
- * Date：2018/1/12
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/12
  * Description:
  */
 

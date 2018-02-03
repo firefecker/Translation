@@ -6,9 +6,9 @@ import java.io.File;
 import java.math.BigDecimal;
 
 /**
- * Created by fire on 2018/1/23.
- * Date：2018/1/23
- * Author: fire
+ *
+ * @author fire
+ * @date 2018/1/23
  * Description:
  */
 
