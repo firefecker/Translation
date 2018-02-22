@@ -48,7 +48,9 @@ public class CountDownView extends View {
     private String mText = "";//要绘制的文字
     private int mWidth;
     private int mHeight;
-
+    private AnimatorSet mAnimatorSet;
+    private ValueAnimator mValueAnimator;
+    private ValueAnimator mValueAnimator1;
 
     public CountDownView(Context context) {
         this(context, null);
@@ -161,26 +163,26 @@ public class CountDownView extends View {
 
 
     public void start() {
-        ValueAnimator animator = ValueAnimator.ofFloat(mmSweepAngleStart, mmSweepAngleEnd);
-        animator.setInterpolator(new LinearInterpolator());
-        animator.addUpdateListener(valueAnimator -> {
+        mValueAnimator = ValueAnimator.ofFloat(mmSweepAngleStart, mmSweepAngleEnd);
+        mValueAnimator.setInterpolator(new LinearInterpolator());
+        mValueAnimator.addUpdateListener(valueAnimator -> {
             mSweepAngle = (float) valueAnimator.getAnimatedValue();
             //获取到需要绘制的角度，重新绘制
             invalidate();
         });
         //这里是时间获取和赋值
-        ValueAnimator animator1 = ValueAnimator.ofInt(mLoadingTime, 0);
-        animator1.setInterpolator(new LinearInterpolator());
-        animator1.addUpdateListener(valueAnimator -> {
+        mValueAnimator1 = ValueAnimator.ofInt(mLoadingTime, 0);
+        mValueAnimator1.setInterpolator(new LinearInterpolator());
+        mValueAnimator1.addUpdateListener(valueAnimator -> {
             int time = (int) valueAnimator.getAnimatedValue();
             mText = time + mLoadingTimeUnit;
         });
-        AnimatorSet set = new AnimatorSet();
-        set.playTogether(animator, animator1);
-        set.setDuration(mLoadingTime * 1000);
-        set.setInterpolator(new LinearInterpolator());
-        set.start();
-        set.addListener(new AnimatorListenerAdapter() {
+        mAnimatorSet = new AnimatorSet();
+        mAnimatorSet.playTogether(mValueAnimator, mValueAnimator1);
+        mAnimatorSet.setDuration(mLoadingTime * 1000);
+        mAnimatorSet.setInterpolator(new LinearInterpolator());
+        mAnimatorSet.start();
+        mAnimatorSet.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
@@ -197,6 +199,10 @@ public class CountDownView extends View {
 
     public void setOnLoadingFinishListener(OnLoadingFinishListener listener) {
         this.loadingFinishListener = listener;
+    }
+
+    public void removeLoading() {
+        mAnimatorSet.removeAllListeners();
     }
 
     public interface OnLoadingFinishListener {

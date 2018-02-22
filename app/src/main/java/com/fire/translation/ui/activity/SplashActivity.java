@@ -45,6 +45,7 @@ public class SplashActivity extends BaseActivity implements SplashView {
         });
 
         mCountDownView.setOnClickListener(v -> {
+            mCountDownView.removeLoading();
             startActivity(new Intent(SplashActivity.this, MainActivity.class));
             finish();
         });
